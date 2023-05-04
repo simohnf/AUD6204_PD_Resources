@@ -1,0 +1,1020 @@
+#N canvas 227 49 544 261 10;
+#X text 296 204 sjf \, SAE London \, 2020;
+#X text 90 96 ------------------------------------------------------------
+;
+#X text 99 42 Firstly \, go to Media >> Audio Settings and ensure your
+drivers are set correctly;
+#X text 101 68 Turn on DSP from the PD Window;
+#X text 99 11 Our third synthesis lesson will look a simpple physical
+modelling algorithm;
+#N canvas 0 23 839 751 physical_modelling 0;
+#X text 81 185 Karplus \, K. and Strong \, A. \, 1983 Digital synthesis
+of plucked-string and drum timbres. Computer Music Journal \, 7(2)
+\, pp.43-55.;
+#X text 68 19 Physical modelling is different to other synthesis approaches
+in that it attempts to create a computer/mathematical model that mimics
+the physics of sound waves passing through a medium(or something like
+that);
+#X text 69 71 Essentially \, we're trying to figure out what happens
+in the real world when a sound is created and how can we replicate
+that;
+#X text 455 24 This sounds complex (and the underlying maths certainly
+is) but when we look at an example it will make more sense (I hope)
+;
+#X text 75 156 Our example will be based on th classic Karplus-Strong
+'plucked-string' algorithm;
+#N canvas -1211 581 1015 710 1_what_happens_when_you_pluck_a_string???
+0;
+#X text 43 125 1 - Plucking is (initially) noise;
+#X text 62 245 If you've ever played guitar (or paid attention to someone
+else playing guitar) \, you'll know the higher the fret you play on
+(i.e. the shorter the string)) the higher the pitch;
+#X text 37 230 2 - Shorter string equals higher pitch (i.e. frequency)
+;
+#X text 70 139 When you pluck the string it is initially a burst of
+random noise (like the click from our bass drum) \, that then propegates
+through the string.;
+#X text 41 182 1b - The string produces the pitch \, not the pick;
+#X text 56 195 You'll know this if you've ever tried to pluck a string
+on a guitar when the strings are muted/damped;
+#X text 36 285 2b - Longer string equals lower pitch (i.e. frequency)
+;
+#X text 61 300 See 2;
+#X text 38 359 3 - You get a different sound depending on the type
+of string \, or what you pluck the string with;
+#X text 63 387 Think of the difference in sound between a classical
+guitar and an acoustic guitar. Or a harpsichord and a piano (ok piano
+isn't plucked but same difference);
+#X text 87 83 Some thoughts about plucked strings;
+#X text 626 80 Some related thoughts about audio and pure data;
+#X obj 787 130 noise~;
+#X text 607 130 1 - we know how to make noise;
+#X text 607 145 1 - we know how to make envelopes (so the noise is
+just at the beginning like when plucking a string);
+#X text 659 333 frequency(Hz) = 1/period(s);
+#X text 629 268 ==> as wavelength goes up \, frequency goes down and
+vice versa;
+#X text 605 229 2 & 2b - we should recognise this is related to our
+basic understanding of sound waves and frequency;
+#X text 605 359 3 - We have looked at filters already too;
+#X text 609 175 1b - we should know that this is because the wave travels
+backwards and forards along the string \, essentially creating nodes
+and antinodes;
+#X obj 479 519 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X msg 479 539 1 \, 0 10;
+#X obj 479 581 *~, f 13;
+#X obj 479 560 vline~;
+#X obj 549 546 noise~;
+#X obj 479 622 vol_sjf~;
+#X obj 498 679 dac~;
+#X text 120 538 I'll start with a simple \, very short burst \, like
+plucking the string with a plastic pick;
+#X text 120 514 1 - Ok \, so we need to create a quick burst of white
+noise (to mimic the pick);
+#X text 141 18 Look at this simulation of waves on a string (particularly
+the Pulse version);
+#X text 35 423 3b - If there is no damping the wave never dies out...
+;
+#X text 56 440 try this in the simulation mentioned above;
+#X text 139 47 https://phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_en.html
+;
+#X text 522 19 The pulse is equivalent to our pluck;
+#X text 497 518 <---- click me;
+#X text 605 254 wavelength(m) = c(m/s)/frequency(Hz);
+#X text 607 296 In the simulation we should also recognise that the
+pulse travels along the wave and then come back again. This is theperiod
+of the waveform and as we know:;
+#X obj 690 380 lop~;
+#X obj 722 380 bp~, f 4;
+#X obj 754 380 hip~;
+#X text 553 641 <--- turn me up;
+#X connect 20 0 21 0;
+#X connect 21 0 23 0;
+#X connect 22 0 25 0;
+#X connect 23 0 22 0;
+#X connect 24 0 22 1;
+#X connect 25 0 26 0;
+#X connect 25 0 26 1;
+#X restore 137 252 pd 1_what_happens_when_you_pluck_a_string???;
+#N canvas -1280 581 1163 637 2_making_a_string 0;
+#X obj 852 61 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 484 540 vol_sjf~;
+#X obj 484 593 dac~;
+#N canvas -1280 581 485 286 intial_pluck 0;
+#X obj 87 81 inlet;
+#X msg 87 104 1 \, 0 10;
+#X obj 87 146 *~, f 13;
+#X obj 87 125 vline~;
+#X obj 157 111 noise~;
+#X text 17 42 I'll start with a simple \, very short burst \, like
+plucking the string with a plastic pick;
+#X text 17 18 1 - Ok \, so we need to create a quick burst of white
+noise (to mimic the pick);
+#X obj 87 167 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 3 0;
+#X connect 2 0 7 0;
+#X connect 3 0 2 0;
+#X connect 4 0 2 1;
+#X restore 852 80 pd intial_pluck;
+#X text 873 60 <---- click me;
+#N canvas -1154 592 1052 498 notes 0;
+#X text 43 125 1 - Plucking is (initially) noise;
+#X text 62 245 If you've ever played guitar (or paid attention to someone
+else playing guitar) \, you'll know the higher the fret you play on
+(i.e. the shorter the string)) the higher the pitch;
+#X text 37 230 2 - Shorter string equals higher pitch (i.e. frequency)
+;
+#X text 70 139 When you pluck the string it is initially a burst of
+random noise (like the click from our bass drum) \, that then propegates
+through the string.;
+#X text 41 182 1b - The string produces the pitch \, not the pick;
+#X text 56 195 You'll know this if you've ever tried to pluck a string
+on a guitar when the strings are muted/damped;
+#X text 36 285 2b - Longer string equals lower pitch (i.e. frequency)
+;
+#X text 61 300 See 2;
+#X text 38 359 3 - You get a different sound depending on the type
+of string \, or what you pluck the string with;
+#X text 63 387 Think of the difference in sound between a classical
+guitar and an acoustic guitar. Or a harpsichord and a piano (ok piano
+isn't plucked but same difference);
+#X text 87 83 Some thoughts about plucked strings;
+#X text 626 80 Some related thoughts about audio and pure data;
+#X obj 787 130 noise~;
+#X text 607 130 1 - we know how to make noise;
+#X text 607 145 1 - we know how to make envelopes (so the noise is
+just at the beginning like when plucking a string);
+#X text 659 333 frequency(Hz) = 1/period(s);
+#X text 629 268 ==> as wavelength goes up \, frequency goes down and
+vice versa;
+#X text 605 229 2 & 2b - we should recognise this is related to our
+basic understanding of sound waves and frequency;
+#X text 605 359 3 - We have looked at filters already too;
+#X text 609 175 1b - we should know that this is because the wave travels
+backwards and forards along the string \, essentially creating nodes
+and antinodes;
+#X text 141 18 Look at this simulation of waves on a string (particularly
+the Pulse version);
+#X text 35 423 3b - If there is no damping the wave never dies out...
+;
+#X text 56 440 try this in the simulation mentioned above;
+#X text 139 47 https://phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_en.html
+;
+#X text 522 19 The pulse is equivalent to our pluck;
+#X text 605 254 wavelength(m) = c(m/s)/frequency(Hz);
+#X text 607 296 In the simulation we should also recognise that the
+pulse travels along the wave and then come back again. This is theperiod
+of the waveform and as we know:;
+#X obj 690 380 lop~;
+#X obj 741 380 bp~, f 4;
+#X obj 773 382 hip~;
+#X restore 136 29 pd notes;
+#X text 113 115 Instead of thinking of wave as travelling the length
+of the string \, lets think about the time it takes for the wave to
+travel the length of the string and back;
+#X text 112 153 This is the period of the wave and period = 1/frequency
+;
+#X text 87 334 We can simulate the the pulse/pluck/noise travelling
+along the string using a delay line;
+#X text 105 360 Think about it this way: the noise begins it's journey
+down the string when it enters the delay line \, and the delay time
+determines how long it takes to travel the length of the string and
+come back to the start;
+#X text 127 444 But the pulse has to repeat its journey along the string
+- i.e. the string has to continue to vibrate (other wise there's no
+sound);
+#X text 151 478 So we need some feedback. Enough to keep the string
+vibrating but not so much it never dies out;
+#X floatatom 550 49 5 0 0 0 - - -;
+#X text 585 49 frequency (Hz);
+#X text 559 205 <-- 1 / frequency;
+#X obj 484 387 vd~ \$0-karStro_1;
+#X obj 851 498 delwrite~ \$0-karStro_1 50;
+#X text 1010 500 <-- period of 20Hz in ms;
+#X obj 484 448 *~ 0.97, f 42;
+#X obj 550 9 loadbang;
+#X msg 550 30 220;
+#X obj 736 82 hsl 100 15 0 1 0 1 empty empty sustain -2 -8 0 10 -262144
+-1 -1 9700 1;
+#X floatatom 733 102 5 0 0 0 - - -;
+#X text 555 561 turn me up;
+#X text 746 500 delay line start;
+#X text 588 387 delay line output;
+#X obj 550 146 sig~;
+#X obj 488 209 /~, f 11;
+#X obj 482 250 *~ 1000;
+#X obj 488 188 sig~ 1;
+#X text 584 217 Period(s);
+#X text 528 252 Period(ms);
+#X connect 0 0 3 0;
+#X connect 1 0 2 0;
+#X connect 1 0 2 1;
+#X connect 3 0 16 0;
+#X connect 12 0 26 0;
+#X connect 15 0 18 0;
+#X connect 18 0 16 0;
+#X connect 18 0 1 0;
+#X connect 19 0 20 0;
+#X connect 20 0 12 0;
+#X connect 21 0 22 0;
+#X connect 22 0 18 1;
+#X connect 26 0 27 1;
+#X connect 27 0 28 0;
+#X connect 28 0 15 0;
+#X connect 29 0 27 0;
+#X restore 136 335 pd 2_making_a_string;
+#N canvas -1280 581 1163 637 adding_some_damping 0;
+#X obj 824 35 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 492 492 vol_sjf~;
+#X obj 492 544 dac~;
+#N canvas -1280 581 485 286 intial_pluck 0;
+#X obj 87 81 inlet;
+#X msg 87 104 1 \, 0 10;
+#X obj 87 146 *~, f 13;
+#X obj 87 125 vline~;
+#X obj 157 111 noise~;
+#X text 17 42 I'll start with a simple \, very short burst \, like
+plucking the string with a plastic pick;
+#X text 17 18 1 - Ok \, so we need to create a quick burst of white
+noise (to mimic the pick);
+#X obj 87 167 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 3 0;
+#X connect 2 0 7 0;
+#X connect 3 0 2 0;
+#X connect 4 0 2 1;
+#X restore 824 66 pd intial_pluck;
+#X text 843 33 <---- click me;
+#N canvas -1154 592 1052 498 notes 0;
+#X text 43 125 1 - Plucking is (initially) noise;
+#X text 62 245 If you've ever played guitar (or paid attention to someone
+else playing guitar) \, you'll know the higher the fret you play on
+(i.e. the shorter the string)) the higher the pitch;
+#X text 37 230 2 - Shorter string equals higher pitch (i.e. frequency)
+;
+#X text 70 139 When you pluck the string it is initially a burst of
+random noise (like the click from our bass drum) \, that then propegates
+through the string.;
+#X text 41 182 1b - The string produces the pitch \, not the pick;
+#X text 56 195 You'll know this if you've ever tried to pluck a string
+on a guitar when the strings are muted/damped;
+#X text 36 285 2b - Longer string equals lower pitch (i.e. frequency)
+;
+#X text 61 300 See 2;
+#X text 38 359 3 - You get a different sound depending on the type
+of string \, or what you pluck the string with;
+#X text 63 387 Think of the difference in sound between a classical
+guitar and an acoustic guitar. Or a harpsichord and a piano (ok piano
+isn't plucked but same difference);
+#X text 87 83 Some thoughts about plucked strings;
+#X text 626 80 Some related thoughts about audio and pure data;
+#X obj 787 130 noise~;
+#X text 607 130 1 - we know how to make noise;
+#X text 607 145 1 - we know how to make envelopes (so the noise is
+just at the beginning like when plucking a string);
+#X text 659 333 frequency(Hz) = 1/period(s);
+#X text 629 268 ==> as wavelength goes up \, frequency goes down and
+vice versa;
+#X text 605 229 2 & 2b - we should recognise this is related to our
+basic understanding of sound waves and frequency;
+#X text 605 359 3 - We have looked at filters already too;
+#X text 609 175 1b - we should know that this is because the wave travels
+backwards and forards along the string \, essentially creating nodes
+and antinodes;
+#X text 141 18 Look at this simulation of waves on a string (particularly
+the Pulse version);
+#X text 35 423 3b - If there is no damping the wave never dies out...
+;
+#X text 56 440 try this in the simulation mentioned above;
+#X text 139 47 https://phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_en.html
+;
+#X text 522 19 The pulse is equivalent to our pluck;
+#X text 605 254 wavelength(m) = c(m/s)/frequency(Hz);
+#X text 607 296 In the simulation we should also recognise that the
+pulse travels along the wave and then come back again. This is theperiod
+of the waveform and as we know:;
+#X obj 690 380 lop~;
+#X obj 741 380 bp~, f 4;
+#X obj 773 382 hip~;
+#X restore 169 4 pd notes;
+#X floatatom 489 132 5 0 0 0 - - -;
+#X text 532 132 frequency (Hz);
+#X text 983 439 <-- period of 20Hz in ms;
+#X obj 489 92 loadbang;
+#X msg 489 113 220;
+#X obj 824 437 delwrite~ \$0-karStro_2 50;
+#X obj 489 294 vd~ \$0-karStro_2;
+#X text 50 93 We can dampen both the string (i.e. lowpass filter the
+delay line) and the initial pluck (i.e. the white noise burst);
+#X obj 489 327 lop~ 7000, f 27;
+#X obj 824 335 lop~ 2000, f 32;
+#X obj 1016 33 hsl 128 15 100 20000 1 1 empty empty pluck_brightness
+-2 -8 0 10 -262144 -1 -1 2200 1;
+#X floatatom 1013 53 10 0 0 0 - - -;
+#X text 1075 52 Hz;
+#X obj 651 36 hsl 128 15 100 20000 1 1 empty empty string_brightness
+-2 -8 0 10 -262144 -1 -1 9700 1;
+#X floatatom 648 58 10 0 0 0 - - -;
+#X text 710 57 Hz;
+#X obj 490 400 *~ 0.99, f 33;
+#X obj 85 299 osc~ 220;
+#X obj 85 320 vol_sjf~;
+#X obj 688 97 hsl 128 15 0.5 1 0 1 empty empty sustain -2 -8 0 10 -262144
+-1 -1 12400 1;
+#X floatatom 685 138 5 0 0 0 - - -;
+#X text 159 337 compare the pitch of the string with an oscillator
+;
+#N canvas 0 23 450 300 finerControl 0;
+#X obj 37 37 inlet;
+#X obj 66 79 sqrt;
+#X text 106 75 This just gives me a more usable output from the slider
+(i.e. finer control of higher values);
+#X floatatom 30 97 5 0 0 0 - - -;
+#X obj 67 61 sqrt;
+#X floatatom 66 100 5 0 0 0 - - -;
+#X obj 66 120 outlet;
+#X connect 0 0 4 0;
+#X connect 0 0 3 0;
+#X connect 1 0 5 0;
+#X connect 4 0 1 0;
+#X connect 5 0 6 0;
+#X restore 685 117 pd finerControl;
+#X text 51 126 Try a variety of different brightness \, sustain \,
+and frequency values...;
+#X text 52 155 You should find that even like this we are able to create
+at least some passable imitations of realworld instruments/sounds;
+#X text 564 512 <--- turn me up;
+#X text 519 222 <-- 1 / frequency;
+#X obj 510 168 sig~;
+#X obj 448 226 /~, f 11;
+#X obj 448 264 *~ 1000;
+#X obj 448 205 sig~ 1;
+#X text 544 234 Period(s);
+#X text 494 266 Period(ms);
+#X connect 0 0 3 0;
+#X connect 1 0 2 0;
+#X connect 1 0 2 1;
+#X connect 3 0 15 0;
+#X connect 6 0 23 0;
+#X connect 6 0 33 0;
+#X connect 9 0 10 0;
+#X connect 10 0 6 0;
+#X connect 12 0 14 0;
+#X connect 14 0 22 0;
+#X connect 15 0 11 0;
+#X connect 16 0 17 0;
+#X connect 17 0 15 1;
+#X connect 19 0 20 0;
+#X connect 20 0 14 1;
+#X connect 22 0 1 0;
+#X connect 22 0 11 0;
+#X connect 23 0 24 0;
+#X connect 24 0 1 0;
+#X connect 25 0 28 0;
+#X connect 26 0 22 1;
+#X connect 28 0 26 0;
+#X connect 33 0 34 1;
+#X connect 34 0 35 0;
+#X connect 35 0 12 0;
+#X connect 36 0 34 0;
+#X restore 143 419 pd adding_some_damping;
+#X text 92 272 ------------------------------------------------------------
+;
+#X text 100 289 Try to figure out howto mimic the pluck travelling
+along the string;
+#X text 92 364 ------------------------------------------------------------
+;
+#X text 100 381 Try to figure out how to add damping to the string
+and intial attack;
+#X text 91 440 ------------------------------------------------------------
+;
+#X text 99 457 Try to adding some different envelope curves for the
+initial attack;
+#N canvas -1280 581 1266 649 different_attacks 0;
+#X obj 260 627 dac~;
+#N canvas -1154 592 1052 498 notes 0;
+#X text 43 125 1 - Plucking is (initially) noise;
+#X text 62 245 If you've ever played guitar (or paid attention to someone
+else playing guitar) \, you'll know the higher the fret you play on
+(i.e. the shorter the string)) the higher the pitch;
+#X text 37 230 2 - Shorter string equals higher pitch (i.e. frequency)
+;
+#X text 70 139 When you pluck the string it is initially a burst of
+random noise (like the click from our bass drum) \, that then propegates
+through the string.;
+#X text 41 182 1b - The string produces the pitch \, not the pick;
+#X text 56 195 You'll know this if you've ever tried to pluck a string
+on a guitar when the strings are muted/damped;
+#X text 36 285 2b - Longer string equals lower pitch (i.e. frequency)
+;
+#X text 61 300 See 2;
+#X text 38 359 3 - You get a different sound depending on the type
+of string \, or what you pluck the string with;
+#X text 63 387 Think of the difference in sound between a classical
+guitar and an acoustic guitar. Or a harpsichord and a piano (ok piano
+isn't plucked but same difference);
+#X text 87 83 Some thoughts about plucked strings;
+#X text 626 80 Some related thoughts about audio and pure data;
+#X obj 787 130 noise~;
+#X text 607 130 1 - we know how to make noise;
+#X text 607 145 1 - we know how to make envelopes (so the noise is
+just at the beginning like when plucking a string);
+#X text 659 333 frequency(Hz) = 1/period(s);
+#X text 629 268 ==> as wavelength goes up \, frequency goes down and
+vice versa;
+#X text 605 229 2 & 2b - we should recognise this is related to our
+basic understanding of sound waves and frequency;
+#X text 605 359 3 - We have looked at filters already too;
+#X text 609 175 1b - we should know that this is because the wave travels
+backwards and forards along the string \, essentially creating nodes
+and antinodes;
+#X text 141 18 Look at this simulation of waves on a string (particularly
+the Pulse version);
+#X text 35 423 3b - If there is no damping the wave never dies out...
+;
+#X text 56 440 try this in the simulation mentioned above;
+#X text 139 47 https://phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_en.html
+;
+#X text 522 19 The pulse is equivalent to our pluck;
+#X text 605 254 wavelength(m) = c(m/s)/frequency(Hz);
+#X text 607 296 In the simulation we should also recognise that the
+pulse travels along the wave and then come back again. This is theperiod
+of the waveform and as we know:;
+#X obj 690 380 lop~;
+#X obj 741 380 bp~, f 4;
+#X obj 773 382 hip~;
+#X restore 159 66 pd notes;
+#X floatatom 249 78 5 0 0 0 - - -;
+#X text 284 78 frequency (Hz);
+#X text 886 475 <-- period of 20Hz in ms;
+#X obj 249 38 loadbang;
+#X obj 259 304 lop~ 7000, f 30;
+#X obj 727 442 lop~ 2000;
+#X obj 748 390 hsl 128 15 10 20000 1 1 empty empty pluck_brightness
+-2 -8 0 10 -262144 -1 -1 8800 1;
+#X floatatom 745 410 10 0 0 0 - - -;
+#X text 807 409 Hz;
+#X obj 452 219 hsl 128 15 100 20000 1 1 empty empty string_brightness
+-2 -8 0 10 -262144 -1 -1 6600 1;
+#X floatatom 449 241 10 0 0 0 - - -;
+#X text 511 240 Hz;
+#X obj 260 377 *~ 0.99, f 72;
+#X obj 6 174 osc~ 220;
+#X obj 6 195 vol_sjf~;
+#X obj 553 279 hsl 128 15 0.1 1 0 1 empty empty sustain -2 -8 0 10
+-262144 -1 -1 6800 1;
+#X floatatom 550 320 5 0 1 0 - - -;
+#N canvas 0 23 450 300 finerControl 0;
+#X obj 37 37 inlet;
+#X obj 66 79 sqrt;
+#X text 106 75 This just gives me a more usable output from the slider
+(i.e. finer control of higher values);
+#X floatatom 30 97 5 0 0 0 - - -;
+#X obj 67 61 sqrt;
+#X floatatom 66 100 5 0 0 0 - - -;
+#X obj 66 120 outlet;
+#X connect 0 0 4 0;
+#X connect 0 0 3 0;
+#X connect 1 0 5 0;
+#X connect 4 0 1 0;
+#X connect 5 0 6 0;
+#X restore 550 299 pd finerControl;
+#X obj 259 271 vd~ \$0-karStro_3;
+#X obj 727 473 delwrite~ \$0-karStro_3 50;
+#X obj 727 231 adsr_1shot_sjf~;
+#X text 804 149 <---- click me;
+#X text 891 147 (I'm simualating a note with MIDI velocity 100);
+#X obj 727 339 *~, f 7;
+#X obj 764 310 noise~;
+#X text 879 245 I've changed my initial attack envelope to this abstraction
+to give me more flexibility;
+#X text 80 212 compare w/osc~;
+#X obj 728 8 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X msg 776 151 100;
+#X msg 249 59 110;
+#X obj 265 585 vol_sjf~;
+#X obj 265 557 *~ 1, f 6;
+#N canvas 0 23 450 300 _bucephalus_bouncing_ball_ 0;
+#X obj 40 39 inlet;
+#X floatatom 144 78 5 0 0 0 - - -;
+#X obj 144 98 t b f;
+#X msg 144 119 1;
+#X obj 144 140 /, f 5;
+#X obj 145 185 * 1000;
+#X obj 40 83 metro 1000;
+#X floatatom 145 206 5 0 0 0 - - -;
+#X obj 144 57 counter_sjf 30;
+#X obj 144 161 expr pow($f1 \, 0.9);
+#X obj 211 185 * 127;
+#X obj 211 206 outlet;
+#X connect 0 0 6 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 1 4 1;
+#X connect 3 0 4 0;
+#X connect 4 0 9 0;
+#X connect 5 0 6 1;
+#X connect 5 0 7 0;
+#X connect 6 0 8 0;
+#X connect 8 0 1 0;
+#X connect 9 0 5 0;
+#X connect 9 0 10 0;
+#X connect 10 0 11 0;
+#X restore 728 28 pd _bucephalus_bouncing_ball_;
+#X obj 869 172 loadbang;
+#X msg 869 193 50;
+#X text 339 604 <--- turn me up;
+#X text 331 201 <-- 1 / frequency;
+#X obj 322 142 sig~;
+#X obj 260 205 /~, f 11;
+#X obj 260 228 *~ 1000;
+#X obj 260 184 sig~ 1;
+#X text 356 213 Period(s);
+#X text 306 230 Period(ms);
+#X connect 2 0 15 0;
+#X connect 2 0 39 0;
+#X connect 5 0 31 0;
+#X connect 6 0 14 0;
+#X connect 7 0 21 0;
+#X connect 8 0 9 0;
+#X connect 9 0 7 1;
+#X connect 11 0 12 0;
+#X connect 12 0 6 1;
+#X connect 14 0 21 0;
+#X connect 14 0 33 0;
+#X connect 15 0 16 0;
+#X connect 16 0 33 0;
+#X connect 17 0 19 0;
+#X connect 18 0 14 1;
+#X connect 19 0 18 0;
+#X connect 20 0 6 0;
+#X connect 22 0 25 0;
+#X connect 25 0 7 0;
+#X connect 26 0 25 1;
+#X connect 29 0 34 0;
+#X connect 30 0 22 0;
+#X connect 31 0 2 0;
+#X connect 32 0 0 0;
+#X connect 32 0 0 1;
+#X connect 33 0 32 0;
+#X connect 34 0 22 0;
+#X connect 35 0 36 0;
+#X connect 36 0 22 2;
+#X connect 39 0 40 1;
+#X connect 40 0 41 0;
+#X connect 41 0 20 0;
+#X connect 42 0 40 0;
+#X restore 142 495 pd different_attacks;
+#X text 85 510 ------------------------------------------------------------
+;
+#N canvas -1280 581 1280 751 dynamic_damping 0;
+#X obj 16 634 vol_sjf~;
+#X obj 15 675 dac~;
+#X floatatom 16 434 5 0 0 0 - - -;
+#X text 51 434 frequency (Hz);
+#X obj 1003 434 hsl 128 15 20 20000 1 1 empty empty attack_brightness
+-2 -8 0 10 -262144 -1 -1 0 1;
+#X floatatom 1000 454 10 0 0 0 - - -;
+#X obj 572 357 hsl 128 15 0.1 1 0 1 empty empty sustain -2 -8 0 10
+-262144 -1 -1 12700 1;
+#X floatatom 569 396 10 0 0 0 - - -;
+#N canvas 0 23 450 300 finerControl 0;
+#X obj 37 37 inlet;
+#X obj 66 79 sqrt;
+#X text 106 75 This just gives me a more usable output from the slider
+(i.e. finer control of higher values);
+#X floatatom 30 97 5 0 0 0 - - -;
+#X obj 67 61 sqrt;
+#X floatatom 66 100 5 0 0 0 - - -;
+#X obj 66 120 outlet;
+#X connect 0 0 4 0;
+#X connect 0 0 3 0;
+#X connect 1 0 5 0;
+#X connect 4 0 1 0;
+#X connect 5 0 6 0;
+#X restore 569 375 pd finerControl;
+#X msg 569 416 \$1 10;
+#X obj 569 437 line~;
+#N canvas 0 23 660 317 Vibrating_Medium 0;
+#X text 461 223 <-- period of 20Hz in ms;
+#X obj 39 119 lop~ 7000, f 24;
+#X obj 39 86 vd~ \$0-karStro_4;
+#X obj 302 221 delwrite~ \$0-karStro_4 50;
+#X obj 39 141 *~, f 35;
+#X obj 39 190 outlet~;
+#X obj 39 48 inlet~;
+#X obj 261 86 inlet~;
+#X text 260 64 Sustain;
+#X obj 171 64 inlet;
+#X text 146 43 medium_damping_Freq;
+#X obj 306 147 inlet~;
+#X text 303 119 initial attack;
+#X text 37 22 frequency;
+#X connect 1 0 4 0;
+#X connect 2 0 1 0;
+#X connect 4 0 5 0;
+#X connect 4 0 3 0;
+#X connect 6 0 2 0;
+#X connect 7 0 4 1;
+#X connect 9 0 1 1;
+#X connect 11 0 3 0;
+#X restore 16 607 pd Vibrating_Medium;
+#X f 155;
+#X obj 407 356 hsl 128 15 0 1 0 1 empty empty brightness -2 -8 0 10
+-262144 -1 -1 2900 1;
+#X obj 14 158 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 799 396 adsr_1shot_sjf~;
+#X obj 747 457 noise~;
+#X obj 747 478 *~, f 9;
+#X obj 871 350 loadbang;
+#X text 94 651 <-- turn me up;
+#N canvas 0 23 419 393 notePatternGenerator 0;
+#X obj 37 37 inlet;
+#X obj 34 106 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 88 106 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 123 106 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 155 106 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 36 78 sel 0 1 2 3;
+#X obj 33 178 +, f 31;
+#X floatatom 222 150 5 0 0 0 - - -;
+#X msg 34 126 36;
+#X msg 88 126 40;
+#X msg 123 126 43;
+#X msg 154 126 35;
+#X floatatom 234 88 5 0 0 0 - - -;
+#X text 269 87 rhythmic division;
+#X text 257 149 base note (c = 0);
+#N canvas 481 63 955 681 musicianship_practice 0;
+#X obj 24 148 inlet;
+#X obj 42 297 counter_sjf 4;
+#X text 264 392 transpose;
+#X obj 42 256 metro 1000;
+#X obj 352 370 counter_sjf 4;
+#X obj 352 391 sel 0;
+#X obj 467 121 t b b;
+#X obj 42 277 t b b, f 35;
+#X obj 551 124 t b b;
+#X obj 634 129 t b b;
+#X obj 723 127 t b b;
+#X msg 498 140 1;
+#X msg 468 141 1000;
+#X msg 552 144 500;
+#X msg 582 143 2;
+#X msg 635 149 333.333;
+#X msg 687 148 3;
+#X msg 724 147 250;
+#X msg 754 146 4;
+#X obj 789 126 t b b;
+#X msg 790 146 200;
+#X msg 820 145 5;
+#X obj 352 471 + 1;
+#X obj 352 433 sel 0;
+#X obj 352 450 counter_sjf 5;
+#X obj 467 100 sel 0 1 2 3 4, f 63;
+#X obj 240 508 sel 0;
+#X obj 240 528 counter_sjf 12;
+#X obj 240 549 * 5;
+#X obj 240 570 % 12;
+#X obj 352 412 counter_sjf 2;
+#X obj 42 318 outlet;
+#X obj 352 492 outlet;
+#X obj 240 591 outlet;
+#X connect 0 0 3 0;
+#X connect 1 0 31 0;
+#X connect 3 0 7 0;
+#X connect 4 0 5 0;
+#X connect 5 0 30 0;
+#X connect 6 0 12 0;
+#X connect 6 1 11 0;
+#X connect 7 0 1 0;
+#X connect 7 1 4 0;
+#X connect 8 0 13 0;
+#X connect 8 1 14 0;
+#X connect 9 0 15 0;
+#X connect 9 1 16 0;
+#X connect 10 0 17 0;
+#X connect 10 1 18 0;
+#X connect 11 0 4 2;
+#X connect 12 0 3 1;
+#X connect 13 0 3 1;
+#X connect 14 0 4 2;
+#X connect 15 0 3 1;
+#X connect 16 0 4 2;
+#X connect 17 0 3 1;
+#X connect 18 0 4 2;
+#X connect 19 0 20 0;
+#X connect 19 1 21 0;
+#X connect 20 0 3 1;
+#X connect 21 0 4 2;
+#X connect 22 0 32 0;
+#X connect 23 0 24 0;
+#X connect 24 0 22 0;
+#X connect 24 0 25 0;
+#X connect 24 0 26 0;
+#X connect 25 0 6 0;
+#X connect 25 1 8 0;
+#X connect 25 2 9 0;
+#X connect 25 3 10 0;
+#X connect 25 4 19 0;
+#X connect 26 0 27 0;
+#X connect 27 0 28 0;
+#X connect 28 0 29 0;
+#X connect 29 0 33 0;
+#X connect 30 0 23 0;
+#X restore 36 58 pd musicianship_practice;
+#X f 35;
+#X obj 33 203 t f b;
+#X obj 33 279 outlet;
+#N canvas 456 98 450 300 _bucephalus_bouncing_ball_ 0;
+#X obj 40 39 inlet;
+#X floatatom 144 78 5 0 0 0 - - -;
+#X obj 144 98 t b f;
+#X msg 144 119 1;
+#X obj 144 140 /, f 5;
+#X obj 145 185 * 1000;
+#X floatatom 145 206 5 0 0 0 - - -;
+#X obj 144 38 counter_sjf 30;
+#X obj 211 185 * 127;
+#X obj 211 206 outlet;
+#X floatatom 273 211 5 0 0 0 - - -;
+#X obj 144 59 + 1;
+#X obj 144 161 expr pow($f1 \, 0.45);
+#X connect 0 0 7 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 1 4 1;
+#X connect 3 0 4 0;
+#X connect 4 0 12 0;
+#X connect 5 0 6 0;
+#X connect 7 0 11 0;
+#X connect 8 0 9 0;
+#X connect 8 0 10 0;
+#X connect 11 0 1 0;
+#X connect 12 0 5 0;
+#X connect 12 0 8 0;
+#X restore 95 240 pd _bucephalus_bouncing_ball_;
+#X obj 95 261 outlet;
+#X connect 0 0 15 0;
+#X connect 1 0 8 0;
+#X connect 2 0 9 0;
+#X connect 3 0 10 0;
+#X connect 4 0 11 0;
+#X connect 5 0 1 0;
+#X connect 5 1 2 0;
+#X connect 5 2 3 0;
+#X connect 5 3 4 0;
+#X connect 6 0 16 0;
+#X connect 7 0 6 1;
+#X connect 8 0 6 0;
+#X connect 9 0 6 0;
+#X connect 10 0 6 0;
+#X connect 11 0 6 0;
+#X connect 15 0 5 0;
+#X connect 15 1 7 0;
+#X connect 15 2 12 0;
+#X connect 16 0 17 0;
+#X connect 16 1 18 0;
+#X connect 18 0 19 0;
+#X restore 14 178 pd notePatternGenerator;
+#X obj 16 405 mtof;
+#X msg 871 371 10;
+#X text 17 8 In this example instead of a fixed low pass cutoff \,
+I use a multiple of the pitch to make the cutoff frequency dependant
+on the incoming midi note;
+#N canvas 0 23 450 300 brightness_logic 0;
+#X obj 37 37 inlet;
+#X obj 65 101 cnv 15 300 100 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 92 123 + 4;
+#X obj 92 105 * 12;
+#X text 118 121 cutoff must be at least 4 times;
+#X text 121 104 Arbitrary maximum of 16(12+4);
+#X obj 77 157 *;
+#X floatatom 77 178 5 0 0 1 (Hz) - -;
+#X text 116 134 frequency of note (i.e. 2 octaves above);
+#X text 103 158 multiply by the frequency of note so that;
+#X text 137 169 cutoff is always some multiple of;
+#X text 138 182 frequency of note played;
+#X obj 78 230 outlet;
+#X text 32 9 frequency of note;
+#X obj 93 78 inlet;
+#X text 74 59 brightness control;
+#X connect 0 0 6 0;
+#X connect 2 0 6 1;
+#X connect 3 0 2 0;
+#X connect 6 0 7 0;
+#X connect 7 0 12 0;
+#X connect 14 0 3 0;
+#X restore 231 513 pd brightness_logic;
+#X obj 797 327 t f f, f 26;
+#N canvas 0 23 766 301 attack_brightness_logic 0;
+#X obj 64 146 inlet~;
+#X obj 64 191 lop~ 2000, f 35;
+#X obj 255 76 cnv 15 470 100 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X floatatom 269 141 10 0 0 1 Hz - -;
+#X obj 269 95 / 127;
+#X obj 269 118 *, f 14;
+#X text 367 83 Nothing clever here \, I just divide the midi velocity
+by 127 (to convert it to a range between 0-->1) and then multiply this
+by the brightness control --> therefore greater velocity notes result
+in a brighter attack;
+#X obj 64 212 outlet~;
+#X text 61 123 pluck sound in;
+#X obj 271 52 inlet;
+#X obj 349 49 inlet;
+#X text 259 32 MIDI vel;
+#X text 342 31 attack brightness (Hz);
+#X connect 0 0 1 0;
+#X connect 1 0 7 0;
+#X connect 3 0 1 1;
+#X connect 4 0 5 0;
+#X connect 5 0 3 0;
+#X connect 9 0 4 0;
+#X connect 10 0 5 1;
+#X restore 746 506 pd attack_brightness_logic;
+#X f 69;
+#N canvas 0 23 450 300 frequency_to_period~ 0;
+#X obj 98 65 inlet;
+#X text 108 150 <-- 1 / frequency;
+#X obj 99 91 sig~;
+#X obj 37 154 /~, f 11;
+#X obj 37 187 *~ 1000;
+#X obj 37 133 sig~ 1;
+#X text 133 162 Period(s);
+#X text 83 189 Period(ms);
+#X obj 37 208 outlet~;
+#X connect 0 0 2 0;
+#X connect 2 0 3 1;
+#X connect 3 0 4 0;
+#X connect 4 0 8 0;
+#X connect 5 0 3 0;
+#X restore 16 508 pd frequency_to_period~;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
+#X connect 2 0 23 0;
+#X connect 2 0 26 0;
+#X connect 4 0 5 0;
+#X connect 5 0 25 2;
+#X connect 6 0 8 0;
+#X connect 7 0 9 0;
+#X connect 8 0 7 0;
+#X connect 9 0 10 0;
+#X connect 10 0 11 2;
+#X connect 11 0 0 0;
+#X connect 12 0 23 1;
+#X connect 13 0 19 0;
+#X connect 14 0 16 1;
+#X connect 15 0 16 0;
+#X connect 16 0 25 0;
+#X connect 17 0 21 0;
+#X connect 19 0 20 0;
+#X connect 19 1 24 0;
+#X connect 20 0 2 0;
+#X connect 21 0 14 2;
+#X connect 23 0 11 1;
+#X connect 24 0 14 0;
+#X connect 24 1 25 1;
+#X connect 25 0 11 3;
+#X connect 26 0 11 0;
+#X restore 138 566 pd dynamic_damping;
+#X text 92 527 Add some dynamic damping --> i.e. think about how the
+intensity with which you strike the string changes its tone;
+#X text 87 584 ------------------------------------------------------------
+;
+#N canvas 0 23 797 450 my_first_real_6_string 0;
+#X obj 102 137 kps6str_sjf~;
+#X obj 106 331 dac~;
+#X obj 102 84 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#N canvas -1274 581 1273 683 Sequencers 0;
+#X obj 553 16 inlet;
+#X obj 37 148 stpseq16_sjf;
+#X obj 37 483 stripnote;
+#X obj 351 147 stpseq16_sjf;
+#X obj 351 482 stripnote;
+#X obj 351 62 t f b, f 37;
+#X obj 37 83 conductor_sjf 500 16;
+#X obj 645 146 stpseq16_sjf;
+#X obj 645 481 stripnote;
+#X obj 645 80 conductor_sjf 1000 4;
+#X obj 351 81 conductor_sjf 250 12;
+#X obj 351 503 + 5;
+#X obj 645 502 + 7;
+#X obj 940 147 stpseq16_sjf;
+#X obj 940 482 stripnote;
+#X obj 940 81 conductor_sjf 250 5;
+#X obj 991 508 * 0.35;
+#X obj 645 61 t f b b, f 45;
+#X msg 904 94 4;
+#X obj 940 62 t f b b, f 51;
+#X msg 1186 103 5;
+#X obj 37 62 t f b b, f 45;
+#X msg 292 86 2;
+#X obj 212 631 outlet;
+#X obj 589 633 outlet;
+#X connect 0 0 21 0;
+#X connect 0 0 5 0;
+#X connect 0 0 17 0;
+#X connect 0 0 19 0;
+#X connect 1 0 2 0;
+#X connect 2 0 23 0;
+#X connect 2 1 24 0;
+#X connect 3 0 4 0;
+#X connect 4 0 11 0;
+#X connect 4 1 24 0;
+#X connect 5 0 10 0;
+#X connect 5 1 10 3;
+#X connect 6 0 1 0;
+#X connect 7 0 8 0;
+#X connect 8 0 12 0;
+#X connect 8 1 24 0;
+#X connect 9 0 7 0;
+#X connect 10 0 3 0;
+#X connect 11 0 23 0;
+#X connect 12 0 23 0;
+#X connect 13 0 14 0;
+#X connect 14 0 23 0;
+#X connect 14 1 16 0;
+#X connect 15 0 13 0;
+#X connect 16 0 24 0;
+#X connect 17 0 9 0;
+#X connect 17 1 9 3;
+#X connect 17 2 18 0;
+#X connect 18 0 7 3;
+#X connect 19 0 15 0;
+#X connect 19 1 15 3;
+#X connect 19 2 20 0;
+#X connect 20 0 13 3;
+#X connect 21 0 6 0;
+#X connect 21 1 6 3;
+#X connect 21 2 22 0;
+#X connect 22 0 1 3;
+#X restore 102 104 pd Sequencers;
+#N canvas 717 46 450 300 satie 0;
+#X obj 68 157 qlist;
+#X obj 68 68 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 264 153 r note;
+#X obj 264 174 unpack;
+#X obj 264 254 pack;
+#X obj 264 195 stripnote;
+#X obj 264 275 outlet;
+#X obj 264 216 - 12;
+#X obj 202 51 loadbang;
+#X msg 171 94 read ./samples/satie_gn_1_rh.txt;
+#X obj 68 19 inlet;
+#X obj 68 41 sel 1;
+#X msg 98 65 rewind;
+#X msg 192 116 tempo 0.35;
+#X connect 1 0 0 0;
+#X connect 2 0 3 0;
+#X connect 3 0 5 0;
+#X connect 3 1 5 1;
+#X connect 4 0 6 0;
+#X connect 5 0 7 0;
+#X connect 5 1 4 1;
+#X connect 7 0 4 0;
+#X connect 8 0 9 0;
+#X connect 8 0 13 0;
+#X connect 9 0 0 0;
+#X connect 10 0 11 0;
+#X connect 11 0 1 0;
+#X connect 11 1 12 0;
+#X connect 12 0 0 0;
+#X connect 13 0 0 0;
+#X restore 428 83 pd satie;
+#X obj 428 104 unpack;
+#X obj 428 62 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 463 158 <--- this is just 6 copies of the same karplus strong
+algorithm;
+#X text 39 22 This example uses 4 of the same sequencer (playing at
+different speeds \, different length patterns \, and with their pitches
+transposed \, to create a polyphonic loop);
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
+#X connect 2 0 3 0;
+#X connect 3 0 0 0;
+#X connect 3 1 0 1;
+#X connect 4 0 5 0;
+#X connect 5 0 0 0;
+#X connect 5 1 0 1;
+#X connect 6 0 4 0;
+#X restore 148 661 pd my_first_real_6_string;
+#X text 94 601 Try adding extra features:;
+#X text 92 614 e.g. vary the delay time to create vibrato \, slide
+between pitches \, create multiple copies of the algorithm for polyphony
+etc.;
+#X restore 122 138 pd physical_modelling;
+#X text 107 114 synthesising a plucked string;

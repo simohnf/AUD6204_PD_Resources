@@ -1,0 +1,2140 @@
+#N canvas 0 110 527 384 10;
+#X text 336 342 sjf \, SAE London \, 2020;
+#X text 110 41 Firstly \, go to Media >> Audio Settings and ensure
+your drivers are set correctly;
+#X text 112 67 Turn on DSP from the PD Window;
+#X text 114 103 We'll start by looking at some probability tables;
+#N canvas 0 105 829 669 probability 0;
+#X text 125 21 We have already seen how the array object can be used
+to store data - allowing us to write \, store \, retieve sequences
+(drum patterns \, melodies \, and audio...);
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-prob1 2 float 3;
+#A 0 0.957142 0.285715;
+#X coords 0 1 2 0 200 140 1 0 0;
+#X restore 567 142 graph;
+#X obj 257 263 array random \$0-prob1;
+#X obj 257 234 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 256 285 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X text 594 283 0;
+#X text 713 285 1;
+#X text 124 63 arrays can also act as probability tables by using the
+"array random" object;
+#X obj 266 89 array random \$0-prob1;
+#X text 116 200 The values displayed in the array determine which of
+the two indices are more likely to be output when you send a bang to
+"array random";
+#X text 397 89 <--- you have to tell the object the name of the array
+to reference;
+#X text 116 174 In this example I have created a two value array (index
+0 & index 1) and called it \$0-prob1;
+#X floatatom 273 285 5 0 0 0 - - - 0;
+#X text 275 236 <---- click me;
+#X floatatom 260 458 5 0 0 0 - - - 0;
+#X floatatom 364 458 5 0 0 0 - - - 0;
+#X obj 260 344 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#N canvas 0 23 450 300 test_100_times 0;
+#X obj 37 37 inlet;
+#X obj 30 148 array random \$0-prob1;
+#X obj 30 169 sel 0 1, f 38;
+#X obj 30 190 counter_sjf 100;
+#X obj 134 190 counter_sjf 100;
+#X msg 35 86 100;
+#X obj 35 107 uzi_sjf;
+#X obj 37 61 t b b;
+#X obj 30 211 outlet;
+#X obj 134 211 outlet;
+#X connect 0 0 7 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 1 4 0;
+#X connect 3 0 8 0;
+#X connect 4 0 9 0;
+#X connect 5 0 6 0;
+#X connect 6 0 1 0;
+#X connect 7 0 5 0;
+#X connect 7 1 3 1;
+#X connect 7 1 4 1;
+#X restore 260 420 pd test_100_times;
+#X text 278 341 <--- click here to check the number of times each index
+is output after 100 bangs;
+#X text 283 368 Unless the probability of one index is set to 0 you
+should get a different result each time \, but for any set of probabilities
+the results should loook similar;
+#X text 130 504 ------------------------------------------------------------
+;
+#X text 137 314 ------------------------------------------------------------
+;
+#X text 398 457 number of 1's;
+#X text 383 471 output after 100 bangs;
+#X text 168 459 number of 0's;
+#X text 148 470 output after 100 bangs;
+#X text 186 528 Create a patch that creates a probability based melody
+;
+#X text 191 542 Use an array to determine the probability for each
+note of the C major scale \, and then output one of these notes every
+500ms;
+#N canvas 0 23 699 440 prob_C_major 0;
+#N canvas 382 323 674 234 Cmajor 0;
+#X obj 54 76 sel 0 1 2 3 4 5 6 7;
+#X obj 54 14 inlet;
+#X obj 54 182 outlet;
+#X text -154 122 '0' is equivalent to MIDI note C;
+#X text 296 122 '12' is equivalent to MIDI note C1;
+#X msg 257 121 12;
+#X msg 229 121 11;
+#X msg 200 121 9;
+#X msg 170 121 7;
+#X msg 141 121 5;
+#X msg 112 121 4;
+#X msg 83 121 2;
+#X msg 54 121 0;
+#X connect 0 0 12 0;
+#X connect 0 1 11 0;
+#X connect 0 2 10 0;
+#X connect 0 3 9 0;
+#X connect 0 4 8 0;
+#X connect 0 5 7 0;
+#X connect 0 6 6 0;
+#X connect 0 7 5 0;
+#X connect 1 0 0 0;
+#X connect 5 0 2 0;
+#X connect 6 0 2 0;
+#X connect 7 0 2 0;
+#X connect 8 0 2 0;
+#X connect 9 0 2 0;
+#X connect 10 0 2 0;
+#X connect 11 0 2 0;
+#X connect 12 0 2 0;
+#X restore 192 311 pd Cmajor;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-melProb1 8 float 3;
+#A 0 0.869999 0.0300001 0.49 0.03 0.7 0.44 0.0200002 0.899999;
+#X coords 0 1 8 0 200 100 1 0 0;
+#X restore 489 122 graph;
+#X obj 146 252 array random \$0-melProb1, f 13;
+#X obj 146 133 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 146 153 metro 500;
+#X obj 192 380 noteout 1;
+#X obj 192 332 + 48;
+#X obj 192 359 makenote 100 500;
+#X text 494 224 C;
+#X text 515 224 D;
+#X text 543 224 E;
+#X text 567 224 F;
+#X text 595 224 G;
+#X text 622 224 A;
+#X text 645 224 B;
+#X text 671 224 c;
+#X obj 146 174 int, f 15;
+#X obj 146 195 sel 0 1, f 46;
+#X obj 245 252 random 8;
+#X obj 224 140 vradio 15 1 1 2 empty empty empty 0 -8 0 10 #fcfcfc
+#000000 #000000 0;
+#X text 240 139 Probability based;
+#X text 240 156 Completely Random;
+#X text 74 6 In this example you should notice that the probability
+based melody is less random \, i.e. seems to have more of a melodic
+sense to it;
+#X text 73 44 Try to change the probability tabel (the values in \$0-melProb1)
+to see how you can control the output of the probability based melody
+;
+#X obj 166 220 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 288 221 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X connect 0 0 6 0;
+#X connect 2 0 0 0;
+#X connect 3 0 4 0;
+#X connect 4 0 16 0;
+#X connect 6 0 7 0;
+#X connect 7 0 5 0;
+#X connect 7 1 5 1;
+#X connect 16 0 17 0;
+#X connect 17 0 2 0;
+#X connect 17 0 24 0;
+#X connect 17 1 18 0;
+#X connect 17 1 25 0;
+#X connect 18 0 0 0;
+#X connect 19 0 16 1;
+#X restore 236 584 pd prob_C_major;
+#X connect 2 0 4 0;
+#X connect 2 0 12 0;
+#X connect 3 0 2 0;
+#X connect 16 0 17 0;
+#X connect 17 0 14 0;
+#X connect 17 1 15 0;
+#X restore 127 125 pd probability;
+#X text 102 85 ------------------------------------------------------------
+;
+#X text 102 148 ------------------------------------------------------------
+;
+#X text 114 166 Markov Chains;
+#X text 110 10 For this lesson we will look at some stochastic (probability
+based) algorithms;
+#N canvas 440 165 992 713 markov_chain_2 0;
+#X text 25 16 So far we have just 'taught' our markov chain the probabilities
+by manually changing values in an array;
+#X text 30 53 But the real benefit of using markov chains is we can
+'train' them. i.e. we can give them data based on examples that they
+then use as the basis for their output;
+#X text 459 43 https://youtu.be/AoQ4AtsFWVM?t=314;
+#X text 434 71 count:;
+#X obj 478 90 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 598 90 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 508 90 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000 #000000
+0 1;
+#X obj 538 90 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 568 90 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000 #000000
+0 1;
+#X obj 628 90 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000 #000000
+0 1;
+#X obj 658 90 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 688 90 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 748 90 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 718 90 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000 #000000
+0 1;
+#X text 476 71 1;
+#X text 598 71 2;
+#X text 717 74 3;
+#X obj 778 90 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 808 90 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 838 90 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X text 835 71 4;
+#X obj 868 90 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 928 90 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 898 90 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000 #000000
+0 1;
+#X text 422 89 pattern:;
+#X obj 476 306 dac~;
+#N canvas -1280 581 1019 546 sequenced_version_of_original 0;
+#X obj 69 47 inlet;
+#X obj 68 170 sel 0 1 2, f 21;
+#X obj 69 193 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 99 278 kick_sjf~;
+#X obj 304 276 snr_sjf~;
+#X obj 108 197 int 100;
+#X obj 173 368 outlet~;
+#X obj 595 275 hh_sjf~;
+#X obj 68 147 tabread \$0-funkyDrummer_k+s;
+#X obj 537 175 sel 0 1 2, f 21;
+#X obj 536 200 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 537 152 tabread \$0-funkyDrummer_hh;
+#X obj 160 196 int 80;
+#X obj 577 202 int 70;
+#X obj 629 201 int 80;
+#N canvas 0 23 450 300 funkyDrummer_pattern 0;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-funkyDrummer_k+s 16 float 3;
+#A 0 1 0 1 0 2 0 1 2 0 2 1 2 2 1 0 2;
+#X coords 0 2 16 0 200 100 1 0 0;
+#X restore 196 35 graph;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-funkyDrummer_hh 16 float 3;
+#A 0 1 1 1 1 1 1 2 1 1 1 1 1 1 2 1 1;
+#X coords 0 2 16 0 200 100 1 0 0;
+#X restore 199 169 graph;
+#X text 12 4 Don't change these arrays.....;
+#X restore 770 118 pd funkyDrummer_pattern;
+#X connect 0 0 8 0;
+#X connect 0 0 11 0;
+#X connect 1 0 2 0;
+#X connect 1 1 5 0;
+#X connect 1 2 12 0;
+#X connect 3 0 6 0;
+#X connect 4 0 6 0;
+#X connect 5 0 3 0;
+#X connect 7 0 6 0;
+#X connect 8 0 1 0;
+#X connect 9 0 10 0;
+#X connect 9 1 13 0;
+#X connect 9 2 14 0;
+#X connect 11 0 9 0;
+#X connect 12 0 4 0;
+#X connect 13 0 7 0;
+#X connect 14 0 7 1;
+#X restore 477 239 pd sequenced_version_of_original;
+#X obj 477 260 vol_sjf~;
+#X text 554 279 <---- turn me up;
+#X obj 477 174 conductor_sjf 175 16;
+#X text 258 211 turn me on to hear original pattern;
+#X text 258 224 NOTE: I haven't included any;
+#X text 297 236 velocity changes yet...;
+#N canvas -1280 581 989 694 transition_table 0;
+#X obj 88 308 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 208 308 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 118 308 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 148 308 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000
+#000000 0 1;
+#X obj 178 308 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 238 308 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 268 308 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000
+#000000 0 1;
+#X obj 298 308 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 358 308 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 328 308 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 388 308 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000
+#000000 0 1;
+#X obj 418 308 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 448 308 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 478 308 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000
+#000000 0 1;
+#X obj 538 308 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 508 308 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000
+#000000 0 1;
+#X text 33 315 pattern:;
+#X text 75 15 As we've already seen a markov chain bases it's each
+outputon the probability of going to each state from the previous output
+;
+#X text 70 51 (the last output was 0 \, what is the probability of
+going to 0/1/2 \, make a random decision weighted by those probabilities)
+;
+#X text 71 109 So to base our pattern on funky drummer \, we need to
+know what the probability of any of the possibilities (rest/kick/snare)
+happening after each of the 3;
+#X text 70 143 So \, what is the probability of kick happening after
+a rest \, what is the possibility of rest happening after a rest \,
+what is the possibility of a snare happening after a rest \, etc;
+#X text 72 181 Disclaimer \, actually I have been incorrectly using
+the word probability. The total of all the probabilities given any
+previous output should always total to one)....;
+#X text 72 223 This makes things even easier though \, because all
+we need is to count how often each transition happens;
+#X text 90 340 k2r;
+#X text 150 340 k2r;
+#X text 482 341 k2r;
+#X obj 86 395 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 206 395 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 116 395 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 146 395 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000
+#000000 0 1;
+#X obj 176 395 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 236 395 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 266 395 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000
+#000000 0 1;
+#X obj 296 395 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 356 395 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 326 395 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 386 395 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000
+#000000 0 1;
+#X obj 416 395 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 446 395 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 476 395 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000
+#000000 0 1;
+#X obj 536 395 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 506 395 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000
+#000000 0 1;
+#X text 31 402 pattern:;
+#X text 361 426 s2k;
+#X text 450 426 s2k;
+#X text 540 426 s2k;
+#X text 97 280 For example \, there are 3 times in the pattern when
+a kick is followed by a rest (k2r);
+#X text 104 367 And there are also 3 times in the pattern when a snare
+is followed by a kick (s2k);
+#X text 574 399 <--- note the pattern would repeat so the next thing
+in the pattern after this snare would be the first kick again;
+#X text 187 512 rest;
+#X text 222 512 kick;
+#X text 253 512 snare;
+#X text 200 496 ----from----;
+#X text 158 528 rest;
+#X text 158 546 kick;
+#X text 153 563 snare;
+#X text 195 528 0;
+#X text 195 546 2;
+#X text 195 563 3;
+#X text 231 528 3;
+#X text 267 528 2;
+#X text 231 546 0;
+#X text 231 563 2;
+#X text 267 546 3;
+#X text 267 563 1;
+#X text 117 603 This gives a total of 16 (which is correct because
+there are 16 steps in the pattern;
+#X text 76 471 By my count we end up with something like this;
+#X text 136 557 |;
+#X text 133 545 to;
+#X text 135 533 |, f 2;
+#X restore 152 364 pd transition_table;
+#X text 137 333 1 - building a transition table;
+#N canvas 0 184 989 694 training_the_chain 0;
+#X obj 151 19 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 271 19 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 181 19 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000 #000000
+0 1;
+#X obj 211 19 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 241 19 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000 #000000
+0 1;
+#X obj 301 19 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000 #000000
+0 1;
+#X obj 331 19 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 361 19 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 421 19 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 391 19 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000 #000000
+0 1;
+#X obj 451 19 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 481 19 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 511 19 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 541 19 tgl 30 0 empty empty kick 2 15 0 10 #c4c4fc #000000 #000000
+0 1;
+#X obj 601 19 tgl 30 0 empty empty snare 1 15 0 10 #fcc4c4 #000000
+#000000 0 1;
+#X obj 571 19 tgl 30 0 empty empty rest 2 15 0 10 #fcfcfc #000000 #000000
+0 1;
+#X text 96 26 pattern:;
+#X text 249 95 rest;
+#X text 284 95 kick;
+#X text 315 95 snare;
+#X text 262 79 ----from----;
+#X text 220 111 rest;
+#X text 220 129 kick;
+#X text 215 146 snare;
+#X text 257 111 0;
+#X text 257 129 2;
+#X text 257 146 3;
+#X text 293 111 3;
+#X text 329 111 2;
+#X text 293 129 0;
+#X text 293 146 2;
+#X text 329 129 3;
+#X text 329 146 1;
+#X text 198 140 |;
+#X text 195 128 to;
+#X text 197 116 |, f 2;
+#X text 231 61 Transition Table;
+#N canvas 0 23 450 278 (subpatch) 0;
+#X array \$0-fd_rst_to 3 float 3;
+#A 0 0 2 3;
+#X coords 0 3 3 0 100 60 1 0 0;
+#X restore 646 170 graph;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-fd_kck_to 3 float 3;
+#A 0 3 0 2;
+#X coords 0 3 3 0 100 60 1 0 0;
+#X restore 645 304 graph;
+#X text 492 174 prob of outputting 0 --->;
+#X text 492 188 if the previous;
+#X text 492 202 output was 0;
+#X text 783 190 if the previous;
+#X text 783 204 output was 0;
+#X text 780 332 if the previous;
+#X text 780 346 output was 1;
+#X text 491 305 prob of outputting 0 --->;
+#X text 491 319 if the previous;
+#X text 491 333 output was 1;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-fd_snr_to 3 float 3;
+#A 0 2 3 1;
+#X coords 0 3 3 0 100 60 1 0 0;
+#X restore 647 425 graph;
+#X text 782 453 if the previous;
+#X text 493 426 prob of outputting 0 --->;
+#X text 493 440 if the previous;
+#X text 746 174 <--- prob of outputting 2;
+#X text 743 316 <--- prob of outputting 2;
+#X text 745 437 <--- prob of outputting 2;
+#X text 782 467 output was 2;
+#X text 493 454 output was 2;
+#X text 544 504 if the previous;
+#X text 544 518 output was 2;
+#X text 544 490 prob of outputting 1 ---^;
+#X text 543 378 if the previous;
+#X text 543 364 prob of outputting 1 ---^;
+#X text 543 392 output was 1;
+#X text 542 243 if the previous;
+#X text 542 229 prob of outputting 1 ---^;
+#X text 542 257 output was 0;
+#X text 55 239 Just like last time \, I will use 0 for a rest \, 1
+for kick \, 2 for snare;
+#X text 58 275 We need to write to each array;
+#X obj 249 272 tabwrite;
+#X text 62 306 so \, we just have to input the data into each array
+;
+#X obj 301 441 tabwrite \$0-fd_rst_to;
+#X text 59 328 STarting from the top left of the table;
+#X msg 246 345 0 0;
+#X obj 342 416 unpack;
+#X msg 283 366 2 1;
+#X msg 327 391 3 2;
+#X text 61 345 Rest goes to rest(0) 0 times;
+#X text 60 365 Rest goes to kick(1) 2 times;
+#X text 60 390 rest goest to snare(2) 3 times;
+#X text 236 365 -------;
+#X text 244 390 -------------;
+#X msg 110 498 3 0 \, 0 1 \, 2 2;
+#X obj 112 530 tabwrite \$0-fd_kck_to;
+#X text 195 497 <--- kick transition in one message box;
+#X text 266 509 (note the commas);
+#X text 266 589 (note the commas);
+#X obj 112 610 tabwrite \$0-fd_snr_to;
+#X text 195 577 <--- snare transition in one message box;
+#X msg 110 578 2 0 \, 3 1 \, 1 2;
+#X text 62 207 Yet again we have 3 possible states so we will use 3
+arrays \, each with a size of 3 (3 values stored within);
+#X connect 73 0 74 0;
+#X connect 74 0 71 0;
+#X connect 74 1 71 1;
+#X connect 75 0 74 0;
+#X connect 76 0 74 0;
+#X connect 82 0 83 0;
+#X connect 89 0 87 0;
+#X restore 152 413 pd training_the_chain;
+#X text 131 394 2 - training the markov chain;
+#N canvas 868 115 572 524 funkyMarkov_1 0;
+#X obj 43 159 sel 0 1 2, f 21;
+#X msg 74 205 100;
+#X msg 110 205 100;
+#X obj 44 182 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 74 267 kick_sjf~;
+#X obj 279 265 snr_sjf~;
+#X obj 148 357 vol_sjf~;
+#X obj 148 397 dac~;
+#X obj 43 99 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000
+0 1;
+#X text 41 56 I've simply used a metro to trigger the output automatically
+\, and assigned 1 to kick \, 2 to snare \, and 0 to a rest;
+#X text 219 371 <---- turn me up;
+#N canvas 0 23 860 512 funkyMarkov 0;
+#X obj 393 46 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 393 66 int, f 5;
+#X obj 371 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 559 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 477 268 int, f 5;
+#X floatatom 476 310 5 0 0 0 - - - 0;
+#X text 426 311 Output;
+#X floatatom 433 42 5 0 2 0 - - - 0;
+#X text 466 33 seed (this is the number we begin with \, i.e. when
+you enter a number here the algirithm acts as if this was the last
+output);
+#X obj 670 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 35 44 1 - hit the bang and it triggers the "int" object to
+output the previous state (or the seed);
+#X obj 393 151 sel 0 1 2, f 40;
+#X text 59 149 2 - send a bang out the output associated with the last
+state (step 1);
+#X text 32 213 3 - trigger the array associated with the last state
+to output a probability based random number;
+#X obj 477 289 t f f;
+#X text 161 290 5 - save the output of step 3 as the previous state
+;
+#X text 515 290 4 - output the result of step 3;
+#X obj 390 9 inlet;
+#X obj 435 9 inlet;
+#X obj 476 330 outlet;
+#X obj 393 211 array random \$0-fd_rst_to, f 12;
+#X obj 474 211 array random \$0-fd_kck_to, f 12;
+#X obj 585 211 array random \$0-fd_snr_to, f 12;
+#X connect 0 0 1 0;
+#X connect 1 0 11 0;
+#X connect 4 0 14 0;
+#X connect 5 0 19 0;
+#X connect 7 0 1 1;
+#X connect 11 0 2 0;
+#X connect 11 0 20 0;
+#X connect 11 1 3 0;
+#X connect 11 1 21 0;
+#X connect 11 2 9 0;
+#X connect 11 2 22 0;
+#X connect 14 0 1 1;
+#X connect 14 1 5 0;
+#X connect 17 0 0 0;
+#X connect 18 0 7 0;
+#X connect 20 0 4 0;
+#X connect 21 0 4 0;
+#X connect 22 0 4 0;
+#X restore 43 138 pd funkyMarkov;
+#X text 42 17 This uses exactly the same code as before (but this time
+we're using the funky drummer transition table as the basis for the
+markov chain);
+#X obj 43 118 metro 160;
+#X text 136 132 I've changed the array names within \, but otherwise
+it's the same code as before;
+#X connect 0 0 3 0;
+#X connect 0 1 1 0;
+#X connect 0 2 2 0;
+#X connect 1 0 4 0;
+#X connect 2 0 5 0;
+#X connect 4 0 6 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 6 0 7 1;
+#X connect 8 0 13 0;
+#X connect 11 0 0 0;
+#X connect 13 0 11 0;
+#X restore 155 460 pd funkyMarkov_1;
+#N canvas 680 104 760 568 funkyMarkov_2 0;
+#X obj 39 292 sel 0 1 2, f 21;
+#X msg 70 338 100;
+#X msg 106 338 100;
+#X obj 40 315 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 70 400 kick_sjf~;
+#X obj 275 398 snr_sjf~;
+#X obj 144 490 vol_sjf~;
+#X obj 144 530 dac~;
+#X obj 462 6 loadbang;
+#X obj 462 56 uzi_sjf 16, f 30;
+#X obj 461 32 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-breakBeat 16 float 3;
+#A 0 1 0 2 1 0 2 1 0 2 2 1 0 1 0 2 1;
+#X coords 0 2 16 0 200 140 1 0 0;
+#X restore 438 152 graph;
+#X obj 39 271 tabread \$0-kickNsnr;
+#X text 476 30 <---- create a new pattern;
+#X text 34 52 This time though \, I store a pattern generated by the
+markov chain in another array so I can loop it...;
+#X text 215 510 <---- turn me up;
+#X text 563 81 <-------- same code again;
+#N canvas 0 23 860 512 funkyMarkov 0;
+#X obj 393 46 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 393 66 int, f 5;
+#X obj 371 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 559 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 477 268 int, f 5;
+#X floatatom 476 310 5 0 0 0 - - - 0;
+#X text 426 311 Output;
+#X floatatom 433 42 5 0 2 0 - - - 0;
+#X text 466 33 seed (this is the number we begin with \, i.e. when
+you enter a number here the algirithm acts as if this was the last
+output);
+#X obj 670 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 35 44 1 - hit the bang and it triggers the "int" object to
+output the previous state (or the seed);
+#X obj 393 151 sel 0 1 2, f 40;
+#X text 59 149 2 - send a bang out the output associated with the last
+state (step 1);
+#X text 32 213 3 - trigger the array associated with the last state
+to output a probability based random number;
+#X obj 477 289 t f f;
+#X text 161 290 5 - save the output of step 3 as the previous state
+;
+#X text 515 290 4 - output the result of step 3;
+#X obj 390 9 inlet;
+#X obj 435 9 inlet;
+#X obj 476 330 outlet;
+#X obj 393 211 array random \$0-fd_rst_to, f 12;
+#X obj 474 211 array random \$0-fd_kck_to, f 12;
+#X obj 585 211 array random \$0-fd_snr_to, f 12;
+#X connect 0 0 1 0;
+#X connect 1 0 11 0;
+#X connect 4 0 14 0;
+#X connect 5 0 19 0;
+#X connect 7 0 1 1;
+#X connect 11 0 2 0;
+#X connect 11 0 20 0;
+#X connect 11 1 3 0;
+#X connect 11 1 21 0;
+#X connect 11 2 9 0;
+#X connect 11 2 22 0;
+#X connect 14 0 1 1;
+#X connect 14 1 5 0;
+#X connect 17 0 0 0;
+#X connect 18 0 7 0;
+#X connect 20 0 4 0;
+#X connect 21 0 4 0;
+#X connect 22 0 4 0;
+#X restore 462 76 pd funkyMarkov;
+#X obj 462 101 tabwrite \$0-breakBeat;
+#X obj 37 185 conductor_sjf 175 16;
+#X text 35 13 This uses exactly the same code as before (and the same
+probability tables \, so you can change them in the markov_chain_2/training_the_chain
+patch);
+#X connect 0 0 3 0;
+#X connect 0 1 1 0;
+#X connect 0 2 2 0;
+#X connect 1 0 4 0;
+#X connect 2 0 5 0;
+#X connect 4 0 6 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 6 0 7 1;
+#X connect 8 0 10 0;
+#X connect 9 0 17 0;
+#X connect 9 2 18 1;
+#X connect 10 0 9 0;
+#X connect 12 0 0 0;
+#X connect 17 0 18 0;
+#X connect 19 0 12 0;
+#X restore 152 504 pd funkyMarkov_2;
+#X text 126 438 3 - using our new chain to make some beats;
+#X text 410 101 kick+snare;
+#X obj 478 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X text 422 124 pattern:;
+#X text 423 137 hi-hats;
+#X obj 508 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 538 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 568 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 598 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 628 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 658 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 688 125 tgl 30 0 empty empty open 2 15 0 10 #c4fcc4 #000000
+#000000 0 1;
+#X obj 718 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 748 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 778 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 808 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 838 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 868 125 tgl 30 0 empty empty open 2 15 0 10 #c4fcc4 #000000
+#000000 0 1;
+#X obj 898 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X obj 928 125 tgl 30 0 empty empty close 0 15 0 10 #00fc04 #000000
+#000000 0 1;
+#X text 100 544 ------------------------------------------------------------
+;
+#X text 127 559 Create another 3 state markov chain for the hihats
+(0=rest \; 1=closed \; 2=open);
+#X text 127 592 Use the pattern given above to build a transition table
+for the hihhats and train the markov chain with it;
+#X text 127 616 Use this newly created chain in combination with the
+kick and snare example to create a markov chain version of the entire
+beat;
+#X text 124 485 4 - creating repeatable loops;
+#X text 458 18 This example is based on one bar of the drum break from
+Funky Drummer;
+#X connect 26 0 27 0;
+#X connect 27 0 25 0;
+#X connect 27 0 25 1;
+#X connect 29 0 26 0;
+#X restore 127 208 pd markov_chain_2;
+#N canvas 0 23 1280 751 markov_chain_1 0;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-mk_0_to 3 float 3;
+#A 0 -0.0166621 0.666667 0.383334;
+#X coords 0 1 3 0 100 60 1 0 0;
+#X restore 180 222 graph;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-mk_1_to 3 float 3;
+#A 0 0.583337 0.466667 0.6;
+#X coords 0 1 3 0 100 60 1 0 0;
+#X restore 179 356 graph;
+#X text 25 150 This time the arrays determine the probability of each
+output depending on the previos example;
+#X text 26 226 prob of outputting 0 --->;
+#X text 26 240 if the previous;
+#X text 26 254 output was 0;
+#X text 317 242 if the previous;
+#X text 317 256 output was 0;
+#X text 314 384 if the previous;
+#X text 314 398 output was 1;
+#X text 25 357 prob of outputting 0 --->;
+#X text 25 371 if the previous;
+#X text 25 385 output was 1;
+#X obj 836 43 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 836 63 int, f 5;
+#X obj 836 208 array random \$0-mk_0_to, f 12;
+#X obj 814 208 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 1002 208 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 920 265 int, f 5;
+#X floatatom 919 307 5 0 0 0 - - - 0;
+#X obj 917 208 array random \$0-mk_1_to, f 12;
+#X text 869 308 Output;
+#X floatatom 876 39 5 0 2 0 - - - 0;
+#X text 909 30 seed (this is the number we begin with \, i.e. when
+you enter a number here the algirithm acts as if this was the last
+output);
+#X obj 1113 208 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 1028 208 array random \$0-mk_2_to, f 12;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-mk_2_to 3 float 3;
+#A 0 0.583337 0.333333 0;
+#X coords 0 1 3 0 100 60 1 0 0;
+#X restore 181 477 graph;
+#X text 316 505 if the previous;
+#X text 27 478 prob of outputting 0 --->;
+#X text 27 492 if the previous;
+#X text 26 96 We will start with a three state example;
+#X text 26 121 For two possible states we need 3 arrays \, each with
+a size of 3;
+#X text 280 226 <--- prob of outputting 2;
+#X text 277 368 <--- prob of outputting 2;
+#X text 279 489 <--- prob of outputting 2;
+#X text 316 519 output was 2;
+#X text 27 506 output was 2;
+#X text 78 556 if the previous;
+#X text 78 570 output was 2;
+#X text 78 542 prob of outputting 1 ---^;
+#X text 77 430 if the previous;
+#X text 77 416 prob of outputting 1 ---^;
+#X text 77 444 output was 1;
+#X text 76 295 if the previous;
+#X text 76 281 prob of outputting 1 ---^;
+#X text 76 309 output was 0;
+#X text 478 41 1 - hit the bang and it triggers the "int" object to
+output the previous state (or the seed);
+#X obj 836 148 sel 0 1 2, f 40;
+#X text 502 146 2 - send a bang out the output associated with the
+last state (step 1);
+#X text 475 210 3 - trigger the array associated with the last state
+to output a probability based random number;
+#X obj 920 286 t f f;
+#X text 604 287 5 - save the output of step 3 as the previous state
+;
+#X text 958 287 4 - output the result of step 3;
+#X text 93 661 applying this musically;
+#N canvas 868 215 572 524 markov_KickSnare 0;
+#N canvas 0 23 860 512 myMarkov_1 0;
+#X obj 393 46 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 393 66 int, f 5;
+#X obj 393 211 array random \$0-mk_0_to, f 12;
+#X obj 371 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 559 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 477 268 int, f 5;
+#X floatatom 476 310 5 0 0 0 - - - 0;
+#X obj 474 211 array random \$0-mk_1_to, f 12;
+#X text 426 311 Output;
+#X floatatom 433 42 5 0 2 0 - - - 0;
+#X text 466 33 seed (this is the number we begin with \, i.e. when
+you enter a number here the algirithm acts as if this was the last
+output);
+#X obj 670 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 585 211 array random \$0-mk_2_to, f 12;
+#X text 35 44 1 - hit the bang and it triggers the "int" object to
+output the previous state (or the seed);
+#X obj 393 151 sel 0 1 2, f 40;
+#X text 59 149 2 - send a bang out the output associated with the last
+state (step 1);
+#X text 32 213 3 - trigger the array associated with the last state
+to output a probability based random number;
+#X obj 477 289 t f f;
+#X text 161 290 5 - save the output of step 3 as the previous state
+;
+#X text 515 290 4 - output the result of step 3;
+#X obj 390 9 inlet;
+#X obj 435 9 inlet;
+#X obj 476 330 outlet;
+#X connect 0 0 1 0;
+#X connect 1 0 14 0;
+#X connect 2 0 5 0;
+#X connect 5 0 17 0;
+#X connect 6 0 22 0;
+#X connect 7 0 5 0;
+#X connect 9 0 1 1;
+#X connect 12 0 5 0;
+#X connect 14 0 2 0;
+#X connect 14 0 3 0;
+#X connect 14 1 4 0;
+#X connect 14 1 7 0;
+#X connect 14 2 11 0;
+#X connect 14 2 12 0;
+#X connect 17 0 1 1;
+#X connect 17 1 6 0;
+#X connect 20 0 0 0;
+#X connect 21 0 9 0;
+#X restore 43 138 pd myMarkov_1;
+#X obj 43 159 sel 0 1 2, f 21;
+#X msg 74 205 100;
+#X msg 110 205 100;
+#X obj 44 182 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 74 267 kick_sjf~;
+#X obj 279 265 snr_sjf~;
+#X obj 148 357 vol_sjf~;
+#X obj 148 397 dac~;
+#X obj 43 99 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000
+0 1;
+#X obj 43 118 metro 250;
+#X text 42 17 This uses exactly the same code as before (and the same
+probability tables \, so you can change them in the markov_chain patch)
+;
+#X text 41 56 I've simply used a metro to trigger the output automatically
+\, and assigned 1 to kick \, 2 to snare \, and 0 to a rest;
+#X text 219 371 <---- turn me up;
+#X connect 0 0 1 0;
+#X connect 1 0 4 0;
+#X connect 1 1 2 0;
+#X connect 1 2 3 0;
+#X connect 2 0 5 0;
+#X connect 3 0 6 0;
+#X connect 5 0 7 0;
+#X connect 6 0 7 0;
+#X connect 7 0 8 0;
+#X connect 7 0 8 1;
+#X connect 9 0 10 0;
+#X connect 10 0 0 0;
+#X restore 241 662 pd markov_KickSnare;
+#X text 90 716 applying this musically;
+#N canvas 0 23 850 592 markov_KickSnare2 0;
+#X obj 46 296 sel 0 1 2, f 21;
+#X msg 77 342 100;
+#X msg 113 342 100;
+#X obj 47 319 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 77 404 kick_sjf~;
+#X obj 282 402 snr_sjf~;
+#X obj 151 494 vol_sjf~;
+#X obj 151 534 dac~;
+#X text 42 17 This uses exactly the same code as before (and the same
+probability tables \, so you can change them in the markov_chain patch)
+;
+#X obj 469 10 loadbang;
+#X obj 469 60 uzi_sjf 16, f 30;
+#N canvas 0 23 860 512 myMarkov_1 0;
+#X obj 393 46 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 393 66 int, f 5;
+#X obj 393 211 array random \$0-mk_0_to, f 12;
+#X obj 371 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 559 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 477 268 int, f 5;
+#X floatatom 476 310 5 0 0 0 - - - 0;
+#X obj 474 211 array random \$0-mk_1_to, f 12;
+#X text 426 311 Output;
+#X floatatom 433 42 5 0 2 0 - - - 0;
+#X text 466 33 seed (this is the number we begin with \, i.e. when
+you enter a number here the algirithm acts as if this was the last
+output);
+#X obj 670 211 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 585 211 array random \$0-mk_2_to, f 12;
+#X text 35 44 1 - hit the bang and it triggers the "int" object to
+output the previous state (or the seed);
+#X obj 393 151 sel 0 1 2, f 40;
+#X text 59 149 2 - send a bang out the output associated with the last
+state (step 1);
+#X text 32 213 3 - trigger the array associated with the last state
+to output a probability based random number;
+#X obj 477 289 t f f;
+#X text 161 290 5 - save the output of step 3 as the previous state
+;
+#X text 515 290 4 - output the result of step 3;
+#X obj 390 9 inlet;
+#X obj 435 9 inlet;
+#X obj 476 330 outlet;
+#X connect 0 0 1 0;
+#X connect 1 0 14 0;
+#X connect 2 0 5 0;
+#X connect 5 0 17 0;
+#X connect 6 0 22 0;
+#X connect 7 0 5 0;
+#X connect 9 0 1 1;
+#X connect 12 0 5 0;
+#X connect 14 0 2 0;
+#X connect 14 0 3 0;
+#X connect 14 1 4 0;
+#X connect 14 1 7 0;
+#X connect 14 2 11 0;
+#X connect 14 2 12 0;
+#X connect 17 0 1 1;
+#X connect 17 1 6 0;
+#X connect 20 0 0 0;
+#X connect 21 0 9 0;
+#X restore 469 84 pd myMarkov_1;
+#X obj 468 36 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-kickNsnr 16 float 3;
+#A 0 1 1 2 0 1 1 0 2 1 0 1 2 0 1 2 0;
+#X coords 0 2 16 0 200 140 1 0 0;
+#X restore 445 154 graph;
+#X obj 469 105 tabwrite \$0-kickNsnr;
+#X obj 46 275 tabread \$0-kickNsnr;
+#X text 483 34 <---- create a new pattern;
+#X text 41 56 This time though \, I store a pattern generated by the
+markov chain in another array so I can loop it...;
+#X text 222 514 <---- turn me up;
+#X text 570 85 <-------- same code again;
+#X obj 45 189 conductor_sjf 250 16;
+#X connect 0 0 3 0;
+#X connect 0 1 1 0;
+#X connect 0 2 2 0;
+#X connect 1 0 4 0;
+#X connect 2 0 5 0;
+#X connect 4 0 6 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 6 0 7 1;
+#X connect 9 0 12 0;
+#X connect 10 0 11 0;
+#X connect 10 2 14 1;
+#X connect 11 0 14 0;
+#X connect 12 0 10 0;
+#X connect 15 0 0 0;
+#X connect 20 0 15 0;
+#X restore 238 717 pd markov_KickSnare2;
+#X text 29 40 Markov Chains expand upon probability tables in that
+the probability of anything happening is dependant on the previous
+output.;
+#X text 24 3 With probability tables \, the last state is irrelevant
+(i.e. like rolling a die \, just because you getting 6 on your last
+roll has no effect on your next roll);
+#X text 126 587 ------------------------------------------------------------
+;
+#X text 116 609 Use a markov chain like the one provided here to generate
+a pattern of kick and snare drums;
+#X text 115 634 You can use 0 to represent a rest (silence) \, 1 to
+trigger a kick \, and 2 to trigger a snare;
+#X text 116 684 Create a patch that allows you to store 8/16 beats
+of this pattern (HINT use an additional array) that you then loop;
+#X connect 13 0 14 0;
+#X connect 14 0 47 0;
+#X connect 15 0 18 0;
+#X connect 18 0 50 0;
+#X connect 20 0 18 0;
+#X connect 22 0 14 1;
+#X connect 25 0 18 0;
+#X connect 47 0 15 0;
+#X connect 47 0 16 0;
+#X connect 47 1 17 0;
+#X connect 47 1 20 0;
+#X connect 47 2 24 0;
+#X connect 47 2 25 0;
+#X connect 50 0 14 1;
+#X connect 50 1 19 0;
+#X restore 127 188 pd markov_chain_1;
+#X text 106 231 ------------------------------------------------------------
+;
+#N canvas 0 23 1225 611 markov_chain_3 0;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-breakBeat2_k+s 16 float 2;
+#X coords 0 2 16 0 200 60 1 0 0;
+#X restore 995 35 graph;
+#X obj 588 140 tabwrite \$0-breakBeat2_k+s;
+#X obj 751 140 tabwrite \$0-breakBeat2_hh;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-breakBeat2_hh 16 float 2;
+#X coords 0 2 16 0 200 60 1 0 0;
+#X restore 995 113 graph;
+#X obj 154 211 tabread \$0-breakBeat2_k+s;
+#N canvas 623 23 828 612 drmSamps0.3 0;
+#X obj 101 32 inlet;
+#X obj 169 579 outlet~;
+#X obj 101 57 route 36 38 42 46;
+#X obj 99 109 sel 0;
+#X obj 138 109 sel 0;
+#X obj 175 109 sel 0;
+#X obj 214 109 sel 0;
+#X text 254 104 My drum machine outputs MIDI Note messages (pitch+velocity)
+\, but this includes note off messages (velocity 0) so I need to select
+'0's and ignore them;
+#X text 212 52 <---I already set the MIDI pitches for each voice of
+my drum machine sequencer so it would work with GeneralMIDI \, here
+I'm just routing the MIDI velocity to each voice;
+#X obj 464 239 inlet~;
+#X text 455 214 audio in;
+#X obj 95 370 sampvoice_sjf~;
+#X obj 265 370 sampvoice_sjf~;
+#X obj 435 370 sampvoice_sjf~;
+#X obj 605 370 sampvoice_sjf~;
+#X msg 632 211 ./samples/kick.wav;
+#X msg 636 233 ./samples/snare.wav;
+#X msg 639 253 ./samples/hhc.wav;
+#X msg 654 273 ./samples/hho.wav;
+#X obj 650 189 loadbang;
+#X text 567 170 Load samples when patch is opened;
+#X connect 0 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 1 4 0;
+#X connect 2 2 5 0;
+#X connect 2 3 6 0;
+#X connect 3 1 11 0;
+#X connect 4 1 12 0;
+#X connect 5 1 13 0;
+#X connect 6 1 14 0;
+#X connect 9 0 11 1;
+#X connect 9 0 12 1;
+#X connect 9 0 13 1;
+#X connect 9 0 14 1;
+#X connect 11 0 1 0;
+#X connect 12 0 1 0;
+#X connect 13 0 1 0;
+#X connect 14 0 1 0;
+#X connect 15 0 11 2;
+#X connect 16 0 12 2;
+#X connect 17 0 13 2;
+#X connect 18 0 14 2;
+#X connect 19 0 15 0;
+#X connect 19 0 16 0;
+#X connect 19 0 17 0;
+#X connect 19 0 18 0;
+#X coords 0 -1 1 1 680 115 1 95 355;
+#X restore 110 329 pd drmSamps0.3;
+#X text 618 451 ^--- right-click and select open;
+#X obj 154 232 sel 1 2, f 15;
+#X obj 313 232 sel 1 2;
+#X msg 154 253 36;
+#X msg 189 254 38;
+#X msg 313 253 42;
+#X msg 348 253 46;
+#X obj 152 290 pack 0 100;
+#X obj 110 452 vol_sjf~;
+#X obj 109 495 dac~;
+#X obj 297 290 pack 0 100;
+#X obj 313 211 tabread \$0-breakBeat2_hh;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-breakBeat2_Vel 16 float 3;
+#A 0 0.95 0.1 0.2 0.1 0.6 0.1 0.2 0.1 0.6 0.1 0.2 0.1 0.6 0.1 0.2 0.1
+;
+#X coords 0 1 16 0 200 40 1 0 0;
+#X restore 995 191 graph;
+#X obj 154 188 t f f f, f 58;
+#X obj 487 211 tabread \$0-breakBeat2_Vel;
+#X obj 487 247 * 127;
+#X obj 770 50 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 154 123 conductor_sjf 175 16;
+#X obj 641 31 r \$0-newBreakBeat;
+#X obj 641 52 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#N canvas 0 23 963 433 generate_Logic 0;
+#X obj 145 72 inlet;
+#X obj 36 252 markov_sjf, f 45;
+#X msg 176 154 1 0 1 0 2 0 1 2 0 2 1 2 2 1 0 2;
+#X obj 36 232 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 36 211 uzi_sjf 16;
+#X obj 36 273 pack;
+#X obj 36 191 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 429 258 markov_sjf, f 45;
+#X obj 429 238 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 429 217 uzi_sjf 16;
+#X obj 429 279 pack;
+#X obj 429 197 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X msg 564 123 1 1 1 1 1 1 2 1 1 1 1 1 1 2 1 1;
+#X obj 144 93 t b b;
+#X text 191 206 kick & snare;
+#X text 554 201 hihats;
+#X text 436 34 patterns based on funky drummer;
+#X text 759 126 funky drummer hihat pattern;
+#X text 369 154 funky drummer kick&snare pattern;
+#X obj 36 294 outlet;
+#X obj 429 300 outlet;
+#X connect 0 0 13 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 1;
+#X connect 3 0 1 0;
+#X connect 4 0 3 0;
+#X connect 4 2 5 1;
+#X connect 5 0 19 0;
+#X connect 6 0 4 0;
+#X connect 7 0 10 0;
+#X connect 8 0 7 0;
+#X connect 9 0 8 0;
+#X connect 9 2 10 1;
+#X connect 10 0 20 0;
+#X connect 11 0 9 0;
+#X connect 12 0 7 1;
+#X connect 13 0 11 0;
+#X connect 13 0 6 0;
+#X connect 13 1 12 0;
+#X connect 13 1 2 0;
+#X restore 641 72 pd generate_Logic;
+#X obj 770 97 tabwrite \$0-breakBeat2_Vel;
+#N canvas 0 23 310 456 velocityPattern 0;
+#X obj 40 10 inlet;
+#X obj 39 35 uzi_sjf 16;
+#X obj 92 71 t f f, f 22;
+#X obj 107 233 % 4;
+#X obj 107 254 sel 0;
+#X obj 160 289 sel 0;
+#X obj 160 268 % 2;
+#X obj 92 92 sel 0;
+#X msg 107 275 0.6;
+#X msg 160 310 0.2;
+#X msg 189 311 0.1;
+#X obj 91 353 pack, f 21;
+#X obj 91 374 outlet;
+#X msg 92 113 0.95;
+#X connect 0 0 1 0;
+#X connect 1 2 2 0;
+#X connect 2 0 7 0;
+#X connect 2 1 11 1;
+#X connect 3 0 4 0;
+#X connect 4 0 8 0;
+#X connect 4 1 6 0;
+#X connect 5 0 9 0;
+#X connect 5 1 10 0;
+#X connect 6 0 5 0;
+#X connect 7 0 13 0;
+#X connect 7 1 3 0;
+#X connect 8 0 11 0;
+#X connect 9 0 11 0;
+#X connect 10 0 11 0;
+#X connect 11 0 12 0;
+#X connect 13 0 11 0;
+#X restore 770 70 pd velocityPattern;
+#X obj 210 58 markov_sjf, f 11;
+#X text 476 54 click for new pattern --->;
+#X floatatom 487 285 5 0 0 0 - - - 0;
+#X floatatom 555 239 5 0 0 0 - - - 0;
+#X text 43 17 this patch uses an (under documented) example of using
+one array to store all of the transition tables;
+#X connect 4 0 7 0;
+#X connect 5 0 14 0;
+#X connect 7 0 9 0;
+#X connect 7 1 10 0;
+#X connect 8 0 11 0;
+#X connect 8 1 12 0;
+#X connect 9 0 13 0;
+#X connect 10 0 13 0;
+#X connect 11 0 16 0;
+#X connect 12 0 16 0;
+#X connect 13 0 5 0;
+#X connect 14 0 15 0;
+#X connect 14 0 15 1;
+#X connect 16 0 5 0;
+#X connect 17 0 8 0;
+#X connect 19 0 4 0;
+#X connect 19 1 17 0;
+#X connect 19 2 20 0;
+#X connect 19 2 32 0;
+#X connect 20 0 21 0;
+#X connect 21 0 16 1;
+#X connect 21 0 13 1;
+#X connect 21 0 31 0;
+#X connect 22 0 28 0;
+#X connect 23 0 19 0;
+#X connect 24 0 25 0;
+#X connect 24 0 22 0;
+#X connect 25 0 26 0;
+#X connect 26 0 1 0;
+#X connect 26 1 2 0;
+#X connect 28 0 27 0;
+#X restore 130 277 pd markov_chain_3;
+#N canvas -1266 581 1050 396 markov_techno 0;
+#X obj 70 150 makenote 100 250;
+#X obj 69 178 fmSyn1_sjf~;
+#X obj 69 283 vol_sjf~;
+#X obj 69 323 dac~;
+#X obj 477 287 vol_sjf~;
+#X obj 476 330 dac~;
+#X obj 70 16 conductor_sjf 125 16;
+#X obj 482 179 kick_sjf~;
+#X obj 662 179 snr_sjf~;
+#X obj 924 179 hh_sjf~;
+#N canvas 0 23 989 470 synth_load_logic 0;
+#X obj 410 305 loadbang;
+#X msg 137 348 100 50 0 400;
+#X msg 250 349 2;
+#X msg 372 356 1 200 0.1 0;
+#X msg 453 357 2;
+#X msg 485 357 5;
+#X msg 663 352 0;
+#X msg 730 353 0.4;
+#X msg 576 354 1 50 0.3 100;
+#X msg 218 349 2.1;
+#X obj 137 369 outlet;
+#X obj 206 381 outlet;
+#X obj 250 370 outlet;
+#X obj 372 377 outlet;
+#X obj 428 382 outlet;
+#X obj 485 378 outlet;
+#X obj 576 375 outlet;
+#X obj 663 373 outlet;
+#X obj 730 374 outlet;
+#X obj 170 139 random 10000;
+#X obj 170 160 / 10000;
+#X obj 170 250 line;
+#X msg 170 229 \$1 10000;
+#X obj 340 80 inlet;
+#X obj 493 176 random 10000;
+#X obj 493 197 / 10000;
+#X obj 493 287 line;
+#X msg 493 266 \$1 10000;
+#X obj 493 240 + 4;
+#X obj 493 219 * 3;
+#X obj 170 203 + 1;
+#X obj 170 182 * 3;
+#X connect 0 0 1 0;
+#X connect 0 0 9 0;
+#X connect 0 0 2 0;
+#X connect 0 0 3 0;
+#X connect 0 0 4 0;
+#X connect 0 0 5 0;
+#X connect 0 0 8 0;
+#X connect 0 0 6 0;
+#X connect 0 0 7 0;
+#X connect 1 0 10 0;
+#X connect 2 0 12 0;
+#X connect 3 0 13 0;
+#X connect 4 0 14 0;
+#X connect 5 0 15 0;
+#X connect 6 0 17 0;
+#X connect 7 0 18 0;
+#X connect 8 0 16 0;
+#X connect 9 0 11 0;
+#X connect 19 0 20 0;
+#X connect 20 0 31 0;
+#X connect 21 0 12 0;
+#X connect 22 0 21 0;
+#X connect 23 0 19 0;
+#X connect 23 0 24 0;
+#X connect 24 0 25 0;
+#X connect 25 0 29 0;
+#X connect 26 0 15 0;
+#X connect 27 0 26 0;
+#X connect 28 0 27 0;
+#X connect 29 0 28 0;
+#X connect 30 0 22 0;
+#X connect 31 0 30 0;
+#X restore 197 148 pd synth_load_logic;
+#X f 37;
+#X obj 483 152 route 36 38 42 46, f 83;
+#N canvas -1178 581 1114 621 sequencing_mess 0;
+#X obj 173 19 inlet;
+#X obj 36 136 stpSeq16_sjf;
+#X obj 36 471 t l l, f 54;
+#N canvas 0 23 1034 626 Markov_Melody 0;
+#X floatatom 444 203 5 0 0 0 - - - 0;
+#X obj 441 269 t l l;
+#X obj 317 186 bng 15 250 50 0 empty empty clear_list 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 148 356 list, f 5;
+#X floatatom 492 204 5 0 0 0 - - - 0;
+#X obj 525 270 t l l;
+#X obj 259 356 list, f 5;
+#X obj 102 98 t b b;
+#X obj 450 179 int;
+#X obj 498 181 int;
+#X obj 196 158 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 102 381 markov_sjf pitch;
+#X obj 204 382 markov_sjf velocity;
+#X obj 102 403 outlet;
+#X obj 204 403 outlet;
+#X obj 451 133 inlet;
+#X obj 102 73 inlet;
+#X obj 196 98 inlet;
+#X obj 341 109 inlet;
+#X obj 67 98 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 97 463 list prepend set;
+#X msg 98 506 36 36 36 39 36 36 36 44 36 38 36 36 36 36 35 36 36 36
+36 39 36 36 36 44 36 38 36 36 36 36 35 36 36 36 36 39 36 36 36 44 36
+38 36 36 36 36 35 36;
+#X obj 473 454 list prepend set;
+#X obj 473 481 route list;
+#X msg 473 502 101 88 118 43 48 96 70 42 65 65 80 0 101 100 96 0 101
+88 118 43 48 96 70 42 65 65 80 0 101 100 96 0 101 88 118 43 48 96 70
+42 65 65 80 0 101 100 96 0;
+#X obj 97 484 route list;
+#X text 92 40 Bang to trigger random choice;
+#X text 191 63 bang to send training;
+#X text 196 80 data to markovs;
+#X text 314 90 bang to clear everything;
+#X text 438 111 midi notes in;
+#X obj 196 119 t b b;
+#X obj 450 158 unpack 0 0;
+#X obj 441 238 list prepend;
+#X obj 525 239 list prepend;
+#X connect 0 0 33 0;
+#X connect 1 0 3 1;
+#X connect 1 1 33 1;
+#X connect 2 0 6 1;
+#X connect 2 0 3 1;
+#X connect 2 0 33 1;
+#X connect 2 0 34 1;
+#X connect 2 0 11 2;
+#X connect 2 0 12 2;
+#X connect 3 0 20 0;
+#X connect 3 0 11 1;
+#X connect 4 0 34 0;
+#X connect 5 0 6 1;
+#X connect 5 1 34 1;
+#X connect 6 0 22 0;
+#X connect 6 0 12 1;
+#X connect 7 0 11 0;
+#X connect 7 1 12 0;
+#X connect 8 0 0 0;
+#X connect 9 0 4 0;
+#X connect 10 0 3 0;
+#X connect 10 0 6 0;
+#X connect 11 0 13 0;
+#X connect 12 0 14 0;
+#X connect 15 0 32 0;
+#X connect 16 0 7 0;
+#X connect 16 0 19 0;
+#X connect 17 0 31 0;
+#X connect 18 0 2 0;
+#X connect 20 0 25 0;
+#X connect 22 0 23 0;
+#X connect 23 0 24 0;
+#X connect 25 0 21 0;
+#X connect 31 1 10 0;
+#X connect 32 0 8 0;
+#X connect 32 1 9 0;
+#X connect 33 0 1 0;
+#X connect 34 0 5 0;
+#X restore 397 513 pd Markov_Melody;
+#N canvas 0 23 993 473 bar_count_logic 0;
+#X obj 192 207 pack;
+#X obj 192 228 route 0 1, f 24;
+#X obj 192 124 t b f f, f 11;
+#X obj 502 13 sel 0;
+#X text 592 20 count every bar;
+#X obj 192 158 int;
+#X msg 536 119 0;
+#X msg 502 178 1;
+#X text 583 77 on the last 2 bars of every 4 switch to the markov chain
+;
+#X text 589 94 switch back on the first beat;
+#X obj 193 93 inlet;
+#X obj 192 269 outlet;
+#X obj 262 269 outlet;
+#X obj 530 178 outlet;
+#X obj 502 157 t b b, f 7;
+#X obj 572 119 outlet;
+#X text 507 195 bang on change to markov;
+#X text 571 137 bang on start of loop;
+#X obj 502 34 counter_sjf 4;
+#X obj 502 79 sel 3 0, f 12;
+#X obj 536 99 t b b;
+#X connect 0 0 1 0;
+#X connect 1 0 11 0;
+#X connect 1 1 12 0;
+#X connect 2 0 5 0;
+#X connect 2 1 0 1;
+#X connect 2 2 3 0;
+#X connect 3 0 18 0;
+#X connect 5 0 0 0;
+#X connect 6 0 5 1;
+#X connect 7 0 5 1;
+#X connect 10 0 2 0;
+#X connect 14 0 7 0;
+#X connect 14 1 13 0;
+#X connect 18 0 19 0;
+#X connect 19 0 14 0;
+#X connect 19 1 20 0;
+#X connect 20 0 6 0;
+#X connect 20 1 15 0;
+#X restore 173 44 pd bar_count_logic;
+#X f 82;
+#N canvas 0 23 523 306 loadBassLine 0;
+#X msg 62 87 12 12 12 15 12 12 12 20 12 14 12 12 12 12 11 12;
+#X msg 199 140 101 88 118 43 48 96 70 42 65 65 80 0 101 100 96 0;
+#N canvas 0 23 450 300 itemize_list 0;
+#X obj 86 23 inlet;
+#X obj 71 211 outlet;
+#X obj 88 77 list split 1;
+#X obj 153 100 list, f 6;
+#X obj 88 98 t b f b;
+#X obj 207 138 counter_sjf;
+#X obj 220 62 list length;
+#X obj 86 44 t l l;
+#X obj 220 83 t b l;
+#X obj 71 189 pack;
+#X connect 0 0 7 0;
+#X connect 2 0 4 0;
+#X connect 2 1 3 1;
+#X connect 3 0 2 0;
+#X connect 4 0 3 0;
+#X connect 4 1 9 0;
+#X connect 4 2 5 0;
+#X connect 5 0 9 1;
+#X connect 6 0 8 0;
+#X connect 7 0 2 0;
+#X connect 7 1 6 0;
+#X connect 8 0 5 1;
+#X connect 8 1 5 2;
+#X connect 9 0 1 0;
+#X restore 199 159 pd itemize_list;
+#N canvas 0 23 450 300 itemize_list 0;
+#X obj 86 23 inlet;
+#X obj 71 211 outlet;
+#X obj 88 77 list split 1;
+#X obj 153 100 list, f 6;
+#X obj 88 98 t b f b;
+#X obj 207 138 counter_sjf;
+#X obj 220 62 list length;
+#X obj 86 44 t l l;
+#X obj 220 83 t b l;
+#X obj 71 189 pack;
+#X connect 0 0 7 0;
+#X connect 2 0 4 0;
+#X connect 2 1 3 1;
+#X connect 3 0 2 0;
+#X connect 4 0 3 0;
+#X connect 4 1 9 0;
+#X connect 4 2 5 0;
+#X connect 5 0 9 1;
+#X connect 6 0 8 0;
+#X connect 7 0 2 0;
+#X connect 7 1 6 0;
+#X connect 8 0 5 1;
+#X connect 8 1 5 2;
+#X connect 9 0 1 0;
+#X restore 64 148 pd itemize_list;
+#X obj 97 45 loadbang;
+#X obj 64 169 outlet;
+#X text 55 190 pitch;
+#X obj 199 180 outlet;
+#X text 193 200 velocity;
+#X msg 417 73 2;
+#X obj 417 94 outlet;
+#X connect 0 0 3 0;
+#X connect 1 0 2 0;
+#X connect 2 0 7 0;
+#X connect 3 0 5 0;
+#X connect 4 0 0 0;
+#X connect 4 0 1 0;
+#X connect 4 0 9 0;
+#X connect 9 0 10 0;
+#X restore 197 107 pd loadBassLine;
+#X obj 786 34 drummachine_sjf;
+#N canvas 0 23 469 361 funky_loader 0;
+#X msg 50 124 0 0 \, 0 1 \, 0 2 \, 0 3 \, 60 4 \, 0 5 \, 0 6 \, 30
+7 \, 0 8 \, 30 9 \, 0 10 \, 30 11 \, 60 12 \, 0 13 \, 0 14 \, 30 15
+;
+#X msg 27 61 100 0 \, 0 1 \, 40 2 \, 0 3 \, 0 4 \, 0 5 \, 30 6 \, 0
+7 \, 0 8 \, 0 9 \, 30 10 \, 0 11 \, 0 12 \, 30 13 \, 0 14 \, 0 15;
+#X msg 117 284 0 0 \, 0 1 \, 0 2 \, 0 3 \, 0 4 \, 0 5 \, 0 6 \, 30
+7 \, 0 8 \, 0 9 \, 0 10 \, 0 11 \, 0 12 \, 30 13 \, 0 14 \, 0 15;
+#X msg 80 195 100 0 \, 30 1 \, 40 2 \, 30 3 \, 60 4 \, 30 5 \, 40 6
+\, 0 7 \, 60 8 \, 30 9 \, 40 10 \, 30 11 \, 60 12 \, 0 13 \, 40 14
+\, 30 15;
+#X obj 134 24 loadbang;
+#X obj 27 93 outlet;
+#X obj 50 156 outlet;
+#X obj 80 227 outlet;
+#X obj 117 316 outlet;
+#X connect 0 0 6 0;
+#X connect 1 0 5 0;
+#X connect 2 0 8 0;
+#X connect 3 0 7 0;
+#X connect 4 0 1 0;
+#X connect 4 0 0 0;
+#X connect 4 0 3 0;
+#X connect 4 0 2 0;
+#X restore 852 3 pd funky_loader;
+#N canvas 0 23 1034 626 Markov_Melody 0;
+#X floatatom 444 203 5 0 0 0 - - - 0;
+#X obj 441 269 t l l;
+#X obj 317 186 bng 15 250 50 0 empty empty clear_list 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 148 356 list, f 5;
+#X floatatom 492 204 5 0 0 0 - - - 0;
+#X obj 525 270 t l l;
+#X obj 259 356 list, f 5;
+#X obj 102 98 t b b;
+#X obj 450 179 int;
+#X obj 498 181 int;
+#X obj 196 158 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 102 381 markov_sjf pitch;
+#X obj 204 382 markov_sjf velocity;
+#X obj 102 403 outlet;
+#X obj 204 403 outlet;
+#X obj 451 133 inlet;
+#X obj 102 73 inlet;
+#X obj 196 98 inlet;
+#X obj 341 109 inlet;
+#X obj 67 98 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 97 463 list prepend set;
+#X msg 98 506 36 0 36 0 38 0 36 38 0 38 36 38 38 36 0 38 36 0 36 0
+38 0 36 38 0 38 36 38 38 36 0 38 36 0 36 0 38 0 36 38 0 38 36 38 38
+36 0 38;
+#X obj 473 454 list prepend set;
+#X obj 473 481 route list;
+#X msg 473 502 100 0 40 0 60 0 30 30 0 30 30 30 60 30 0 30 100 0 40
+0 60 0 30 30 0 30 30 30 60 30 0 30 100 0 40 0 60 0 30 30 0 30 30 30
+60 30 0 30;
+#X obj 97 484 route list;
+#X text 92 40 Bang to trigger random choice;
+#X text 191 63 bang to send training;
+#X text 196 80 data to markovs;
+#X text 314 90 bang to clear everything;
+#X text 438 111 midi notes in;
+#X obj 196 119 t b b;
+#X obj 450 158 unpack 0 0;
+#X obj 441 238 list prepend;
+#X obj 525 239 list prepend;
+#X connect 0 0 33 0;
+#X connect 1 0 3 1;
+#X connect 1 1 33 1;
+#X connect 2 0 6 1;
+#X connect 2 0 3 1;
+#X connect 2 0 33 1;
+#X connect 2 0 34 1;
+#X connect 2 0 11 2;
+#X connect 2 0 12 2;
+#X connect 3 0 20 0;
+#X connect 3 0 11 1;
+#X connect 4 0 34 0;
+#X connect 5 0 6 1;
+#X connect 5 1 34 1;
+#X connect 6 0 22 0;
+#X connect 6 0 12 1;
+#X connect 7 0 11 0;
+#X connect 7 1 12 0;
+#X connect 8 0 0 0;
+#X connect 9 0 4 0;
+#X connect 10 0 3 0;
+#X connect 10 0 6 0;
+#X connect 11 0 13 0;
+#X connect 12 0 14 0;
+#X connect 15 0 32 0;
+#X connect 16 0 7 0;
+#X connect 16 0 19 0;
+#X connect 17 0 31 0;
+#X connect 18 0 2 0;
+#X connect 20 0 25 0;
+#X connect 22 0 23 0;
+#X connect 23 0 24 0;
+#X connect 25 0 21 0;
+#X connect 31 1 10 0;
+#X connect 32 0 8 0;
+#X connect 32 1 9 0;
+#X connect 33 0 1 0;
+#X connect 34 0 5 0;
+#X restore 604 369 pd Markov_Melody;
+#N canvas 0 23 1034 626 Markov_Melody 0;
+#X floatatom 444 203 5 0 0 0 - - - 0;
+#X obj 441 269 t l l;
+#X obj 317 186 bng 15 250 50 0 empty empty clear_list 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 148 356 list, f 5;
+#X floatatom 492 204 5 0 0 0 - - - 0;
+#X obj 525 270 t l l;
+#X obj 259 356 list, f 5;
+#X obj 102 98 t b b;
+#X obj 450 179 int;
+#X obj 498 181 int;
+#X obj 196 158 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 102 381 markov_sjf pitch;
+#X obj 204 382 markov_sjf velocity;
+#X obj 102 403 outlet;
+#X obj 204 403 outlet;
+#X obj 451 133 inlet;
+#X obj 102 73 inlet;
+#X obj 196 98 inlet;
+#X obj 341 109 inlet;
+#X obj 67 98 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 97 463 list prepend set;
+#X msg 98 506 42 42 42 42 42 42 42 46 42 42 42 42 42 46 42 42 42 42
+42 42 42 42 42 46 42 42 42 42 42 46 42 42 42 42 42 42 42 42 42 46 42
+42 42 42 42 46 42 42;
+#X obj 473 454 list prepend set;
+#X obj 473 481 route list;
+#X msg 473 502 100 30 40 30 60 30 40 30 60 30 40 30 60 30 40 30 100
+30 40 30 60 30 40 30 60 30 40 30 60 30 40 30 100 30 40 30 60 30 40
+30 60 30 40 30 60 30 40 30;
+#X obj 97 484 route list;
+#X text 92 40 Bang to trigger random choice;
+#X text 191 63 bang to send training;
+#X text 196 80 data to markovs;
+#X text 314 90 bang to clear everything;
+#X text 438 111 midi notes in;
+#X obj 196 119 t b b;
+#X obj 450 158 unpack 0 0;
+#X obj 441 238 list prepend;
+#X obj 525 239 list prepend;
+#X connect 0 0 33 0;
+#X connect 1 0 3 1;
+#X connect 1 1 33 1;
+#X connect 2 0 6 1;
+#X connect 2 0 3 1;
+#X connect 2 0 33 1;
+#X connect 2 0 34 1;
+#X connect 2 0 11 2;
+#X connect 2 0 12 2;
+#X connect 3 0 20 0;
+#X connect 3 0 11 1;
+#X connect 4 0 34 0;
+#X connect 5 0 6 1;
+#X connect 5 1 34 1;
+#X connect 6 0 22 0;
+#X connect 6 0 12 1;
+#X connect 7 0 11 0;
+#X connect 7 1 12 0;
+#X connect 8 0 0 0;
+#X connect 9 0 4 0;
+#X connect 10 0 3 0;
+#X connect 10 0 6 0;
+#X connect 11 0 13 0;
+#X connect 12 0 14 0;
+#X connect 15 0 32 0;
+#X connect 16 0 7 0;
+#X connect 16 0 19 0;
+#X connect 17 0 31 0;
+#X connect 18 0 2 0;
+#X connect 20 0 25 0;
+#X connect 22 0 23 0;
+#X connect 23 0 24 0;
+#X connect 25 0 21 0;
+#X connect 31 1 10 0;
+#X connect 32 0 8 0;
+#X connect 32 1 9 0;
+#X connect 33 0 1 0;
+#X connect 34 0 5 0;
+#X restore 733 365 pd Markov_Melody;
+#X obj 786 269 t l l, f 35;
+#X obj 604 390 pack, f 16;
+#X obj 733 385 pack, f 16;
+#X obj 771 7 t b f f;
+#N canvas 0 23 969 535 pat_Logic 0;
+#X obj 235 7 inlet;
+#X obj 80 78 inlet;
+#X obj 80 99 t b;
+#X obj 146 139 t l l, f 30;
+#X obj 146 160 expr if($f2<=0 \, 0 \, 1);
+#X obj 146 181 pack 0 0 0, f 31;
+#X obj 292 161 unpack;
+#X obj 146 202 route 1;
+#X obj 80 240 list, f 49;
+#X obj 371 75 inlet;
+#X text 312 57 bang at start;
+#X text 61 57 bang at start;
+#X obj 74 292 outlet;
+#X obj 370 124 tabread \$0-breakBeat3_Vel;
+#X msg 372 193 0 \$1;
+#X obj 147 90 route 36 38;
+#X msg 147 111 36 \$1;
+#X msg 195 113 38 \$1;
+#X obj 543 82 route 42 46;
+#X msg 543 103 42 \$1;
+#X msg 591 105 46 \$1;
+#X obj 559 232 t l l, f 30;
+#X obj 559 253 expr if($f2<=0 \, 0 \, 1);
+#X obj 559 274 pack 0 0 0, f 31;
+#X obj 705 254 unpack;
+#X obj 559 295 route 1;
+#X obj 202 379 list, f 49;
+#X obj 196 431 outlet;
+#X obj 650 455 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#N canvas 0 23 310 456 velocityPattern 0;
+#X obj 40 10 inlet;
+#X obj 39 35 uzi_sjf 16;
+#X obj 92 71 t f f, f 22;
+#X obj 107 233 % 4;
+#X obj 107 254 sel 0;
+#X obj 160 289 sel 0;
+#X obj 160 268 % 2;
+#X obj 92 92 sel 0;
+#X msg 107 275 0.6;
+#X msg 160 310 0.2;
+#X msg 189 311 0.1;
+#X obj 91 353 pack, f 21;
+#X obj 91 374 outlet;
+#X msg 92 113 0.95;
+#X connect 0 0 1 0;
+#X connect 1 2 2 0;
+#X connect 2 0 7 0;
+#X connect 2 1 11 1;
+#X connect 3 0 4 0;
+#X connect 4 0 8 0;
+#X connect 4 1 6 0;
+#X connect 5 0 9 0;
+#X connect 5 1 10 0;
+#X connect 6 0 5 0;
+#X connect 7 0 13 0;
+#X connect 7 1 3 0;
+#X connect 8 0 11 0;
+#X connect 9 0 11 0;
+#X connect 10 0 11 0;
+#X connect 11 0 12 0;
+#X connect 13 0 11 0;
+#X restore 650 475 pd velocityPattern;
+#X obj 650 502 tabwrite \$0-breakBeat3_Vel;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-breakBeat3_Vel 16 float 3;
+#A 0 0.95 0.1 0.2 0.1 0.6 0.1 0.2 0.1 0.6 0.1 0.2 0.1 0.6 0.1 0.2 0.1
+;
+#X coords 0 1 16 0 200 40 1 0 0;
+#X restore 722 401 graph;
+#X obj 645 434 loadbang;
+#X connect 0 0 15 0;
+#X connect 0 0 18 0;
+#X connect 1 0 2 0;
+#X connect 2 0 8 0;
+#X connect 2 0 26 0;
+#X connect 3 0 4 0;
+#X connect 3 1 6 0;
+#X connect 4 0 5 0;
+#X connect 5 0 7 0;
+#X connect 6 0 5 1;
+#X connect 6 1 5 2;
+#X connect 7 0 8 1;
+#X connect 8 0 12 0;
+#X connect 9 0 13 0;
+#X connect 13 0 14 0;
+#X connect 14 0 8 1;
+#X connect 14 0 26 1;
+#X connect 15 0 16 0;
+#X connect 15 1 17 0;
+#X connect 16 0 3 0;
+#X connect 17 0 3 0;
+#X connect 18 0 19 0;
+#X connect 18 1 20 0;
+#X connect 19 0 21 0;
+#X connect 20 0 21 0;
+#X connect 21 0 22 0;
+#X connect 21 1 24 0;
+#X connect 22 0 23 0;
+#X connect 23 0 25 0;
+#X connect 24 0 23 1;
+#X connect 24 1 23 2;
+#X connect 25 0 26 1;
+#X connect 26 0 27 0;
+#X connect 28 0 29 0;
+#X connect 29 0 30 0;
+#X connect 32 0 28 0;
+#X restore 770 312 pd pat_Logic;
+#X obj 614 315 t f f;
+#X obj 396 538 pack;
+#X obj 810 465 outlet, f 9;
+#X obj 153 560 outlet, f 9;
+#X obj 695 100 outlet;
+#X obj 705 314 t b b;
+#X obj 663 313 t b b;
+#X connect 0 0 4 0;
+#X connect 1 0 2 0;
+#X connect 2 0 18 0;
+#X connect 2 1 3 3;
+#X connect 3 0 16 0;
+#X connect 3 1 16 1;
+#X connect 4 0 1 0;
+#X connect 4 0 13 0;
+#X connect 4 1 3 0;
+#X connect 4 1 15 0;
+#X connect 4 2 3 1;
+#X connect 4 2 21 0;
+#X connect 4 3 3 2;
+#X connect 4 3 19 0;
+#X connect 4 3 20 0;
+#X connect 5 0 1 1;
+#X connect 5 1 1 2;
+#X connect 5 2 1 3;
+#X connect 6 0 10 0;
+#X connect 7 0 6 1;
+#X connect 7 1 6 2;
+#X connect 7 2 6 3;
+#X connect 7 3 6 4;
+#X connect 8 0 11 0;
+#X connect 8 1 11 1;
+#X connect 9 0 12 0;
+#X connect 9 1 12 1;
+#X connect 10 0 14 1;
+#X connect 10 1 17 0;
+#X connect 11 0 17 0;
+#X connect 12 0 17 0;
+#X connect 13 0 14 0;
+#X connect 13 1 6 0;
+#X connect 13 2 14 2;
+#X connect 14 0 8 3;
+#X connect 14 1 9 3;
+#X connect 15 0 8 0;
+#X connect 15 1 9 0;
+#X connect 16 0 18 0;
+#X connect 20 0 8 2;
+#X connect 20 1 9 2;
+#X connect 21 0 8 1;
+#X connect 21 1 9 1;
+#X restore 70 81 pd sequencing_mess;
+#X f 70;
+#X text 433 13 this example uses markov chains to create a variation
+of the bass line and drum pattern every 4th bar;
+#X text 145 299 <--- turn me up;
+#X text 558 298 <--- turn me up;
+#X connect 0 0 1 0;
+#X connect 0 1 1 1;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 5 0;
+#X connect 4 0 5 1;
+#X connect 6 0 12 0;
+#X connect 7 0 4 0;
+#X connect 8 0 4 0;
+#X connect 9 0 4 0;
+#X connect 10 0 1 2;
+#X connect 10 1 1 3;
+#X connect 10 2 1 4;
+#X connect 10 3 1 5;
+#X connect 10 4 1 6;
+#X connect 10 5 1 7;
+#X connect 10 6 1 8;
+#X connect 10 7 1 9;
+#X connect 10 8 1 10;
+#X connect 11 0 7 0;
+#X connect 11 1 8 0;
+#X connect 11 2 9 0;
+#X connect 11 3 9 1;
+#X connect 12 0 0 0;
+#X connect 12 1 10 0;
+#X connect 12 2 11 0;
+#X restore 130 297 pd markov_techno;
+#N canvas 611 58 811 323 satie_markov 0;
+#N canvas 0 23 589 726 satie_markov___MESSY!!!! 0;
+#X obj 149 160 qlist;
+#X obj 149 140 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 329 289 r note;
+#X msg 93 91 read ./samples/satie_gn_1_rh.txt;
+#X obj 149 353 list;
+#X obj 149 286 delay;
+#X msg 239 161 rewind;
+#X msg 239 182 next;
+#X obj 255 204 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 149 265 route 1;
+#X obj 149 223 int;
+#X obj 149 244 pack;
+#X obj 255 224 t b f b;
+#N canvas 1029 23 891 979 Markov_Melody 0;
+#X floatatom 387 425 5 0 0 0 - - - 0;
+#X obj 384 491 t l l;
+#X obj 260 408 bng 15 250 50 0 empty empty clear_list 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 91 578 list, f 5;
+#X floatatom 435 426 5 0 0 0 - - - 0;
+#X obj 468 492 t l l;
+#X obj 202 578 list, f 5;
+#X obj 45 320 t b b;
+#X obj 393 401 int;
+#X obj 441 403 int;
+#X obj 139 380 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 45 603 markov_sjf pitch;
+#X obj 147 604 markov_sjf velocity;
+#X obj 45 625 outlet;
+#X obj 147 625 outlet;
+#X obj 394 355 inlet;
+#X obj 45 295 inlet;
+#X obj 139 320 inlet;
+#X obj 284 331 inlet;
+#X obj 10 320 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 40 685 list prepend set;
+#X msg 41 728 72 72 72 71 71 71 65 60 68 68 68 68 68 67 67 67 67 60
+65 65 65 60 60 60 65 60 60 60 65 60 60 60 60 72 72 65 60 74 74 76 76
+77 77 79 79 79 79 65 60 83 83 79 79 79 79 77 79 79 79 65 60 77;
+#X obj 416 676 list prepend set;
+#X obj 416 703 route list;
+#X msg 416 724 100 100 100 110 110 110 100 100 100 100 100 100 100
+110 100 100 100 100 110 110 100 100 100 100 100 100 100 100 100 100
+100 100 100 70 70 60 60 70 70 70 70 70 70 70 70 70 70 60 60 70 70 70
+70 70 70 70 60 60 60 60 60 70;
+#X obj 40 706 route list;
+#X text 35 262 Bang to trigger random choice;
+#X text 134 285 bang to send training;
+#X text 139 302 data to markovs;
+#X text 257 312 bang to clear everything;
+#X text 381 333 midi notes in;
+#X obj 139 341 t b b;
+#X obj 393 380 unpack 0 0;
+#X obj 384 460 list prepend;
+#X obj 468 461 list prepend;
+#X connect 0 0 33 0;
+#X connect 1 0 3 1;
+#X connect 1 1 33 1;
+#X connect 2 0 6 1;
+#X connect 2 0 3 1;
+#X connect 2 0 33 1;
+#X connect 2 0 34 1;
+#X connect 2 0 11 2;
+#X connect 2 0 12 2;
+#X connect 3 0 20 0;
+#X connect 3 0 11 1;
+#X connect 4 0 34 0;
+#X connect 5 0 6 1;
+#X connect 5 1 34 1;
+#X connect 6 0 22 0;
+#X connect 6 0 12 1;
+#X connect 7 0 11 0;
+#X connect 7 1 12 0;
+#X connect 8 0 0 0;
+#X connect 9 0 4 0;
+#X connect 10 0 3 0;
+#X connect 10 0 6 0;
+#X connect 11 0 13 0;
+#X connect 12 0 14 0;
+#X connect 15 0 32 0;
+#X connect 16 0 7 0;
+#X connect 16 0 19 0;
+#X connect 17 0 31 0;
+#X connect 18 0 2 0;
+#X connect 20 0 25 0;
+#X connect 22 0 23 0;
+#X connect 23 0 24 0;
+#X connect 25 0 21 0;
+#X connect 31 1 10 0;
+#X connect 32 0 8 0;
+#X connect 32 1 9 0;
+#X connect 33 0 1 0;
+#X connect 34 0 5 0;
+#X restore 379 404 pd Markov_Melody;
+#X obj 149 307 int, f 23;
+#X obj 149 328 sel 0 1;
+#X obj 364 220 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 391 304 sel 0 1;
+#X obj 364 240 t f f;
+#X msg 345 177 1;
+#X msg 378 115 read ./samples/bach.txt;
+#X msg 312 91 tempo 0.5;
+#X obj 329 310 unpack;
+#X obj 329 352 pack;
+#X obj 329 331 stripnote;
+#X obj 149 202 t b f f;
+#X obj 473 269 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 149 181 * 4;
+#X obj 93 66 loadbang;
+#X obj 224 4 inlet;
+#X obj 394 29 inlet;
+#X obj 149 442 outlet;
+#X obj 193 442 outlet;
+#X floatatom 379 425 5 0 0 0 - - - 0;
+#X obj 149 374 stripnote;
+#X connect 0 0 27 0;
+#X connect 0 1 19 0;
+#X connect 1 0 0 0;
+#X connect 2 0 22 0;
+#X connect 3 0 0 0;
+#X connect 4 0 13 3;
+#X connect 4 0 34 0;
+#X connect 5 0 7 0;
+#X connect 5 0 14 0;
+#X connect 6 0 0 0;
+#X connect 7 0 0 0;
+#X connect 8 0 12 0;
+#X connect 9 0 5 0;
+#X connect 10 0 11 0;
+#X connect 11 0 9 0;
+#X connect 12 0 7 0;
+#X connect 12 1 10 1;
+#X connect 12 2 6 0;
+#X connect 13 0 33 0;
+#X connect 13 0 31 0;
+#X connect 14 0 15 0;
+#X connect 15 0 4 0;
+#X connect 15 1 13 0;
+#X connect 16 0 18 0;
+#X connect 17 0 13 2;
+#X connect 17 1 13 1;
+#X connect 18 0 14 1;
+#X connect 18 1 17 0;
+#X connect 19 0 8 0;
+#X connect 20 0 0 0;
+#X connect 21 0 0 0;
+#X connect 22 0 24 0;
+#X connect 22 1 24 1;
+#X connect 23 0 4 1;
+#X connect 24 0 23 0;
+#X connect 24 1 23 1;
+#X connect 24 1 32 0;
+#X connect 25 0 10 0;
+#X connect 25 1 11 1;
+#X connect 26 0 13 2;
+#X connect 27 0 25 0;
+#X connect 28 0 3 0;
+#X connect 29 0 8 0;
+#X connect 30 0 16 0;
+#X connect 34 0 31 0;
+#X restore 306 119 pd satie_markov___MESSY!!!!;
+#X f 55;
+#X obj 306 74 tgl 15 0 empty empty on/off 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 386 76 tgl 15 0 empty empty markov_variations 17 7 0 10 #fcfcfc
+#000000 #000000 0 1;
+#X text 23 8 An undeveloped/tidied/completed example using markov chains
+and an erik satie piece...;
+#X obj 306 168 kps6str_sjf~;
+#X obj 306 273 dac~;
+#X obj 306 140 - 12;
+#X floatatom 651 138 5 0 0 0 - - - 0;
+#X text 23 35 Turn on the sequencer for a while (it will need to run
+to train the markov chain) \, and then turn on the Markov variations...
+;
+#X text 441 6 Note \, I've only worked with pitches here \, the rhythms
+are still generated by the original piece;
+#X connect 0 0 6 0;
+#X connect 0 1 4 1;
+#X connect 0 1 7 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 1;
+#X connect 4 0 5 0;
+#X connect 4 0 5 1;
+#X connect 6 0 4 0;
+#X restore 130 324 pd satie_markov;
+#X text 118 249 Chains of arbitrary size (these may not be fully documented...)
+;

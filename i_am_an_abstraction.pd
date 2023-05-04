@@ -1,0 +1,25 @@
+#N canvas 601 171 485 218 10;
+#X obj 25 62 inlet;
+#X obj 25 97 t b b b;
+#X obj 25 152 pack 0 0 0;
+#X obj 25 175 outlet;
+#X text 70 63 <---- just like subpatches \, we use "inlet" and "outlet"
+objects allow cables to be connected to our abstractions;
+#X obj 25 123 f \$1;
+#X obj 56 123 f \$2;
+#X obj 88 123 f \$3;
+#X text 126 116 <---- arguments work just like with normal PD objects
+;
+#X text 125 128 the first argument is immediately after the abstraction
+name \, and can be referenced with '\$1';
+#X text 22 7 Look in the "AUD6204_PD" folder to see that this abstraction
+is saved as a PD patch;
+#X text 329 185 sjf \, SAE London \, 2020;
+#X connect 0 0 1 0;
+#X connect 1 0 5 0;
+#X connect 1 1 6 0;
+#X connect 1 2 7 0;
+#X connect 2 0 3 0;
+#X connect 5 0 2 0;
+#X connect 6 0 2 1;
+#X connect 7 0 2 2;

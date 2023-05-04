@@ -1,0 +1,1630 @@
+#N canvas 0 411 570 467 10;
+#X text 414 441 sjf \, SAE London \, 2020;
+#N canvas -1280 581 761 476 drum_machine_w/samples3 0;
+#X obj 180 7 tgl 50 0 empty empty on/off 10 25 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 44 173 vol2_sjf~;
+#X obj 312 148 vol2_sjf~;
+#N canvas -1212 581 735 722 bassSynth 0;
+#X obj 98 110 inlet;
+#X obj 90 405 flange_sjf~;
+#X obj 100 163 addSYn1_sjf~;
+#X obj 100 299 ovrdr_sjf~;
+#X msg 443 89 1;
+#X obj 336 404 flange_sjf~;
+#X msg 479 88 500;
+#X obj 163 485 distort2_sjf~;
+#X obj 522 33 loadbang;
+#X obj 140 110 inlet;
+#X obj 319 654 outlet~;
+#X obj 224 599 vol2_sjf~;
+#X obj 218 660 outlet~;
+#X obj 326 312 loadbang;
+#X obj 348 595 loadbang;
+#X msg 348 616 0.2;
+#X msg 326 333 4;
+#X msg 355 333 5;
+#X connect 0 0 2 0;
+#X connect 1 0 7 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 0;
+#X connect 3 0 5 0;
+#X connect 4 0 2 6;
+#X connect 5 0 7 1;
+#X connect 6 0 2 7;
+#X connect 7 0 11 0;
+#X connect 7 1 11 1;
+#X connect 8 0 6 0;
+#X connect 8 0 4 0;
+#X connect 9 0 2 1;
+#X connect 11 0 12 0;
+#X connect 11 1 10 0;
+#X connect 13 0 16 0;
+#X connect 13 0 17 0;
+#X connect 14 0 15 0;
+#X connect 15 0 11 2;
+#X connect 16 0 1 6;
+#X connect 17 0 5 6;
+#X restore 314 94 pd bassSynth;
+#X obj 285 227 throw~ to_out_L;
+#X obj 54 226 throw~ to_out_L;
+#X obj 269 327 dac~;
+#X obj 234 307 catch~ to_out_L;
+#X obj 381 227 throw~ to_out_R;
+#X obj 330 306 catch~ to_out_R;
+#X obj 150 226 throw~ to_out_R;
+#N canvas -1181 581 921 610 sampler 0;
+#X obj 100 39 inlet;
+#N canvas 623 23 828 612 drmSamps0.3 0;
+#X obj 101 32 inlet;
+#X obj 95 498 outlet~;
+#X obj 101 57 route 36 38 42 46;
+#X obj 99 109 sel 0;
+#X obj 138 109 sel 0;
+#X obj 175 109 sel 0;
+#X obj 214 109 sel 0;
+#X text 254 104 My drum machine outputs MIDI Note messages (pitch+velocity)
+\, but this includes note off messages (velocity 0) so I need to select
+'0's and ignore them;
+#X text 212 52 <---I already set the MIDI pitches for each voice of
+my drum machine sequencer so it would work with GeneralMIDI \, here
+I'm just routing the MIDI velocity to each voice;
+#X obj 464 239 inlet~;
+#X text 455 214 audio in;
+#X obj 95 370 sampvoice_sjf~;
+#X obj 265 370 sampvoice_sjf~;
+#X obj 435 370 sampvoice_sjf~;
+#X obj 605 370 sampvoice_sjf~;
+#X msg 632 211 ./samples/kick.wav;
+#X msg 636 233 ./samples/snare.wav;
+#X msg 639 253 ./samples/hhc.wav;
+#X msg 654 273 ./samples/hho.wav;
+#X obj 650 189 loadbang;
+#X text 567 170 Load samples when patch is opened;
+#X obj 271 499 outlet~;
+#X obj 434 499 outlet~;
+#X obj 610 495 outlet~;
+#X connect 0 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 1 4 0;
+#X connect 2 2 5 0;
+#X connect 2 3 6 0;
+#X connect 3 1 11 0;
+#X connect 4 1 12 0;
+#X connect 5 1 13 0;
+#X connect 6 1 14 0;
+#X connect 9 0 11 1;
+#X connect 9 0 12 1;
+#X connect 9 0 13 1;
+#X connect 9 0 14 1;
+#X connect 11 0 1 0;
+#X connect 12 0 21 0;
+#X connect 13 0 22 0;
+#X connect 14 0 23 0;
+#X connect 15 0 11 2;
+#X connect 16 0 12 2;
+#X connect 17 0 13 2;
+#X connect 18 0 14 2;
+#X connect 19 0 15 0;
+#X connect 19 0 16 0;
+#X connect 19 0 17 0;
+#X connect 19 0 18 0;
+#X coords 0 -1 1 1 680 115 1 95 355;
+#X restore 91 70 pd drmSamps0.3;
+#X obj 305 312 pan_sjf~;
+#X obj 472 198 ovrdr_sjf~;
+#X obj 250 454 ovrdr2_sjf~;
+#X obj 305 190 ovrdr_sjf~;
+#X obj 305 265 vol_sjf~;
+#X obj 659 286 pan_sjf~;
+#X obj 659 239 vol_sjf~;
+#X obj 750 233 loadbang;
+#X msg 742 256 0.4;
+#X obj 407 290 loadbang;
+#X msg 770 256 0.6;
+#X msg 427 312 0.4;
+#X msg 399 313 0.2;
+#X obj 91 185 distort_sjf~;
+#X obj 250 529 outlet~;
+#X obj 328 533 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 15 0;
+#X connect 1 1 5 0;
+#X connect 1 2 3 0;
+#X connect 1 3 8 0;
+#X connect 2 0 4 0;
+#X connect 2 1 4 1;
+#X connect 3 0 8 0;
+#X connect 4 0 16 0;
+#X connect 4 1 17 0;
+#X connect 5 0 6 0;
+#X connect 6 0 2 0;
+#X connect 7 0 4 0;
+#X connect 7 1 4 1;
+#X connect 8 0 7 0;
+#X connect 9 0 12 0;
+#X connect 9 0 10 0;
+#X connect 10 0 8 1;
+#X connect 11 0 13 0;
+#X connect 11 0 14 0;
+#X connect 12 0 7 1;
+#X connect 13 0 2 1;
+#X connect 14 0 6 1;
+#X connect 15 0 4 0;
+#X connect 15 0 4 1;
+#X restore 43 141 pd sampler;
+#N canvas -1280 581 581 588 bass_sequencer 0;
+#X obj 84 30 inlet;
+#X obj 84 138 stpSeq16_sjf;
+#X obj 396 109 loadbang;
+#X msg 396 130 1;
+#X obj 85 503 makenote 100 1000;
+#X obj 85 524 outlet;
+#X obj 153 524 outlet;
+#X obj 84 51 t f b, f 38;
+#X obj 84 72 conductor_sjf 1000 16;
+#X connect 0 0 7 0;
+#X connect 1 0 4 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 3;
+#X connect 4 0 5 0;
+#X connect 4 1 6 0;
+#X connect 7 0 8 0;
+#X connect 7 1 8 3;
+#X connect 8 0 1 0;
+#X restore 316 63 pd bass_sequencer;
+#N canvas 0 23 458 441 drum_sequencer 0;
+#X obj 93 25 inlet;
+#X obj 93 134 drummachine_sjf;
+#X obj 93 65 conductor_sjf 125 16;
+#X obj 93 44 t f b, f 38;
+#X obj 93 369 outlet;
+#X connect 0 0 3 0;
+#X connect 1 0 4 0;
+#X connect 2 0 1 0;
+#X connect 3 0 2 0;
+#X connect 3 1 2 3;
+#X restore 42 111 pd drum_sequencer;
+#X obj 529 148 vol2_sjf~;
+#X obj 502 227 throw~ to_out_L;
+#X obj 598 227 throw~ to_out_R;
+#N canvas -1280 581 594 624 high_sequencer 0;
+#X obj 84 30 inlet;
+#X obj 84 138 stpSeq16_sjf;
+#X obj 396 109 loadbang;
+#X obj 85 573 outlet;
+#X obj 153 573 outlet;
+#X obj 84 51 t f b, f 38;
+#X obj 84 473 unpack;
+#X obj 84 494 +;
+#X obj 230 488 inlet;
+#X floatatom 230 509 5 0 0 0 - - - 0;
+#X obj 84 541 makenote 100 2000;
+#X obj 84 515 + 5;
+#X obj 84 72 conductor_sjf 2000 4;
+#X msg 396 130 3;
+#X connect 0 0 5 0;
+#X connect 1 0 6 0;
+#X connect 2 0 13 0;
+#X connect 5 0 12 0;
+#X connect 5 1 12 3;
+#X connect 6 0 7 0;
+#X connect 6 1 10 1;
+#X connect 7 0 11 0;
+#X connect 8 0 7 1;
+#X connect 8 0 9 0;
+#X connect 10 0 3 0;
+#X connect 10 1 4 0;
+#X connect 11 0 10 0;
+#X connect 12 0 1 0;
+#X connect 13 0 1 3;
+#X restore 533 63 pd high_sequencer;
+#N canvas -1280 581 573 755 Synth 0;
+#X obj 106 8 inlet;
+#X obj 110 282 flange_sjf~;
+#X obj 109 54 addSYn1_sjf~;
+#X obj 378 8 loadbang;
+#X obj 148 8 inlet;
+#X obj 116 716 outlet~;
+#X obj 15 716 outlet~;
+#X obj 335 203 loadbang;
+#X obj 187 668 loadbang;
+#X msg 414 30 100;
+#X obj 110 189 ovrdr_sjf~;
+#X msg 378 31 2;
+#X obj 110 346 distort_sjf~;
+#X obj 110 443 pan_sjf~;
+#X obj 268 703 random 1000;
+#X obj 268 724 / 1000;
+#X obj 268 664 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X msg 335 224 12;
+#X obj 21 515 monodel_sjf~;
+#X obj 360 421 loadbang;
+#X msg 213 692 1;
+#X obj 268 682 metro 500;
+#X msg 273 448 1;
+#X msg 370 460 0.5;
+#X obj 21 675 vol2_sjf~;
+#X obj 195 513 monodel_sjf~;
+#X msg 310 447 187.5;
+#X msg 180 692 0.01;
+#X connect 0 0 2 0;
+#X connect 1 0 12 0;
+#X connect 2 0 10 0;
+#X connect 3 0 9 0;
+#X connect 3 0 11 0;
+#X connect 4 0 2 1;
+#X connect 7 0 17 0;
+#X connect 8 0 27 0;
+#X connect 8 0 20 0;
+#X connect 9 0 2 7;
+#X connect 10 0 1 0;
+#X connect 11 0 2 6;
+#X connect 12 0 13 0;
+#X connect 13 0 18 0;
+#X connect 13 1 25 0;
+#X connect 14 0 15 0;
+#X connect 15 0 13 1;
+#X connect 16 0 21 0;
+#X connect 17 0 1 6;
+#X connect 18 0 24 0;
+#X connect 19 0 22 0;
+#X connect 19 0 23 0;
+#X connect 19 0 26 0;
+#X connect 20 0 16 0;
+#X connect 21 0 14 0;
+#X connect 22 0 25 2;
+#X connect 22 0 18 2;
+#X connect 23 0 25 4;
+#X connect 23 0 18 4;
+#X connect 24 0 6 0;
+#X connect 24 1 5 0;
+#X connect 25 0 24 1;
+#X connect 26 0 25 1;
+#X connect 27 0 24 2;
+#X restore 533 84 pd Synth;
+#X connect 0 0 12 0;
+#X connect 0 0 13 0;
+#X connect 0 0 17 0;
+#X connect 1 0 5 0;
+#X connect 1 1 10 0;
+#X connect 2 0 4 0;
+#X connect 2 1 8 0;
+#X connect 3 0 2 0;
+#X connect 3 1 2 1;
+#X connect 7 0 6 0;
+#X connect 9 0 6 1;
+#X connect 11 0 1 0;
+#X connect 11 1 1 1;
+#X connect 12 0 17 1;
+#X connect 12 0 3 0;
+#X connect 12 1 3 1;
+#X connect 13 0 11 0;
+#X connect 14 0 15 0;
+#X connect 14 1 16 0;
+#X connect 17 0 18 0;
+#X connect 17 1 18 1;
+#X connect 18 0 14 0;
+#X connect 18 1 14 1;
+#X restore 91 424 pd drum_machine_w/samples3;
+#N canvas -1280 581 1231 596 distortion 0;
+#X obj 831 34 vsl 15 50 1 10 1 1 empty empty gain 0 -9 0 10 #fcfcfc
+#000000 #000000 0 1;
+#X text 17 10 Most (if not all) distortion is based on a simple idea
+;
+#X text 16 28 First amplify the signal;
+#X text 15 74 We have already seen that we amplify signals by multiplying
+them by something greater than 1;
+#X obj 218 91 *~;
+#X text 14 152 We can use;
+#X obj 84 152 expr~;
+#X text 126 152 to write mathematical expressions to crush/constrain
+;
+#X text 16 44 Then pass the amplified version through something the
+constrains it back into the desired range;
+#X obj 722 24 vradio 15 1 1 7 empty empty empty 0 -8 0 10 #fcfcfc #000000
+#000000 0;
+#X text 739 39 tanh;
+#X text 744 68 sin;
+#X obj 722 139 s \$0-distType;
+#X obj 778 378 dac~;
+#X obj 778 358 *~;
+#X obj 849 317 vsl 15 50 0 1 0 1 empty empty vol 0 -9 0 10 #fcfcfc
+#000000 #000000 0 1;
+#X msg 849 375 \$1 5;
+#X obj 849 396 line~;
+#X obj 521 17 osc~ 440;
+#X obj 831 93 s \$0-gain;
+#X text 739 99 tanh --> sin;
+#X text 740 116 sin --> tanh;
+#X obj 579 316 scope_sjf~;
+#X text 80 171 Don't worry... I don't rememember any highschool trigonometry
+either;
+#X obj 521 38 send~ \$0-signal2distort;
+#N canvas 0 23 590 364 tanh_distortion 0;
+#X obj 315 118 r \$0-distType;
+#X obj 315 141 == 1;
+#N canvas 0 23 747 495 tanh 0;
+#X obj 256 173 inlet~;
+#X obj 256 450 outlet~;
+#X obj 256 227 *~, f 12;
+#X obj 325 207 inlet;
+#X text 220 153 signal to distort;
+#X text 324 184 gain;
+#X text 86 226 initial amplification stage;
+#X text 353 329 <--- distortion logic;
+#X text 30 9 This patch uses the expr~ object to give us the hyperbollic
+tangent function of the input;
+#X text 31 34 (don't worry \, just look at an example on the internet
+to see how the graph of a hyperbollic tangent function compares to
+the output of this distortion technique);
+#X text 31 72 This approach creates a "soft clipping" style overdrive
+;
+#X obj 256 331 expr~ tanh($v1);
+#X text 320 350 Note: "$v1" is an argument telling the expr~ object
+to expect a signal in the first inlet and perform some maths with it
+(in this case get the tanh of it);
+#X text 320 383 $v2 would imply a signal n a second inlet;
+#X text 319 395 $f1 would be a number (float) in the third inlet \,
+etc. etc.;
+#X connect 0 0 2 0;
+#X connect 2 0 11 0;
+#X connect 3 0 2 1;
+#X connect 11 0 1 0;
+#X restore 235 162 pd tanh;
+#X obj 252 118 r \$0-gain;
+#X obj 143 96 receive~ \$0-signal2distort;
+#X obj 235 205 *~;
+#X obj 235 226 outlet~;
+#X text 94 164 Distortion inside --->;
+#X connect 0 0 1 0;
+#X connect 1 0 5 1;
+#X connect 2 0 5 0;
+#X connect 3 0 2 1;
+#X connect 4 0 2 0;
+#X connect 5 0 6 0;
+#X restore 577 175 pd tanh_distortion;
+#N canvas 0 23 450 300 sin_distortion 0;
+#X obj 243 49 r \$0-distType;
+#X obj 186 73 r \$0-gain;
+#X obj 77 51 receive~ \$0-signal2distort;
+#X obj 142 191 *~, f 21;
+#X obj 142 212 outlet~;
+#N canvas 0 23 450 300 sin 0;
+#X obj 289 125 inlet~;
+#X obj 289 219 expr~ sin($V1);
+#X obj 289 267 outlet~;
+#X obj 289 193 *~, f 12;
+#X obj 390 157 inlet;
+#X text 285 103 signal to distort;
+#X text 389 134 gain;
+#X text 30 9 This patch uses the expr~ object to give us the sin function
+of the input;
+#X text 30 37 This results in any input outside of the -1 --> 1 range
+being folded back in to the range;
+#X connect 0 0 3 0;
+#X connect 1 0 2 0;
+#X connect 3 0 1 0;
+#X connect 4 0 3 1;
+#X restore 142 170 pd sin;
+#X obj 266 83 == 3;
+#X text 3 170 Distortion inside --->;
+#X connect 0 0 6 0;
+#X connect 1 0 5 1;
+#X connect 2 0 5 0;
+#X connect 3 0 4 0;
+#X connect 5 0 3 0;
+#X connect 6 0 3 1;
+#X restore 811 175 pd sin_distortion;
+#N canvas 0 23 450 300 wrap_distortion 0;
+#X obj 330 146 r \$0-distType;
+#N canvas -1280 581 1280 755 wraparaound 0;
+#X obj 997 318 expr~ if($v1<-1 \, $v1 \, 0);
+#X obj 736 371 expr~ if($v1> 1 \, $v1 \, 0);
+#X obj 999 477 *~ -1;
+#X obj 471 204 expr~ if($v1>=-1 \, $v1 \, 0);
+#X obj 471 275 expr~ if($v1<= 1 \, $v1 \, 0);
+#X obj 479 662 outlet~;
+#X obj 999 499 expr~ sin($v1);
+#X obj 663 42 inlet~;
+#X obj 663 110 *~, f 12;
+#X obj 764 74 inlet;
+#X text 763 51 gain;
+#X text 645 17 signal to distort;
+#X text 71 14 This example is a bit more complex \, and uses a series
+of expr~ objects with "if" statements to take any values between -1
+& 1 and output them unchanged;
+#X text 142 200 If the input value is greater than or equal to -1 then
+output the value \, otherwise output 0;
+#X text 124 275 If the input value is less than or equal to 1 then
+output the value \, otherwise output 0;
+#X text 71 50 Then we say any values that are greater than 1 should
+be folded back into the range (using sin) but I multiply the signal
+by -1 to invert it's polarity - this means that signals greater than
+1 are folded back in from -1;
+#X text 70 99 Finally we take signals less than -1 and fold them back
+in from 1;
+#X text 68 123 (Think PakMan going out the top of the world and coming
+back in at the bottom);
+#X text 915 476 Flip polarity;
+#X text 822 499 Fold input back within range;
+#X text 482 367 If the input value is greater than 1;
+#X text 478 382 then output the value \, otherwise output 0;
+#X text 742 311 If the input value is less than -1;
+#X text 738 325 then output the value \, otherwise output 0;
+#X text 67 157 REMEMBER: Multiplying signals by 0 gives us silence!
+;
+#X connect 0 0 2 0;
+#X connect 1 0 2 0;
+#X connect 2 0 6 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 6 0 5 0;
+#X connect 7 0 8 0;
+#X connect 8 0 3 0;
+#X connect 8 0 0 0;
+#X connect 8 0 1 0;
+#X connect 9 0 8 1;
+#X restore 185 198 pd wraparaound;
+#X obj 309 70 r \$0-gain;
+#X obj 200 48 receive~ \$0-signal2distort;
+#X obj 185 219 *~, f 20;
+#X obj 185 240 outlet~;
+#X obj 353 180 == 4;
+#X text 47 196 Distortion inside --->;
+#X connect 0 0 6 0;
+#X connect 1 0 4 0;
+#X connect 2 0 1 1;
+#X connect 3 0 1 0;
+#X connect 4 0 5 0;
+#X connect 6 0 4 1;
+#X restore 921 175 pd wrap_distortion;
+#N canvas 0 23 450 300 tanh-->sin 0;
+#X obj 317 99 r \$0-distType;
+#X obj 241 58 r \$0-gain;
+#N canvas 0 23 425 389 tanh2sin 0;
+#X obj 103 50 inlet~;
+#X obj 103 165 expr~ tanh($V1);
+#X obj 103 270 outlet~;
+#X obj 103 186 *~, f 22;
+#X obj 242 141 inlet;
+#X obj 103 217 expr~ sin($V1);
+#X obj 103 71 *~;
+#X text 98 30 signal to distort;
+#X text 246 121 gain;
+#X connect 0 0 6 0;
+#X connect 1 0 3 0;
+#X connect 3 0 5 0;
+#X connect 4 0 3 1;
+#X connect 4 0 6 1;
+#X connect 5 0 2 0;
+#X connect 6 0 1 0;
+#X restore 229 157 pd tanh2sin;
+#X obj 81 119 receive~ \$0-signal2distort;
+#X obj 229 178 *~, f 21;
+#X obj 229 199 outlet~;
+#X obj 340 133 == 6;
+#X text 56 14 This just takes two previous examples and rund them in
+parallel (like a guitarist "stacking" overdrive pedals);
+#X connect 0 0 6 0;
+#X connect 1 0 2 1;
+#X connect 2 0 4 0;
+#X connect 3 0 2 0;
+#X connect 4 0 5 0;
+#X connect 6 0 4 1;
+#X restore 1133 175 pd tanh-->sin;
+#N canvas 0 23 450 300 bypass 0;
+#X obj 161 119 *~;
+#X obj 176 97 == 0;
+#X obj 175 61 r \$0-distType;
+#X obj 53 37 receive~ \$0-signal2distort;
+#X obj 161 140 outlet~;
+#X connect 0 0 4 0;
+#X connect 1 0 0 1;
+#X connect 2 0 1 0;
+#X connect 3 0 0 0;
+#X restore 515 175 pd bypass;
+#N canvas 0 23 450 300 sin--->tanh 0;
+#X obj 350 150 r \$0-distType;
+#X obj 280 110 r \$0-gain;
+#N canvas 0 23 450 300 sin2tanh 0;
+#X obj 37 37 inlet~;
+#X obj 37 203 outlet~;
+#X obj 37 126 *~, f 22;
+#X obj 176 41 inlet;
+#X obj 37 105 expr~ sin($V1);
+#X obj 37 157 expr~ tanh($V1);
+#X text 31 13 signal to distort;
+#X text 178 22 gain;
+#X obj 37 76 *~, f 16;
+#X connect 0 0 8 0;
+#X connect 2 0 5 0;
+#X connect 3 0 2 1;
+#X connect 3 0 8 1;
+#X connect 4 0 2 0;
+#X connect 5 0 1 0;
+#X connect 8 0 4 0;
+#X restore 268 209 pd sin2tanh;
+#X obj 126 169 receive~ \$0-signal2distort;
+#X obj 268 230 *~, f 17;
+#X obj 268 251 outlet~;
+#X obj 373 184 == 5;
+#X text 56 14 This just takes two previous examples and rund them in
+parallel (like a guitarist "stacking" overdrive pedals);
+#X connect 0 0 6 0;
+#X connect 1 0 2 1;
+#X connect 2 0 4 0;
+#X connect 3 0 2 0;
+#X connect 4 0 5 0;
+#X connect 6 0 4 1;
+#X restore 1038 175 pd sin--->tanh;
+#X obj 645 254 *~ 1;
+#X obj 778 337 *~ 0.1;
+#X text 738 23 bypass;
+#N canvas 0 23 450 300 clip_distortion 0;
+#X obj 274 54 r \$0-distType;
+#X obj 217 78 r \$0-gain;
+#X obj 108 56 receive~ \$0-signal2distort;
+#X obj 173 196 *~, f 21;
+#X obj 173 217 outlet~;
+#X obj 297 88 == 2;
+#X text 36 120 Distortion inside --->;
+#N canvas 0 23 450 300 clip 0;
+#X obj 270 103 inlet~;
+#X obj 270 245 outlet~;
+#X obj 270 171 *~, f 12;
+#X obj 371 135 inlet;
+#X text 266 81 signal to distort;
+#X text 370 112 gain;
+#X obj 270 197 clip~ -1 1;
+#X text 20 13 This example uses the built in "clip~" object to limit
+the output to between -1 and 1;
+#X text 24 40 This results in a harder clipped overdrive than tanh
+;
+#X connect 0 0 2 0;
+#X connect 2 0 6 0;
+#X connect 3 0 2 1;
+#X connect 6 0 1 0;
+#X restore 173 120 pd clip;
+#X connect 0 0 5 0;
+#X connect 1 0 7 1;
+#X connect 2 0 7 0;
+#X connect 3 0 4 0;
+#X connect 5 0 3 1;
+#X connect 7 0 3 0;
+#X restore 693 175 pd clip_distortion;
+#X text 738 55 clip;
+#X text 739 84 wrap;
+#X text 13 119 Some of this will involve using mathematical formulae
+to constrain our output;
+#X text 18 281 Then compare the sound of each (note I've used a sinewave
+as my source to accentuate the harmonic content created by each approach)
+;
+#X text 18 254 First visually compare the output of each algorithm
+at different levels of gain;
+#X text 18 320 Finally explore each subpatch to see how I achieved
+the distortion;
+#X text 79 198 Suffice to say I had an idea about what I wanted (some
+of which is based on a Logic pro distortion the name of which I can't
+remember...) and used some trial and error until I found these;
+#X text 61 469 ------------------------------------------------------------
+;
+#X text 71 512 Experiment with different distortion combinations/settings
+;
+#X text 73 527 Try adding some distortion to your delay patch;
+#X text 73 542 Try adding distortion and delay to your synthesiser
+patches;
+#X text 424 469 ------------------------------------------------------------
+;
+#X text 788 469 ------------------------------------------------------------
+;
+#X connect 0 0 19 0;
+#X connect 9 0 12 0;
+#X connect 14 0 13 0;
+#X connect 14 0 13 1;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 17 0 14 1;
+#X connect 18 0 24 0;
+#X connect 25 0 31 0;
+#X connect 26 0 31 0;
+#X connect 27 0 31 0;
+#X connect 28 0 31 0;
+#X connect 29 0 31 0;
+#X connect 30 0 31 0;
+#X connect 31 0 32 0;
+#X connect 31 0 22 0;
+#X connect 32 0 14 0;
+#X connect 34 0 31 0;
+#X restore 96 233 pd distortion;
+#N canvas 780 38 801 579 filters 0;
+#X obj 295 360 *~ 1;
+#X obj 295 406 dac~;
+#X obj 295 386 *~;
+#X obj 366 345 vsl 15 50 0 1 0 1 empty empty vol 0 -9 0 10 #fcfcfc
+#000000 #000000 0 1;
+#X msg 366 403 \$1 5;
+#X obj 366 424 line~;
+#X obj 370 176 noise~;
+#X obj 540 51 hsl 128 15 20 20000 1 1 empty empty cutoff/centre_frequency
+-2 -8 0 10 #fcfcfc #000000 #000000 7200 1;
+#X obj 426 31 vradio 15 1 1 4 empty empty empty 0 -8 0 10 #fcfcfc #000000
+#000000 1;
+#X obj 426 102 s \$0-filtType;
+#X text 443 46 lpf;
+#X text 443 62 hpf;
+#X text 442 30 bypass;
+#X floatatom 692 84 5 1 100 0 Q - - 0;
+#X text 445 77 bp;
+#X floatatom 538 74 20 0 0 0 - - - 0;
+#X obj 693 36 loadbang;
+#N canvas 0 23 729 466 distortion_w/tone 0;
+#X obj 383 118 distort_sjf~;
+#X obj 383 265 scope_sjf~;
+#X obj 119 260 scope_sjf~;
+#X obj 297 40 osc~ 1000;
+#X obj 246 119 ovrdr_sjf~;
+#X obj 246 260 scope_sjf~;
+#X connect 0 0 1 0;
+#X connect 3 0 2 0;
+#X connect 3 0 4 0;
+#X connect 3 0 0 0;
+#X connect 4 0 5 0;
+#X restore 208 530 pd distortion_w/tone;
+#X text 29 33 This patch introduces three basic filters available in
+pd;
+#X text 9 81 High pass;
+#X obj 144 78 hip~;
+#X text 9 136 Low pass;
+#X text 12 193 Band pass;
+#X text 80 68 sig in -->;
+#X text 171 67 <-- cut off frequency;
+#X text 79 122 sig in -->;
+#X text 170 121 <-- cut off frequency;
+#X obj 143 132 lop~;
+#X text 77 187 sig in -->;
+#X obj 141 197 bp~, f 14;
+#X text 180 214 ^-- centre frequency;
+#X text 229 186 <-- Q;
+#X obj 370 197 send~ signal2filter;
+#N canvas 0 23 450 300 bypass 0;
+#X obj 201 89 r \$0-filtType;
+#X obj 148 138 *~, f 10;
+#X obj 201 110 == 0;
+#X obj 65 69 receive~ signal2filter;
+#X obj 148 159 outlet~;
+#X connect 0 0 2 0;
+#X connect 1 0 4 0;
+#X connect 2 0 1 1;
+#X connect 3 0 1 0;
+#X restore 174 277 pd bypass;
+#X obj 538 96 s \$0-filtFreq;
+#X obj 692 104 s \$0-bpQ;
+#X msg 693 57 10;
+#N canvas 0 23 450 300 lowPass 0;
+#X obj 250 114 lop~;
+#X obj 303 115 r \$0-filtType;
+#X obj 250 164 *~, f 10;
+#X obj 303 136 == 1;
+#X obj 151 54 receive~ signal2filter;
+#X obj 255 83 r \$0-filtFreq;
+#X obj 250 185 outlet~;
+#X connect 0 0 2 0;
+#X connect 1 0 3 0;
+#X connect 2 0 6 0;
+#X connect 3 0 2 1;
+#X connect 4 0 0 0;
+#X connect 5 0 0 1;
+#X restore 235 277 pd lowPass;
+#N canvas 0 23 450 300 highPass 0;
+#X obj 181 76 r \$0-filtType;
+#X obj 128 125 *~, f 10;
+#X obj 128 75 hip~;
+#X obj 181 97 == 2;
+#X obj 146 44 r \$0-filtFreq;
+#X obj 106 20 receive~ signal2filter;
+#X obj 128 146 outlet~;
+#X connect 0 0 3 0;
+#X connect 1 0 6 0;
+#X connect 2 0 1 0;
+#X connect 3 0 1 1;
+#X connect 4 0 2 1;
+#X connect 5 0 2 0;
+#X restore 302 277 pd highPass;
+#N canvas 0 23 450 300 bandPass 0;
+#X obj 130 91 bp~, f 12;
+#X obj 213 92 r \$0-filtType;
+#X obj 160 141 *~, f 10;
+#X obj 213 113 == 3;
+#X obj 69 24 receive~ signal2filter;
+#X obj 112 51 r \$0-filtFreq;
+#X obj 217 48 r \$0-bpQ;
+#X obj 160 162 outlet~;
+#X connect 0 0 2 0;
+#X connect 1 0 3 0;
+#X connect 2 0 7 0;
+#X connect 3 0 2 1;
+#X connect 4 0 0 0;
+#X connect 5 0 0 1;
+#X connect 6 0 0 2;
+#X restore 375 277 pd bandPass;
+#X text 383 366 <--- turn me up;
+#X text 150 479 ------------------------------------------------------------
+;
+#X text 147 496 Experiment with adding filters to your distortion &
+delay patches;
+#X connect 0 0 2 0;
+#X connect 2 0 1 0;
+#X connect 2 0 1 1;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 5 0 2 1;
+#X connect 6 0 32 0;
+#X connect 7 0 15 0;
+#X connect 8 0 9 0;
+#X connect 13 0 35 0;
+#X connect 15 0 34 0;
+#X connect 16 0 36 0;
+#X connect 33 0 0 0;
+#X connect 36 0 13 0;
+#X connect 37 0 0 0;
+#X connect 38 0 0 0;
+#X connect 39 0 0 0;
+#X restore 95 286 pd filters;
+#N canvas 521 50 458 257 delayLines_3_variableDT 0;
+#N canvas 0 23 907 540 vibrato 0;
+#X text 647 116 name of delay line;
+#X text 697 98 ^;
+#X text 697 102 |;
+#X text 777 98 ^;
+#X text 777 102 |;
+#X text 777 112 |;
+#X text 777 122 |;
+#X text 777 132 |;
+#X text 729 145 maximum delay time (ms);
+#X obj 347 229 osc~;
+#X obj 347 271 *~, f 14;
+#X obj 427 240 line~;
+#X obj 457 141 hsl 60 10 0 1 0 1 empty empty depth -2 -8 0 10 #fcfcfc
+#000000 #000000 400 1;
+#X obj 350 141 hsl 60 10 0.0002 20 1 1 empty empty rate -2 -8 0 10
+#fcfcfc #000000 #000000 4600 1;
+#X obj 348 480 dac~;
+#X obj 347 377 vd~ \$0-myVibrato;
+#X obj 626 83 delwrite~ \$0-myVibrato 100;
+#X obj 626 35 osc~ 440;
+#X msg 427 219 \$1 50;
+#X obj 347 345 +~, f 33;
+#X text 77 10 For vibrato \, we simply use an sinewave oscillator to
+vary the delay time;
+#X text 497 35 Sound source ---->;
+#X text 67 229 LFO (this controls how fast the pitch changes);
+#X text 67 277 The oscillator outputs from -1 --> 1;
+#X text 27 292 multiplying by the depth gives us -depth --> + depth
+;
+#X text 54 344 Finally we add the depth so we get 0 --> 2*depth;
+#X text 96 375 This is then used to vary the delay time;
+#X floatatom 362 155 5 0 0 0 - - - 0;
+#X floatatom 454 178 5 0 0 0 - - - 0;
+#X text 395 156 Hz;
+#X text 488 178 ms;
+#X obj 347 416 vol_sjf~;
+#X text 418 433 <--- turn me up;
+#X obj 454 157 * 20;
+#X connect 9 0 10 0;
+#X connect 10 0 19 0;
+#X connect 11 0 10 1;
+#X connect 11 0 19 1;
+#X connect 12 0 33 0;
+#X connect 13 0 27 0;
+#X connect 13 0 9 0;
+#X connect 15 0 31 0;
+#X connect 17 0 16 0;
+#X connect 18 0 11 0;
+#X connect 19 0 15 0;
+#X connect 31 0 14 0;
+#X connect 31 0 14 1;
+#X connect 33 0 28 0;
+#X connect 33 0 18 0;
+#X restore 148 134 pd vibrato;
+#N canvas -1280 581 1062 750 variSpeed 0;
+#X text 797 432 name of delay line;
+#X text 847 414 ^;
+#X text 847 418 |;
+#X text 936 414 ^;
+#X text 936 418 |;
+#X text 936 428 |;
+#X text 936 438 |;
+#X text 936 448 |;
+#X text 888 461 maximum delay time (ms);
+#X floatatom 220 404 5 5 1000 0 - - - 0;
+#X obj 220 470 line~;
+#X obj 220 544 *~;
+#X obj 257 547 vsl 15 50 0 1 0 1 empty empty vol 0 -9 0 10 #fcfcfc
+#000000 #000000 0 1;
+#X obj 221 608 dac~;
+#X msg 257 605 \$1 5;
+#X obj 257 626 line~;
+#X obj 765 377 osc~ 440;
+#X obj 220 267 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 220 494 vd~ \$0-myVariSpeed;
+#X obj 765 400 delwrite~ \$0-myVariSpeed 1000;
+#X obj 220 514 *~ 0.1;
+#X obj 220 354 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 248 354 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 220 287 metro 500;
+#X obj 220 424 pack, f 16;
+#X msg 220 449 \$1 \$2;
+#X floatatom 603 327 5 0 0 0 ramp_time - - 0;
+#X obj 505 273 loadbang;
+#X text 263 513 <--- Just because a sine wave can bore into your ears...
+;
+#X text 62 15 This patch demonstrates how changing a delayline results
+in pitch shifting;
+#X text 62 44 You can think of it like this:;
+#X text 37 78 As the delay time goes from longer to shorter it is like
+the sound source is moving towards you \, and the pitch gets higher
+;
+#X text 76 66 Doppler;
+#X text 38 114 As the delay time goes from shorter to longer it is
+like the sound source is moving away from you \, and the pitch gets
+lower;
+#X text 549 58 Or;
+#X text 510 71 Imagine what happens when you speed something up \,
+the pitch goes up;
+#X text 512 96 We can imagine shortening the delay time as speeding
+up the playback (getting closer to the most recently recorded audio)
+;
+#X text 511 139 As we lengthen the delay time it is like slowing down
+\, the most recently receorded audio begins to get away from us;
+#X text 239 265 <---- turn me on;
+#X text 277 572 <---- turn me up;
+#X text 39 193 Try changing the ramp time to see how the sound changes
+(if you go to ramp times less than 500 you should hear the original
+pitch emerge when the line~ object reaches its target value;
+#X floatatom 505 327 5 5 1000 0 delaytime2 - - 0;
+#X floatatom 400 327 5 5 1000 0 delaytime1 - - 0;
+#X obj 220 383 int;
+#X text 112 404 delay time (ms);
+#X obj 248 384 int;
+#X text 497 189 Try different delay times as well;
+#X text 497 206 You should also be able to recognise that the amount
+of pitch shift is related to how quickly the delay time is changing
+\, once the change stops happenning we no longer get the pitch shift
+effect;
+#X msg 400 303 126;
+#X msg 505 303 413;
+#X msg 603 303 250;
+#X text 41 161 Here I use just one oscillator with a fixed pitch and
+ramp between 2 different delay times to demonstrate;
+#X obj 220 308 counter_sjf 2;
+#X obj 220 329 sel 0 1, f 10;
+#X text 140 661 ------------------------------------------------------------
+;
+#X text 144 679 Experiment with patches that utilise changing delaytimes
+;
+#X text 257 451 <--- always ramp between delay times to avoid discontinuities
+in the audio!;
+#X text 144 693 Try varying the delay time using oscillators as well
+as ramps;
+#X connect 9 0 24 0;
+#X connect 10 0 18 0;
+#X connect 11 0 13 0;
+#X connect 11 0 13 1;
+#X connect 12 0 14 0;
+#X connect 14 0 15 0;
+#X connect 15 0 11 1;
+#X connect 16 0 19 0;
+#X connect 17 0 23 0;
+#X connect 18 0 20 0;
+#X connect 20 0 11 0;
+#X connect 21 0 43 0;
+#X connect 22 0 45 0;
+#X connect 23 0 52 0;
+#X connect 24 0 25 0;
+#X connect 25 0 10 0;
+#X connect 26 0 24 1;
+#X connect 27 0 50 0;
+#X connect 27 0 48 0;
+#X connect 27 0 49 0;
+#X connect 41 0 45 1;
+#X connect 42 0 43 1;
+#X connect 43 0 9 0;
+#X connect 45 0 9 0;
+#X connect 48 0 42 0;
+#X connect 49 0 41 0;
+#X connect 50 0 26 0;
+#X connect 52 0 53 0;
+#X connect 53 0 21 0;
+#X connect 53 1 22 0;
+#X restore 157 64 pd variSpeed;
+#X text 51 10 ------------------------------------------------------------
+;
+#X text 55 28 First let's just observe how changing the delay time
+alters the pitch of the material;
+#X text 50 81 ------------------------------------------------------------
+;
+#X text 54 99 As previously stated \, many classic audio techniques
+a possible through varying the delay time of a delayline;
+#N canvas -1280 581 1009 713 flange_etc 0;
+#X obj 75 520 dac~;
+#X obj 73 193 sampVoice_sjf~;
+#X text 57 72 Generally delay times of less than 20ms are used and
+some of the pitchshifted material is fedback into the beginning of
+the delay loop;
+#X obj 74 461 vol_sjf~;
+#X text 144 480 <--- turn me up;
+#X text 247 203 <--- load and play sample;
+#X text 57 33 Digital flanging uses essentially the same principal
+as vibrato \, but we add the pitchshited version to the original to
+create phase shifting effects;
+#X msg 237 163 ./breaks/funkydrummer.wav;
+#X obj 237 141 loadbang;
+#X text 77 596 ------------------------------------------------------------
+;
+#X text 81 614 Experiment with a variety of LFO types (e.g. triangle
+or a controlled random source) \, delay to find other effects;
+#N canvas 0 23 700 818 phaserAbstraction 0;
+#X obj 104 602 flange_sjf~;
+#X obj 104 768 dac~;
+#X obj 104 447 addSYn1_sjf~;
+#X obj 104 71 stpSeq16_sjf;
+#X obj 104 6 conductor_sjf 500 16;
+#X obj 104 406 makenote 100 450;
+#X obj 423 38 loadbang;
+#X msg 423 59 2;
+#X msg 490 57 200;
+#X msg 454 58 1;
+#X obj 356 603 flange_sjf~;
+#X obj 104 711 vol2_sjf~;
+#X obj 510 532 loadbang;
+#X msg 510 553 2.5;
+#X connect 0 0 11 0;
+#X connect 2 0 0 0;
+#X connect 2 0 10 0;
+#X connect 3 0 5 0;
+#X connect 4 0 3 0;
+#X connect 5 0 2 0;
+#X connect 5 1 2 1;
+#X connect 6 0 7 0;
+#X connect 6 0 9 0;
+#X connect 6 0 8 0;
+#X connect 7 0 3 3;
+#X connect 8 0 2 7;
+#X connect 9 0 2 6;
+#X connect 10 0 11 1;
+#X connect 11 0 1 0;
+#X connect 11 1 1 1;
+#X connect 12 0 13 0;
+#X connect 13 0 10 6;
+#X restore 118 677 pd phaserAbstraction;
+#X text 57 112 Note there is a limit to the length of delaylines with
+feedback of one block ofsamples (see Audio settings);
+#X obj 591 323 hsl 60 10 0 1 0 1 empty empty depth -2 -8 0 10 #fcfcfc
+#000000 #000000 5000 1;
+#X obj 518 323 hsl 60 10 0.0002 20 1 1 empty empty rate -2 -8 0 10
+#fcfcfc #000000 #000000 5500 1;
+#X floatatom 522 338 5 0 0 0 - - - 0;
+#X text 555 336 Hz;
+#X floatatom 596 340 5 0 0 0 - - - 0;
+#N canvas 0 23 631 467 variSpeed 0;
+#X obj 381 48 inlet;
+#X obj 381 102 osc~;
+#X obj 381 144 *~, f 14;
+#X obj 461 123 line~;
+#X obj 381 299 +~, f 33;
+#X text 101 102 LFO (this controls how fast the pitch changes);
+#X text 101 150 The oscillator outputs from -1 --> 1;
+#X text 61 165 multiplying by the depth gives us -depth --> + depth
+;
+#X text 137 418 This is then used to vary the delay time;
+#X text 382 21 rate;
+#X obj 461 48 inlet;
+#X text 458 21 depth;
+#X obj 381 417 outlet~;
+#X msg 461 102 \$1 5;
+#X obj 381 210 *~, f 27;
+#X obj 546 123 line~;
+#X obj 546 48 inlet;
+#X msg 546 102 \$1 5;
+#X text 530 21 delay time;
+#X text 172 210 multiplying this by the delay time;
+#X text 12 292 Finally we add that to the delay time \, this means
+the actual delay time oscillates below and above the delay time set
+by the user;
+#X text 11 328 --> enabling greater flexibility and control;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 14 0;
+#X connect 3 0 2 1;
+#X connect 4 0 12 0;
+#X connect 10 0 13 0;
+#X connect 13 0 3 0;
+#X connect 14 0 4 0;
+#X connect 15 0 14 1;
+#X connect 15 0 4 1;
+#X connect 16 0 17 0;
+#X connect 17 0 15 0;
+#X restore 515 366 pd variSpeed;
+#X floatatom 731 323 5 0 0 0 delay_time - - 0;
+#X obj 730 270 loadbang;
+#X text 600 366 This is the same logic as I used for the vibrato \,
+but now we have a feedback loop \, I've created an independant control
+for the delay time \, and I"m summing the dry and wet;
+#X obj 695 427 vsl 15 50 0 1 0 1 empty empty feedback 0 -9 0 10 #fcfcfc
+#000000 #000000 4200 1;
+#X msg 695 485 \$1 5;
+#X obj 695 506 line~;
+#X obj 515 440 *~, f 19;
+#X msg 730 291 2;
+#X text 164 359 name of delay line;
+#X text 214 341 ^;
+#X text 214 345 |;
+#X text 296 342 ^;
+#X text 296 346 |;
+#X text 296 356 |;
+#X text 296 366 |;
+#X text 296 376 |;
+#X text 248 389 maximum delay time (ms);
+#X obj 74 440 +~, f 50;
+#X obj 149 327 delwrite~ \$0-myFlange_2 100;
+#X obj 515 408 vd~ \$0-myFlange_2;
+#X obj 515 461 send~ \$0-flange2FB;
+#X obj 149 298 receive~ \$0-flange2FB;
+#X text 81 637 Try using two copies with slightly \, or massively \,
+different settings sent to left and right channels to create stereo
+flanging effects;
+#X connect 1 0 37 0;
+#X connect 1 0 36 0;
+#X connect 3 0 0 0;
+#X connect 3 0 0 1;
+#X connect 7 0 1 2;
+#X connect 8 0 7 0;
+#X connect 13 0 17 0;
+#X connect 13 0 18 1;
+#X connect 14 0 15 0;
+#X connect 14 0 18 0;
+#X connect 18 0 38 0;
+#X connect 19 0 18 2;
+#X connect 20 0 26 0;
+#X connect 22 0 23 0;
+#X connect 23 0 24 0;
+#X connect 24 0 25 1;
+#X connect 25 0 39 0;
+#X connect 26 0 19 0;
+#X connect 36 0 3 0;
+#X connect 38 0 36 1;
+#X connect 38 0 25 0;
+#X connect 40 0 37 0;
+#X restore 148 162 pd flange_etc;
+#X text 49 177 ------------------------------------------------------------
+;
+#N canvas 0 23 978 751 pitchShift 0;
+#X obj 501 523 vol_sjf~;
+#X obj 500 568 dac~;
+#X obj 774 463 +~ 0.5;
+#X floatatom 297 309 5 0 0 0 window_size(ms) \$0-windoSize_rec \$0-windoSize_snd
+0;
+#X obj 585 392 phasor~ 1;
+#X obj 821 463 r \$0-windoSize_snd;
+#N canvas 568 109 450 300 pitchShiftVoice 0;
+#X obj 37 37 inlet~;
+#X obj 39 222 vd~ \$0-pitchShift;
+#X obj 39 243 *~, f 19;
+#X obj 39 63 wrap~;
+#X obj 39 112 *~;
+#X obj 39 198 +~ 2;
+#N canvas 0 23 450 300 env 0;
+#X obj 37 37 inlet~;
+#X obj 37 102 cos~;
+#X obj 37 59 *~ 0.5;
+#X obj 37 81 -~ 0.25;
+#X obj 37 123 outlet~;
+#X connect 0 0 2 0;
+#X connect 1 0 4 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 0;
+#X restore 147 222 pd env;
+#X obj 39 264 outlet~;
+#X obj 103 85 inlet;
+#X obj 187 125 inlet;
+#X text 105 60 windowSize;
+#X floatatom 103 106 5 0 0 0 - - - 0;
+#X text 181 102 min window size;
+#X connect 0 0 3 0;
+#X connect 1 0 2 0;
+#X connect 2 0 7 0;
+#X connect 3 0 4 0;
+#X connect 3 0 6 0;
+#X connect 4 0 5 0;
+#X connect 5 0 1 0;
+#X connect 6 0 2 1;
+#X connect 8 0 4 1;
+#X connect 8 0 11 0;
+#X connect 9 0 5 1;
+#X restore 774 488 pd pitchShiftVoice;
+#N canvas 0 23 450 300 pitchShiftVoice 0;
+#X obj 37 37 inlet~;
+#X obj 39 222 vd~ \$0-pitchShift;
+#X obj 39 243 *~, f 19;
+#X obj 39 63 wrap~;
+#X obj 39 112 *~;
+#X obj 39 198 +~ 2;
+#N canvas 0 23 450 300 env 0;
+#X obj 37 37 inlet~;
+#X obj 37 102 cos~;
+#X obj 37 59 *~ 0.5;
+#X obj 37 81 -~ 0.25;
+#X obj 37 123 outlet~;
+#X connect 0 0 2 0;
+#X connect 1 0 4 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 0;
+#X restore 147 222 pd env;
+#X obj 39 264 outlet~;
+#X obj 103 85 inlet;
+#X obj 260 157 inlet;
+#X text 105 60 windowSize;
+#X floatatom 103 106 5 0 0 0 - - - 0;
+#X connect 0 0 3 0;
+#X connect 1 0 2 0;
+#X connect 2 0 7 0;
+#X connect 3 0 4 0;
+#X connect 3 0 6 0;
+#X connect 4 0 5 0;
+#X connect 5 0 1 0;
+#X connect 6 0 2 1;
+#X connect 8 0 4 1;
+#X connect 8 0 11 0;
+#X connect 9 0 5 1;
+#X restore 501 488 pd pitchShiftVoice;
+#X obj 559 461 r \$0-windoSize_snd;
+#X text 459 19 f = (t-1)R / s;
+#X obj 585 248 - 1;
+#X floatatom 585 309 5 0 0 0 - - - 0;
+#X obj 585 287 * -20, f 26;
+#X obj 711 158 r \$0-windoSize_snd;
+#X obj 711 179 / 1000;
+#X obj 711 200 1over_sjf;
+#X floatatom 711 221 5 0 0 0 - - - 0;
+#X obj 711 241 * -1;
+#X floatatom 157 309 5 -12 12 0 transposition \$0-trans_rec \$0-trans_snd
+0;
+#X obj 585 179 r \$0-trans_snd;
+#X floatatom 585 221 5 0 0 0 - - - 0;
+#X obj 585 200 expr pow(2 \, $f1/12);
+#X obj 103 416 osc~ 440;
+#X obj 711 262 t b f;
+#X obj 114 631 delwrite~ \$0-pitchShift 500;
+#X text 770 438 180 degrees out of phase!;
+#X text 65 17 this example demonstrates how delay lines \, and the
+doppler effect \, can be used to achieve pitch shifting;
+#X text 65 43 The idea is simple:;
+#X text 66 73 as the delay time increases the pitch decends \, as it
+increase the pitch ascends;
+#X text 67 57 a phasor~ is used to constantly change the delay time
+;
+#X text 65 97 ==> positive frequencies for the phasor~ result transpositions
+down in pitch \, negative values result in transpositions up in pitch
+;
+#X text 64 136 the rate of change of the delay line determines the
+amount of pitch shifting;
+#X obj 612 6 loadbang;
+#X obj 612 48 s \$0-windoSize_rec;
+#X obj 161 416 sampVoice_sjf~;
+#X text 335 426 <--- load and play sample;
+#X msg 325 386 ./breaks/funkydrummer.wav;
+#X obj 325 364 loadbang;
+#X text 64 163 as the delay time cannot increase/decrease indefinitely
+two copies of the same algorithm are used. One is shifted 90 degrees
+out of phase and the two signals are faded between;
+#X msg 612 27 20;
+#X text 63 204 ideally we want to keep the window size small or you
+will hear a noticeable echo between the two copies of the signal \,
+but you will probably find that for more extreme transpositions you
+need to change the window size...;
+#X obj 106 577 *~;
+#X obj 163 578 *~;
+#X obj 36 486 t f f;
+#X obj 119 549 == 0;
+#X obj 178 556 == 1;
+#X obj 36 344 vradio 15 1 1 2 empty empty sound_source 0 -8 0 10 #fcfcfc
+#000000 #000000 1;
+#X text 50 344 oscillator;
+#X text 51 358 sample;
+#X msg 585 333 \$1 10;
+#X obj 585 354 line~;
+#X text 623 344 I'm just using a line~ to minimise clicking when changing
+transposition;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
+#X connect 2 0 6 0;
+#X connect 4 0 2 0;
+#X connect 4 0 7 0;
+#X connect 5 0 6 1;
+#X connect 6 0 0 0;
+#X connect 7 0 0 0;
+#X connect 8 0 7 1;
+#X connect 10 0 12 0;
+#X connect 11 0 49 0;
+#X connect 12 0 11 0;
+#X connect 13 0 14 0;
+#X connect 14 0 15 0;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 17 0 23 0;
+#X connect 19 0 21 0;
+#X connect 20 0 10 0;
+#X connect 21 0 20 0;
+#X connect 22 0 41 0;
+#X connect 23 0 12 0;
+#X connect 23 1 12 1;
+#X connect 32 0 39 0;
+#X connect 34 0 42 0;
+#X connect 36 0 34 2;
+#X connect 37 0 36 0;
+#X connect 39 0 33 0;
+#X connect 41 0 24 0;
+#X connect 42 0 24 0;
+#X connect 43 0 44 0;
+#X connect 43 1 45 0;
+#X connect 44 0 41 1;
+#X connect 45 0 42 1;
+#X connect 46 0 43 0;
+#X connect 49 0 50 0;
+#X connect 50 0 4 0;
+#X restore 150 216 pd pitchShift;
+#X text 53 195 pitchshifting is also possible...;
+#X restore 86 373 pd delayLines_3_variableDT;
+#X text 47 43 Firstly \, go to Media >> Audio Settings and ensure your
+drivers are set correctly;
+#X text 49 69 Turn on DSP from the PD Window;
+#X text 46 2 In thiis lesson we will look at some delay line based
+fx \, distortion \, and filters;
+#X text 38 131 ------------------------------------------------------------
+;
+#X text 42 195 ------------------------------------------------------------
+;
+#X text 79 148 Let's begin by looking at delay lines;
+#N canvas 0 581 636 286 delayLines_101 0;
+#N canvas 0 123 890 755 delayLines_1 0;
+#X obj 661 260 *~;
+#X obj 698 263 vsl 15 50 0 1 0 1 empty empty dry_vol 0 -9 0 10 #fcfcfc
+#000000 #000000 4500 1;
+#X obj 662 324 dac~;
+#X msg 698 321 \$1 5;
+#X obj 698 342 line~;
+#X obj 425 580 vd~ \$0-myFirstDelay;
+#X obj 380 160 delwrite~ \$0-myFirstDelay 1000;
+#X obj 425 657 *~, f 46;
+#X obj 425 678 dac~;
+#X obj 794 549 vsl 15 50 0 1 0 1 empty empty wet_vol 0 -9 0 10 #fcfcfc
+#000000 #000000 2800 1;
+#X msg 794 607 \$1 5;
+#X obj 794 628 line~;
+#X floatatom 424 454 5 0 1000 0 - - - 0;
+#X msg 424 474 \$1 5;
+#X obj 424 495 line~;
+#X obj 661 91 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#N canvas 0 23 450 300 soundSource 0;
+#X obj 92 109 *~, f 29;
+#X obj 263 27 inlet;
+#X obj 263 73 vline~;
+#X msg 263 52 1 5 \, 0.3 50 5 \, 0 50 55;
+#X obj 92 88 noise~;
+#X text 135 89 White noise;
+#X text 163 50 amplitude ramp;
+#X obj 92 130 outlet~;
+#X connect 0 0 7 0;
+#X connect 1 0 3 0;
+#X connect 2 0 0 1;
+#X connect 3 0 2 0;
+#X connect 4 0 0 0;
+#X restore 661 111 pd soundSource;
+#X text 326 454 delay time (ms);
+#X obj 424 407 loadbang;
+#X msg 424 428 125;
+#X text 680 90 <---- click me;
+#X text 412 192 name of delay line;
+#X text 462 174 ^;
+#X text 462 178 |;
+#X text 551 174 ^;
+#X text 551 178 |;
+#X text 551 188 |;
+#X text 551 198 |;
+#X text 551 208 |;
+#X text 506 237 maximum delay time (ms);
+#X text 40 10 Digital delay lines copy the logic of recording to and
+playing back from tape;
+#X text 39 34 First we need something to record onto - with a tape
+delay this is the physical medium of the tape \, on a computer this
+translates as memory in the computer);
+#X text 40 68 And a way to actually record onto that storage medium
+- in a tape recorder this is the record head \, in a computer we need
+a piece of computer code;
+#X text 43 105 Fortunately \, in PD the "delwrite~" object covers both
+tasks;
+#X text 497 224 length of delay line (ms);
+#X text 37 417 We then need a way of reading from this delay line at
+a later point in time - on tape this would be the play head;
+#X text 166 159 create & record to delay line ---->;
+#X text 498 595 ^---- name of delay line;
+#X text 442 612 We need to tell vd~ which delay line to read from;
+#X text 460 496 We can use audio signals to set the delay time (ms)
+;
+#X text 76 368 ------------------------------------------------------------
+;
+#X text 444 369 ------------------------------------------------------------
+;
+#X text 37 235 When we give the delwrite~ object a name (e.g. \$0-myFirstDelay)
+we are telling the computer to dedicate a piece of storage to recording
+this delay line.;
+#X text 36 271 The length of the delay line tells us the maximum delay
+time we can have (in this example I have chosen a 1second \, 100ms
+\, delay line);
+#X obj 184 119 delwrite~;
+#X text 127 582 Play back the delayed signal a a later time ---->;
+#X text 38 444 To play back our delay line we will use "vd~";
+#X obj 281 463 vd~;
+#X connect 0 0 2 0;
+#X connect 0 0 2 1;
+#X connect 1 0 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 0 1;
+#X connect 5 0 7 0;
+#X connect 7 0 8 0;
+#X connect 7 0 8 1;
+#X connect 9 0 10 0;
+#X connect 10 0 11 0;
+#X connect 11 0 7 1;
+#X connect 12 0 13 0;
+#X connect 13 0 14 0;
+#X connect 14 0 5 0;
+#X connect 15 0 16 0;
+#X connect 16 0 0 0;
+#X connect 16 0 6 0;
+#X connect 18 0 19 0;
+#X connect 19 0 12 0;
+#X restore 146 73 pd delayLines_1;
+#N canvas 470 151 854 606 delayLines_2_w/feedback 0;
+#X obj 576 90 *~;
+#X obj 613 93 vsl 15 50 0 1 0 1 empty empty dry_vol 0 -9 0 10 #fcfcfc
+#000000 #000000 4900 1;
+#X obj 577 154 dac~;
+#X msg 613 151 \$1 5;
+#X obj 613 172 line~;
+#X obj 107 305 *~, f 21;
+#X obj 107 326 dac~;
+#X obj 234 141 vsl 15 50 0 1 0 1 empty empty wet_vol 0 -9 0 10 #fcfcfc
+#000000 #000000 4400 1;
+#X msg 234 228 \$1 5;
+#X obj 234 249 line~;
+#X floatatom 107 166 5 0 1000 0 - - - 0;
+#X msg 107 186 \$1 5;
+#X obj 107 207 line~;
+#X obj 576 5 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#N canvas 0 23 450 300 soundSource 0;
+#X obj 92 109 *~, f 29;
+#X obj 263 27 inlet;
+#X obj 263 73 vline~;
+#X msg 263 52 1 5 \, 0.3 50 5 \, 0 50 55;
+#X obj 92 88 noise~;
+#X text 135 89 White noise;
+#X text 163 50 amplitude ramp;
+#X obj 92 130 outlet~;
+#X connect 0 0 7 0;
+#X connect 1 0 3 0;
+#X connect 2 0 0 1;
+#X connect 3 0 2 0;
+#X connect 4 0 0 0;
+#X restore 576 25 pd soundSource;
+#X text 9 166 delay time (ms);
+#X obj 107 119 loadbang;
+#X msg 107 140 125;
+#X text 595 4 <---- click me;
+#X text 583 338 name of delay line;
+#X text 633 320 ^;
+#X text 633 324 |;
+#X text 722 320 ^;
+#X text 722 324 |;
+#X text 722 334 |;
+#X text 722 344 |;
+#X text 722 354 |;
+#X text 674 367 maximum delay time (ms);
+#X obj 551 306 delwrite~ \$0-mySecondDelay 1000;
+#X obj 107 228 vd~ \$0-mySecondDelay;
+#X obj 265 283 *~, f 4;
+#X obj 331 137 vsl 15 50 0 1 0 1 empty empty feedback 0 -9 0 10 #fcfcfc
+#000000 #000000 4000 1;
+#X msg 331 224 \$1 5;
+#X obj 331 245 line~;
+#X obj 265 304 throw~ \$0-to_mySecondDelay;
+#X obj 551 282 catch~ \$0-to_mySecondDelay;
+#X obj 602 55 throw~ \$0-to_mySecondDelay;
+#X text 61 8 To achieve feedback we simply feed the output of the delay
+line (vd~) back into the input of the delay loop (i.e. delwrite~);
+#X text 69 85 Experiment with a variety of different feedback and delay
+time settings;
+#X text 79 432 These objects are analogous to send &receive objects
+\, but you can not have 2 or more have one catch~ objects with the
+same name! (i.e. it creates a summing bus);
+#X text 80 471 There are also send~ & receive~ objects \, but you cannot
+have more than one send~ object with the same name. (i.e. it copies
+a signal to multiple places);
+#X text 63 48 By changning the amplitude of th signal being fed back
+into the delay line we can get various intensities of feedback (* 1:
+feedback never ends \; * 0 : no feedback at all);
+#X floatatom 234 199 5 0 0 0 - - - 0;
+#X floatatom 331 195 5 0 0 0 - - - 0;
+#X text 79 407 NOTE: For this example I have decided to use throw~
+and catch~ objects (to try and avoid crossing cables);
+#X connect 0 0 2 0;
+#X connect 0 0 2 1;
+#X connect 1 0 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 0 1;
+#X connect 5 0 6 0;
+#X connect 5 0 6 1;
+#X connect 7 0 42 0;
+#X connect 8 0 9 0;
+#X connect 9 0 5 1;
+#X connect 10 0 11 0;
+#X connect 11 0 12 0;
+#X connect 12 0 29 0;
+#X connect 13 0 14 0;
+#X connect 14 0 0 0;
+#X connect 14 0 36 0;
+#X connect 16 0 17 0;
+#X connect 17 0 10 0;
+#X connect 29 0 5 0;
+#X connect 29 0 30 0;
+#X connect 30 0 34 0;
+#X connect 31 0 43 0;
+#X connect 32 0 33 0;
+#X connect 33 0 30 1;
+#X connect 35 0 28 0;
+#X connect 42 0 8 0;
+#X connect 43 0 32 0;
+#X restore 151 129 pd delayLines_2_w/feedback;
+#X text 91 31 ------------------------------------------------------------
+;
+#X text 132 49 We will begin by making a simple delay line;
+#X text 94 88 ------------------------------------------------------------
+;
+#X text 135 106 Next we will add feedback to a delay line;
+#X text 106 149 ------------------------------------------------------------
+;
+#X text 121 167 Experiment with creating delay lines with other features:
+e.g. stereo/multi-tap/ping-pong etc.;
+#X restore 94 172 pd delayLines_101;
+#X text 83 213 Let's look at some distortion ideas;
+#X text 43 250 ------------------------------------------------------------
+;
+#X text 84 268 Let's look at some filters;
+#X text 45 306 ------------------------------------------------------------
+;
+#X text 49 324 Now that we've looked at some basic effects and processing
+\, let's look at varying the playback speed of our delay lines to create
+some classic audio effects;
+#X text 35 76 ------------------------------------------------------------
+;
+#X text 76 93 a quick technical example before we start;
+#N canvas 0 127 1280 751 panning 0;
+#X text 91 31 ------------------------------------------------------------
+;
+#X text 132 49 There are lots of ways you can achieve panning;
+#X obj 649 263 dac~;
+#X obj 117 90 sampVoice_sjf~;
+#X text 716 229 <--- turn me up;
+#X obj 646 210 vol2_sjf~;
+#X obj 671 186 *~;
+#X obj 647 186 *~;
+#X obj 664 59 vsl 15 50 0 1 0 1 empty empty left_vol -15 -9 0 10 #fcfcfc
+#000000 #000000 1600 1;
+#X obj 724 59 vsl 15 50 0 1 0 1 empty empty right_vol -15 -9 0 10 #fcfcfc
+#000000 #000000 4500 1;
+#X obj 89 197 send~ \$0-sig2pan;
+#X obj 515 60 receive~ \$0-sig2pan;
+#X text 772 53 We can just use different controls for the level of
+the send to the left and right;
+#X text 771 78 But this is a bit cumbersome;
+#X obj 151 524 dac~;
+#X text 218 476 <--- turn me up;
+#X obj 148 471 vol2_sjf~;
+#X obj 173 447 *~;
+#X obj 149 447 *~;
+#X obj 12 343 receive~ \$0-sig2pan;
+#X obj 167 320 hsl 50 15 0 1 0 0 empty empty empty -2 -8 0 10 #fcfcfc
+#000000 #000000 0 1;
+#X obj 164 382 -, f 6;
+#X msg 164 361 1;
+#X text 269 336 We can use linear fades (so if one side is 0.25 the
+other is 0.75 \, if one is 0.3 the other is 0.7 etc);
+#X obj 164 339 t b f f;
+#X obj 227 422 line~;
+#X obj 164 420 line~;
+#X text 268 361 But this can sound uneven;
+#X msg 227 401 \$1 50;
+#X msg 164 400 \$1 50;
+#X obj 725 138 line~;
+#X msg 725 117 \$1 50;
+#X obj 664 137 line~;
+#X msg 664 116 \$1 50;
+#X obj 765 632 dac~;
+#X text 832 584 <--- turn me up;
+#X obj 762 579 vol2_sjf~;
+#X obj 787 555 *~;
+#X obj 763 555 *~;
+#X obj 573 506 receive~ \$0-sig2pan;
+#X obj 781 374 hsl 50 15 0 1 0 0 empty empty empty -2 -8 0 10 #fcfcfc
+#000000 #000000 0 1;
+#X obj 778 414 line~;
+#X obj 790 477 cos~;
+#X obj 744 477 cos~;
+#X msg 778 394 \$1 50;
+#X obj 778 435 *~ 0.5;
+#X obj 778 456 -~ 0.5;
+#X obj 744 498 *~ 0.5;
+#X obj 744 519 +~ 0.5;
+#X obj 790 497 *~ 0.5;
+#X obj 790 518 +~ 0.5;
+#X text 836 456 By reading the cosine 180 gerees out of phase on the
+second channel we get a smoth transition between both speakers;
+#X text 828 426 I tend to use a track learned from a MaxMSP tutorial
+that uses 180degrees of a cosine wav to create a non linear fade;
+#X text 862 498 The output of the cosines needs to be converted from
+a range of -1 --> 1 to a range of 0--> 1;
+#X connect 3 0 10 0;
+#X connect 5 0 2 0;
+#X connect 5 1 2 1;
+#X connect 6 0 5 1;
+#X connect 7 0 5 0;
+#X connect 8 0 33 0;
+#X connect 9 0 31 0;
+#X connect 11 0 7 0;
+#X connect 11 0 6 0;
+#X connect 16 0 14 0;
+#X connect 16 1 14 1;
+#X connect 17 0 16 1;
+#X connect 18 0 16 0;
+#X connect 19 0 18 0;
+#X connect 19 0 17 0;
+#X connect 20 0 24 0;
+#X connect 21 0 29 0;
+#X connect 22 0 21 0;
+#X connect 24 0 22 0;
+#X connect 24 1 21 1;
+#X connect 24 2 28 0;
+#X connect 25 0 17 1;
+#X connect 26 0 18 1;
+#X connect 28 0 25 0;
+#X connect 29 0 26 0;
+#X connect 30 0 6 1;
+#X connect 31 0 30 0;
+#X connect 32 0 7 1;
+#X connect 33 0 32 0;
+#X connect 36 0 34 0;
+#X connect 36 1 34 1;
+#X connect 37 0 36 1;
+#X connect 38 0 36 0;
+#X connect 39 0 38 0;
+#X connect 39 0 37 0;
+#X connect 40 0 44 0;
+#X connect 41 0 45 0;
+#X connect 42 0 49 0;
+#X connect 43 0 47 0;
+#X connect 44 0 41 0;
+#X connect 45 0 43 0;
+#X connect 45 0 46 0;
+#X connect 46 0 42 0;
+#X connect 47 0 48 0;
+#X connect 48 0 38 1;
+#X connect 49 0 50 0;
+#X connect 50 0 37 1;
+#X restore 91 117 pd panning;

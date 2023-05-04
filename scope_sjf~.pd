@@ -1,0 +1,9 @@
+#N canvas 0 23 450 300 10;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-scope 64 float 4;
+#X coords 0 1 63 -1 125 100 1 0 0;
+#X restore 30 124 graph;
+#X obj 143 56 tabsend~ \$0-scope;
+#X obj 143 34 inlet~;
+#X connect 2 0 1 0;
+#X coords 0 -1 1 1 125 125 1 30 100;

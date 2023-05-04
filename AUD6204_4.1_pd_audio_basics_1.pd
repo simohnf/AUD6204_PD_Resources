@@ -1,0 +1,414 @@
+#N canvas -1280 581 730 324 10;
+#N canvas 0 23 955 645 pd_audio_101 0;
+#X obj 413 280 osc~ 220;
+#X text 25 58 The computer runs these tasks at a much lower rate than
+audio to save CPU;
+#X obj 413 570 dac~;
+#X obj 413 450 *~;
+#X obj 539 362 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X floatatom 539 498 5 0 0 0 - - -;
+#X obj 539 518 / 127;
+#X floatatom 539 539 5 0 0 0 - - -;
+#X text 472 275 <--- osc~ provides the most basic oscillator in PD
+(a sine wave \, actually its cosine but still);
+#X text 472 301 The argument sets the frequency;
+#X floatatom 413 230 5 0 20000 0 - - -;
+#X floatatom 473 230 5 0 1 0 - - -;
+#X text 405 212 Frequency;
+#X text 471 211 Phase;
+#X text 30 365 The Oscillator outputs values ranging from -1 --> 1
+;
+#X text 529 340 Volume;
+#X text 128 571 dac~ outputs signals to your audio driver;
+#X text 28 497 NOTE: I'm using "*~" because it is an audio signal!!!
+;
+#X text 515 9 audio objects always have "~" at the end of their name
+\, and run at whatever sample rate you have set in your Audio Settings
+;
+#X text 515 46 Unlinke control level objects \, ther is no order of
+operations for audio objects - i.e. there are no hot and cold inlets
+\, and signals are output every outlet simultaneously;
+#X text 27 11 Audio and control rates are differentientated in PD;
+#X text 26 29 So far we have only looked at control rates (MIDI \,
+sliders \, number boxes \, etc);
+#X text 271 100 You will find that many of the objects you are already
+familiar with have audio rate versions;
+#X text 296 152 e.g.;
+#X obj 338 152 *;
+#X obj 424 154 *~;
+#X text 308 133 control rate;
+#X text 401 132 audio rate;
+#X text 24 438 To control the amplitude we simply multiply these values
+by something (multiply by 0 and you get silence \, multiply by 1 and
+you get full amplitude);
+#X text 30 384 (When sending signals to our speakers our output should
+not exceed -1 ---> 1);
+#X text 558 404 <----- we can control many aspects of our audio signals
+using the control rate objects we have already looked at;
+#X text 7 228 we can control many aspects of our audio signals using
+the control rate objects we have already looked at;
+#X text 363 230 ------>;
+#X text 399 541 L;
+#X text 441 540 R;
+#X text 398 557 1;
+#X text 441 556 2;
+#X obj 413 595 adc~;
+#X text 128 596 adc~ receives signals from your audio driver;
+#X connect 0 0 3 0;
+#X connect 3 0 2 0;
+#X connect 3 0 2 1;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 7 0 3 1;
+#X connect 10 0 0 0;
+#X connect 11 0 0 1;
+#X restore 130 69 pd pd_audio_101;
+#X text 108 13 Firstly \, go to Media >> Audio Settings and ensure
+your drivers are set correctly;
+#X text 110 39 Turn on DSP from the PD Window;
+#X text 230 67 <---- Click me;
+#X text 93 100 ------------------------------------------------------------
+;
+#X text 282 151 <---- Click me;
+#X text 134 118 One-shot envelopes;
+#N canvas -1280 23 1280 755 audio_envelopes 0;
+#X obj 944 383 osc~ 220;
+#X obj 802 543 dac~;
+#X obj 802 514 *~;
+#X obj 1043 258 vsl 15 128 0 127 0 1 empty empty empty 0 -9 0 10 -262144
+-1 -1 8100 1;
+#X floatatom 1043 394 5 0 0 0 - - -;
+#X obj 1043 414 / 127;
+#X floatatom 1043 435 5 0 0 0 - - -;
+#X floatatom 944 358 5 0 20000 0 - - -;
+#X text 936 340 Frequency;
+#X text 1025 240 Volume;
+#X text 17 5 As we saw you control the amplitude of signals by multiplying
+them by values at audio rate;
+#X text 16 37 Therefore \, to create amplitude envelopes we need to
+create some sort of ramp with values between 0 --> 1 and multiply our
+signal by this;
+#X text 13 82 Therefore \, to create amplitude envelopes we need to
+create some sort of ramp with values between 0 --> 1 and multiply our
+signal by this;
+#X obj 43 167 line~;
+#X text 14 131 PD provides 2 different alternatives for this with slightly
+different functionalities;
+#X obj 96 167 vline~;
+#X text 15 190 I'll use vline~ as it is slightly more flexible;
+#X obj 802 487 *~;
+#X obj 559 423 vline~;
+#X obj 495 227 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 437 13 I will begin by creating "oneshot" envelopes (i.e.you
+trigger a note and the full enveloped is played without needing any
+noteoff message);
+#X text 436 55 We will create an ADSR patch later;
+#X msg 560 279 1 100;
+#X text 565 259 1 - attack \, ramp goes to 1 in 100ms;
+#X obj 499 314 delay 100;
+#X obj 496 250 t b b b;
+#X msg 499 335 0.4 500;
+#X text 566 312 2 - we wait for 100ms (the attack portion of the envelope)
+;
+#X text 567 335 3 - decay \, the ramp drops to 0.4 over 500ms;
+#X obj 405 314 delay 600;
+#X msg 405 351 0 200;
+#X text 46 313 4 - we wait for 600ms (the attack & decay portions of
+the envelope);
+#X text 45 347 5 - release \, the ramp returns to 0 over 200ms;
+#X text 517 227 <---- click me;
+#X msg 87 486 1 100 \, 0.4 500 100 \, 0 200 600;
+#X text 272 487 <--- click me;
+#X text 48 452 This message does exactly the same thing (but in only
+one message!!!);
+#X text 660 615 Create an interface that lets us control the 4 aspects
+of this envelope (attack time \, decay time \, sustain amount (0-->100%
+of max amplitude) \, release time);
+#X text 841 667 <---- Click me;
+#N canvas -1280 23 1280 755 pd_audio_envelopes_2 0;
+#X obj 415 446 osc~ 220;
+#X obj 399 616 dac~;
+#X obj 399 579 *~;
+#X obj 481 505 vsl 15 128 0 127 0 1 empty empty empty 0 -9 0 10 -262144
+-1 -1 8100 1;
+#X floatatom 481 641 5 0 0 0 - - -;
+#X obj 481 660 / 127;
+#X floatatom 481 681 5 0 0 0 - - -;
+#X floatatom 414 418 5 0 20000 0 - - -;
+#X floatatom 474 418 5 0 1 0 - - -;
+#X text 406 400 Frequency;
+#X text 472 399 Phase;
+#X text 464 485 Volume;
+#X obj 399 549 *~;
+#X obj 401 356 vline~;
+#X floatatom 407 86 5 0 10000 2 attack - -;
+#X floatatom 453 86 5 0 10000 2 decay - -;
+#X floatatom 494 86 5 0 1 2 sustain - -;
+#X floatatom 540 86 5 0 10000 2 release - -;
+#X obj 592 139 t b f;
+#X obj 592 164 +;
+#X obj 399 246 f;
+#X obj 372 224 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 281 224 click me ---->;
+#X text 643 180 This looks more complex than it is;
+#X text 25 242 I use a "float" object to store the attck time so the
+envelope isn't triggered each time you change the envelope values;
+#X text 645 226 1) attack time;
+#X text 645 242 2) sustain amount (0-->1 * max volume);
+#X text 645 258 3) decay time;
+#X text 644 274 4) amount of delay before decay portion of envelope
+starts (i.e. the attack time);
+#X text 644 302 5) release time;
+#X text 643 320 6) amount of delay before release portion of envelope
+starts (i.e. the attack time + the decay time);
+#X obj 401 7 loadbang;
+#X obj 401 28 t b b b b, f 33;
+#X text 638 356 This is the same as the order of values we gave the
+vline object in the previous examples \, but now we have interface
+objects to control the different values;
+#X msg 401 50 100;
+#X msg 465 52 500;
+#X msg 520 54 0.4;
+#X msg 580 55 600;
+#X text 636 132 We've seen this technique before \, here I'm making
+sure that whether I change the decay or release \, the delay before
+the release portion of the envelope is always correct;
+#X obj 400 273 pack 0 0 0 0 0, f 32;
+#X text 644 199 If we look at the variables for the message we can
+see that the values it receives are (working left to right);
+#X msg 401 331 1 \$1 \, \$3 \$2 \$1 \, 0 \$4 \$5;
+#X text 641 399 I chose to rearrange the variables within the message
+to keep the cabling tidier;
+#X connect 0 0 12 1;
+#X connect 2 0 1 0;
+#X connect 2 0 1 1;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 2 1;
+#X connect 7 0 0 0;
+#X connect 8 0 0 1;
+#X connect 12 0 2 0;
+#X connect 13 0 12 0;
+#X connect 14 0 20 1;
+#X connect 14 0 19 0;
+#X connect 15 0 18 0;
+#X connect 15 0 39 1;
+#X connect 16 0 39 2;
+#X connect 17 0 39 3;
+#X connect 18 0 19 0;
+#X connect 18 1 19 1;
+#X connect 19 0 39 4;
+#X connect 20 0 39 0;
+#X connect 21 0 20 0;
+#X connect 31 0 32 0;
+#X connect 32 0 34 0;
+#X connect 32 1 35 0;
+#X connect 32 2 36 0;
+#X connect 32 3 37 0;
+#X connect 34 0 14 0;
+#X connect 35 0 15 0;
+#X connect 36 0 16 0;
+#X connect 37 0 17 0;
+#X connect 39 0 41 0;
+#X connect 41 0 13 0;
+#X restore 698 668 pd pd_audio_envelopes_2;
+#X text 133 579 ------------------------------------------------------------
+;
+#X text 497 579 ------------------------------------------------------------
+;
+#X text 861 579 ------------------------------------------------------------
+;
+#X text 45 434 ------------------------------------------------------------
+;
+#X text 403 449 |;
+#X text 403 460 |;
+#X text 403 471 |;
+#X text 403 482 |;
+#X text 403 493 |;
+#X text 403 504 |;
+#X text 403 515 |;
+#X text 28 446 |;
+#X text 28 457 |;
+#X text 28 468 |;
+#X text 28 479 |;
+#X text 28 490 |;
+#X text 28 501 |;
+#X text 28 512 |;
+#X text 42 528 ------------------------------------------------------------
+;
+#X text 634 612 |;
+#X text 634 623 |;
+#X text 634 634 |;
+#X text 634 645 |;
+#X text 634 656 |;
+#X text 634 667 |;
+#X text 634 678 |;
+#X text 170 612 Create multiple different envelopes using messages
+;
+#X text 171 635 Try to create envelopes with more stages \, e.g.;
+#X obj 87 507 s myEnvelope;
+#X obj 201 685 s myEnvelope;
+#X obj 635 395 r myEnvelope;
+#X msg 199 664 1 10 \, 0.1 90 10 \, 1 500 100 \, 0.4 500 600 \, 0 20
+1100;
+#X connect 0 0 17 1;
+#X connect 2 0 1 0;
+#X connect 2 0 1 1;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 2 1;
+#X connect 7 0 0 0;
+#X connect 17 0 2 0;
+#X connect 18 0 17 0;
+#X connect 19 0 25 0;
+#X connect 22 0 18 0;
+#X connect 24 0 26 0;
+#X connect 25 0 29 0;
+#X connect 25 1 24 0;
+#X connect 25 2 22 0;
+#X connect 26 0 18 0;
+#X connect 29 0 30 0;
+#X connect 30 0 18 0;
+#X connect 34 0 68 0;
+#X connect 70 0 18 0;
+#X connect 71 0 69 0;
+#X restore 139 152 pd audio_envelopes;
+#X text 564 290 sjf \, SAE London \, 2020;
+#X text 98 184 ------------------------------------------------------------
+;
+#X text 139 202 Experiment with creating envelopes;
+#X text 138 221 Try to create a patch with an envelope for amplitude
+\, pitch \, panning etc.;
+#N canvas -1280 581 1280 755 basic_audio_objects 0;
+#X obj 168 47 +;
+#X obj 168 91 +;
+#X text 23 69 control rate cable ---->;
+#X text 196 66 audio rate cable ---->;
+#X obj 329 45 +~;
+#X obj 329 90 +~;
+#X obj 61 163 +~;
+#X obj 88 163 -~;
+#X obj 114 163 *~;
+#X obj 141 163 /~;
+#X obj 264 186 sig~;
+#X obj 264 252 snapshot~;
+#X floatatom 264 163 5 0 0 0 - - -;
+#X obj 375 173 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 375 194 metro 100;
+#X obj 264 218 wrap~;
+#X floatatom 264 273 5 0 0 0 - - -;
+#X obj 87 245 +~;
+#X text 47 137 audio maths objects;
+#X floatatom 646 52 5 0 0 0 - - -;
+#X obj 677 108 snapshot~;
+#X obj 732 28 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 732 49 metro 100;
+#X floatatom 677 129 5 0 0 0 - - -;
+#X obj 780 109 snapshot~;
+#X floatatom 780 130 5 0 0 0 - - -;
+#X obj 646 75 sig~;
+#X obj 816 75 sig~ 0.5;
+#X text 408 76 sig~ converts numbers to audio signals;
+#X text 381 109 snapshot~ converts audio signals back to numbers;
+#X text 651 7 Note we must 'bang' snapshot to get a reading;
+#X text 262 142 wrap~;
+#X text 666 176 osc~;
+#X text 668 193 (sinewave);
+#X floatatom 694 225 0 0 0 0 - - -;
+#X floatatom 698 281 0 0 0 0 - - -;
+#X obj 698 311 sig~;
+#X text 622 303 convert to;
+#X text 612 319 audio signal;
+#X text 618 342 oscillator;
+#X text 579 280 frequency control;
+#X obj 698 342 osc~;
+#X text 583 237 change frequency;
+#X text 756 256 <-- creation argument sets initial frequency;
+#X text 582 222 incoming numbers;
+#X obj 694 254 osc~ 1000;
+#X text 744 236 v-- messages to right inlet set phase in cycles;
+#X text 612 362 invoked without argument to;
+#X text 614 386 specify audio signal input;
+#X text 793 299 (lifted from helpfile...);
+#X obj 269 624 snapshot~;
+#X floatatom 269 647 5 0 0 0 - - -;
+#X obj 279 597 metro 100;
+#X msg 269 407 1 1000;
+#X msg 297 523 stop;
+#X msg 286 454 0;
+#X obj 269 549 vline~;
+#X text 334 404 ramp up;
+#X msg 278 429 0 1000;
+#X text 341 432 ramp down;
+#X text 298 474 ramp up \, jump down \, ramp up again;
+#X text 324 453 jump down;
+#X text 340 522 "stop" message freezes vline~ at its current value
+;
+#X msg 292 495 1 1000 \, 0 0 2000 \, 1 1000 3000;
+#X text 489 496 note: times (2000 \, 3000) are cumulative \, not incremental.
+;
+#X text 268 364 vline~;
+#X text 257 382 (ramp generator);
+#X obj 279 576 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 345 595 (lifted from helpfile...);
+#X msg 106 489 10 2000 1000;
+#X text 34 460 then go to 10 over 2000ms (2seconds);
+#X text 31 447 wait for 1000ms (1second);
+#X obj 998 80 sig~ 1;
+#X obj 1031 35 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 1031 56 metro 100;
+#X obj 1079 116 snapshot~;
+#X floatatom 1079 137 5 0 0 0 - - -;
+#X obj 1115 82 sig~ 0.5;
+#X text 963 158 Note how these two signals have;
+#X text 965 171 been summed together simply by;
+#X text 965 185 connecting them to the same inlet;
+#X connect 0 0 1 0;
+#X connect 4 0 5 0;
+#X connect 6 0 17 0;
+#X connect 7 0 17 0;
+#X connect 8 0 17 1;
+#X connect 9 0 17 1;
+#X connect 10 0 15 0;
+#X connect 11 0 16 0;
+#X connect 12 0 10 0;
+#X connect 13 0 14 0;
+#X connect 14 0 11 0;
+#X connect 15 0 11 0;
+#X connect 19 0 26 0;
+#X connect 20 0 23 0;
+#X connect 21 0 22 0;
+#X connect 22 0 20 0;
+#X connect 22 0 24 0;
+#X connect 24 0 25 0;
+#X connect 26 0 20 0;
+#X connect 27 0 24 0;
+#X connect 34 0 45 0;
+#X connect 35 0 36 0;
+#X connect 36 0 41 0;
+#X connect 50 0 51 0;
+#X connect 52 0 50 0;
+#X connect 53 0 56 0;
+#X connect 54 0 56 0;
+#X connect 55 0 56 0;
+#X connect 56 0 50 0;
+#X connect 58 0 56 0;
+#X connect 63 0 56 0;
+#X connect 67 0 52 0;
+#X connect 69 0 56 0;
+#X connect 72 0 75 0;
+#X connect 73 0 74 0;
+#X connect 74 0 75 0;
+#X connect 75 0 76 0;
+#X connect 77 0 75 0;
+#X restore 558 21 pd basic_audio_objects;

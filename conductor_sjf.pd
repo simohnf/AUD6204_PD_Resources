@@ -1,0 +1,61 @@
+#N canvas 0 23 1280 755 10;
+#X msg 43 100 0;
+#X text 191 20 reset;
+#X floatatom 69 39 5 50 2000 0 - - -;
+#X text 60 21 delta time;
+#X floatatom 139 41 5 0 0 0 - - -;
+#X obj 141 -159 loadbang;
+#X obj 12 69 metro 250;
+#X msg 120 -68 250;
+#X obj 12 39 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
+;
+#X text 9 20 on/off;
+#X text 136 20 #beats;
+#X obj 12 155 outlet;
+#X obj 194 40 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 12 -31 inlet;
+#X obj 62 -31 inlet;
+#X obj 208 -35 inlet;
+#X obj 248 -34 inlet;
+#X text 298 -42 I have included inlets here \, just incase I ever want
+to control this patch externally;
+#X msg 180 -71 16;
+#X text 492 182 sjf \, SAE London \, 2020;
+#X text 79 133 <--- this is an abstraction too!!!;
+#X obj 141 -137 t b b;
+#X obj 141 -93 sel 0;
+#X obj 185 -93 sel 0;
+#X obj 185 -115 int \$2;
+#X obj 142 -115 int \$1;
+#X text 321 -156 This abstraction can take 2 arguments;
+#X text 359 -135 \$1 - delta time;
+#X text 359 -121 \$2 - number of beats;
+#X text 224 -93 <--- if no argument is given it is essentially the
+same as giving 0 as the argument \, by selecting any 0 value I can
+output a default loading value (delta time = 250ms \, nBeats = 16)
+;
+#X obj 12 133 counter_sjf;
+#X connect 0 0 30 1;
+#X connect 2 0 6 1;
+#X connect 4 0 30 2;
+#X connect 5 0 21 0;
+#X connect 6 0 30 0;
+#X connect 7 0 2 0;
+#X connect 8 0 6 0;
+#X connect 12 0 0 0;
+#X connect 13 0 8 0;
+#X connect 14 0 2 0;
+#X connect 15 0 4 0;
+#X connect 16 0 12 0;
+#X connect 18 0 4 0;
+#X connect 21 0 25 0;
+#X connect 21 1 24 0;
+#X connect 22 0 7 0;
+#X connect 22 1 2 0;
+#X connect 23 0 18 0;
+#X connect 23 1 4 0;
+#X connect 24 0 23 0;
+#X connect 25 0 22 0;
+#X connect 30 0 11 0;
+#X coords 0 -1 1 1 230 60 1 0 0;

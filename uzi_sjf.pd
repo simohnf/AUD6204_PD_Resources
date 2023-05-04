@@ -1,0 +1,82 @@
+#N canvas 297 106 737 327 12;
+#X obj 25 88 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 25 112 pd simpleCounter;
+#X obj 25 6 inlet;
+#X obj 25 39 int \$1;
+#X obj 76 6 inlet;
+#X obj 25 67 t f f 0 f, f 24;
+#X obj 25 236 outlet;
+#X text 21 256 Outlet 1: bangs!!!;
+#X obj 84 219 outlet;
+#X text 80 239 Outlet 2: bang when finished;
+#X obj 25 136 t b f f;
+#X obj 84 197 sel;
+#X obj 148 190 outlet;
+#X text 253 11 This patch output x bangs as fast as possible;
+#X text 256 76 Or set via the right inlet and stored until a bang is
+received in the left inlet;
+#X text 255 109 Or set via the left inlet and that number of bangs
+will immediately be output;
+#X text 254 145 This is roughly based on a standard MaxMSP object that
+is quite useful;
+#X text 253 30 The number of bangs to output can be set as an argument
+(the \$1 arghument to the "int" references the first argument to the
+abstraction;
+#X obj 129 152 - 1;
+#X text 144 210 Outlet 3: count;
+#X connect 0 0 1 0;
+#X connect 1 0 10 0;
+#X connect 2 0 3 0;
+#X connect 3 0 5 0;
+#X connect 4 0 3 1;
+#X connect 5 0 0 0;
+#X connect 5 1 1 1;
+#X connect 5 2 1 2;
+#X connect 5 3 18 0;
+#X connect 10 0 6 0;
+#X connect 10 1 11 0;
+#X connect 10 2 12 0;
+#X connect 11 0 8 0;
+#X connect 18 0 11 1;

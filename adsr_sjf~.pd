@@ -1,0 +1,173 @@
+#N canvas 235 75 1275 677 10;
+#X text 9 13 When creating oneshot envelopes we knew the entire length
+of the note at the beginning;
+#X text 9 39 This meant that we could trigger the entire envelope at
+the beginning of the note (as we did with vline~);
+#X text 401 10 When receieving MIDI notes (e.g. from a MIDI keyboard)
+we don't know in advance when the key will be received;
+#X text 399 48 So we want to trigger the attack decay sustain portions
+of the envelope on a note-on message (MIDI Velocity greater than 0)
+;
+#X text 781 41 Then when we receive a note-off message (MIDI Velocity
+0) we trigger the release portion;
+#X text 779 5 (We will also want to scale our maximum amplitude so
+that a MIDI Velocity of 127 creates a louder note than a MIDI Velocity
+of 60);
+#X obj 462 459 vline~, f 18;
+#X floatatom 250 195 5 1 10000 2 _att - -;
+#X floatatom 282 195 5 1 10000 2 dec - -;
+#X floatatom 314 195 5 0 1 2 sus - -;
+#X floatatom 346 195 5 1 10000 2 rel - -;
+#X obj 242 93 loadbang;
+#X obj 242 114 t b b b b, f 33;
+#X obj 725 234 / 127;
+#X text 768 259 MIDI Velocities are 0 --> 127 \, so by dividing by
+127 I get between 0 --> 1 for the amplitude;
+#X obj 698 234 t b;
+#X obj 698 391 f;
+#X msg 698 425 0 \$1;
+#X obj 698 194 sel 0;
+#X msg 462 430 \$1 \$2 \, \$4 \$3 \$2;
+#X obj 462 406 pack 0 0 0 0, f 15;
+#X obj 751 334 *;
+#X obj 725 293 t f f;
+#X text 744 195 1 - When a MIDI velosity is received we check whether
+it is note on/off;
+#X text 568 247 then trigger release;
+#X text 786 359 So I multiply the amplitude value (0-->1) by the sustain
+value and use that for the sustain;
+#X text 506 296 value (0-->1) out the left outlet;
+#X text 75 467 then to go to the sustain level (\$4) over the length
+of the decay (\$3) after waiting for the attack to finish (\$2);
+#X text 768 234 2 - If MIDI velocity received is greater than 0 it
+is a note on so we work out the maximum amplitude (between 0 --> 1)
+;
+#X text 765 293 3 - the trigger outputs the amplitude value (0-->1)
+out the right outlet;
+#X text 787 331 4 - sustain is the proportion of the maximumamplitude
+the level drops to;
+#X text 498 282 5 - the trigger outputs the amplitude;
+#X text 72 400 6 - The amplitude value is used as the maximum amplitude
+and causes the pack to output it's list;
+#X text 75 439 7 - the message tells the vline to go to maximum amplitude
+(\$1) over the length of the attack (\$2);
+#X text 540 231 8 - if MIDI velocity = 0;
+#X text 737 423 10 - at end of release there should be silence so this
+message tells the vline~ to go to 0 in x milliseconds;
+#X msg 421 141 400;
+#X text 730 390 9 - length of release is stored using "float" and triggered
+when a MIDI Note off is received (step 8);
+#X msg 361 140 0.6;
+#X msg 242 136 50;
+#X msg 306 138 500;
+#X text 436 522 |;
+#X text 436 533 |;
+#X text 436 544 |;
+#X text 436 555 |;
+#X text 436 566 |;
+#X text 436 477 |;
+#X text 436 488 |;
+#X text 436 499 |;
+#X text 436 510 |;
+#X text 441 575 ------------------------------------------;
+#X text 439 470 ------------------------------------------;
+#X text 689 524 |;
+#X text 689 535 |;
+#X text 689 546 |;
+#X text 689 557 |;
+#X text 689 568 |;
+#X text 689 479 |;
+#X text 689 490 |;
+#X text 689 501 |;
+#X text 689 512 |;
+#X text 856 144 |;
+#X text 856 155 |;
+#X text 856 166 |;
+#X text 856 99 |;
+#X text 856 110 |;
+#X text 856 121 |;
+#X text 856 132 |;
+#X text 531 93 -------------------------------------------------------
+;
+#X text 529 146 |;
+#X text 529 157 |;
+#X text 529 168 |;
+#X text 529 101 |;
+#X text 529 112 |;
+#X text 529 123 |;
+#X text 529 134 |;
+#X text 530 173 -------------------------------------------------------
+;
+#X text 781 68 (NOTE: I have kept the pitch fixed in this example)
+;
+#X obj 462 488 outlet~;
+#X obj 698 144 inlet;
+#X obj 250 161 r \$0-att;
+#X obj 308 163 r \$0-dec;
+#X obj 370 163 r \$0-sus;
+#X obj 438 163 r \$0-rel;
+#X obj 965 136 inlet;
+#X obj 1021 136 inlet;
+#X obj 1084 136 inlet;
+#X obj 1152 136 inlet;
+#X obj 965 160 s \$0-att;
+#X obj 1021 160 s \$0-dec;
+#X obj 1084 160 s \$0-sus;
+#X obj 1152 160 s \$0-rel;
+#X text 1260 140 |;
+#X text 1260 151 |;
+#X text 1260 162 |;
+#X text 1260 95 |;
+#X text 1260 106 |;
+#X text 1260 117 |;
+#X text 1260 128 |;
+#X text 922 83 -------------------------------------------------------
+;
+#X text 912 138 |;
+#X text 912 149 |;
+#X text 912 160 |;
+#X text 912 93 |;
+#X text 912 104 |;
+#X text 912 115 |;
+#X text 912 126 |;
+#X text 921 172 -------------------------------------------------------
+;
+#X text 921 99 I moved these here and created send&receives so the
+the leftmost inlet triggers the envelope (basically it made things
+tidier;
+#X text 1094 596 sjf \, SAE London \, 2020;
+#X connect 6 0 78 0;
+#X connect 7 0 20 1;
+#X connect 8 0 20 2;
+#X connect 9 0 21 1;
+#X connect 10 0 16 1;
+#X connect 11 0 12 0;
+#X connect 12 0 39 0;
+#X connect 12 1 40 0;
+#X connect 12 2 38 0;
+#X connect 12 3 36 0;
+#X connect 13 0 22 0;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 17 0 6 0;
+#X connect 18 0 15 0;
+#X connect 18 1 13 0;
+#X connect 19 0 6 0;
+#X connect 20 0 19 0;
+#X connect 21 0 20 3;
+#X connect 22 0 20 0;
+#X connect 22 1 21 0;
+#X connect 36 0 10 0;
+#X connect 38 0 9 0;
+#X connect 39 0 7 0;
+#X connect 40 0 8 0;
+#X connect 79 0 18 0;
+#X connect 80 0 7 0;
+#X connect 81 0 8 0;
+#X connect 82 0 9 0;
+#X connect 83 0 10 0;
+#X connect 84 0 88 0;
+#X connect 85 0 89 0;
+#X connect 86 0 90 0;
+#X connect 87 0 91 0;
+#X coords 0 -1 1 1 128 40 1 250 170;

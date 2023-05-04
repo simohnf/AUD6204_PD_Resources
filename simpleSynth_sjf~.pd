@@ -1,0 +1,40 @@
+#N canvas 293 23 1055 433 10;
+#X obj 377 55 inlet;
+#X obj 625 56 inlet;
+#X text 375 34 MIDI pitch;
+#X text 620 33 MIDI velocity;
+#X obj 625 86 / 127;
+#X obj 377 337 dac~;
+#X obj 377 304 *~ 0.1;
+#X obj 377 260 *~;
+#X obj 377 210 osc~;
+#X obj 377 86 mtof;
+#X msg 377 120 \$1 10;
+#X msg 625 140 \$1 10;
+#X obj 377 146 line~;
+#X obj 625 161 line~;
+#X text 661 78 convert from MIDI (0-127) to between 0 (off) and 1 (full
+volume);
+#X text 668 137 use "line~" to create a small (10ms) ramp to values
+so there are no sudden changes (i.e. prevent clicks);
+#X text 424 300 Multiply by 0.1 just to lower the maximum amplitude
+;
+#X text 10 119 use "line~" to create a small (10ms) ramp to values
+so there are no sudden changes (i.e. prevent clicks);
+#X text 125 84 convert from MIDI (0-127) to frequency;
+#X text 140 208 osc~ is a simple sinewave oscillator;
+#X text 508 222 multiply velocity (scaled between 0->1) by output of
+oscillator to create amplitude envelope;
+#X text 864 368 sjf \, SAE London \, 2020;
+#X connect 0 0 9 0;
+#X connect 1 0 4 0;
+#X connect 4 0 11 0;
+#X connect 6 0 5 0;
+#X connect 6 0 5 1;
+#X connect 7 0 6 0;
+#X connect 8 0 7 0;
+#X connect 9 0 10 0;
+#X connect 10 0 12 0;
+#X connect 11 0 13 0;
+#X connect 12 0 8 0;
+#X connect 13 0 7 1;

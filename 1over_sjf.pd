@@ -1,0 +1,13 @@
+#N canvas 0 23 450 300 12;
+#X obj 77 85 inlet;
+#X obj 77 109 t b f;
+#X msg 77 133 1;
+#X obj 77 157 /, f 5;
+#X obj 77 181 outlet;
+#X text 64 7 this patch gives the result of (1 / input);
+#X text 63 25 i.e. the reciprocal of the input;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 1 1 3 1;
+#X connect 2 0 3 0;
+#X connect 3 0 4 0;

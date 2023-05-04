@@ -1,0 +1,2703 @@
+#N canvas 211 395 686 262 10;
+#X text 495 213 sjf \, SAE London \, 2020;
+#X text 108 95 ------------------------------------------------------------
+;
+#X text 117 41 Firstly \, go to Media >> Audio Settings and ensure
+your drivers are set correctly;
+#X text 119 67 Turn on DSP from the PD Window;
+#N canvas 854 295 586 356 drum_synthesis 0;
+#X text 74 29 There are many many ways synthesise drum sounds;
+#X text 74 47 For these examples I will base my ideas on some sound
+on sound articles \, and some random trial and error;
+#N canvas 0 23 654 418 kick_synthesis 0;
+#X text 187 8 This is based on Fig. 11 of this article: https://www.soundonsound.com/techniques/practical-bass-drum-synthesis
+;
+#X text 190 80 1 - Creating the amplitude ramp;
+#N canvas 0 23 875 421 kick_1 0;
+#X obj 389 60 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 389 16 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 389 36 metro 500;
+#X obj 389 80 t b;
+#X obj 389 261 vline~;
+#X msg 389 203 1 1 \, 0 \$1 1;
+#X text 469 204 This ramp will act as both the control for the overall
+amlitude envelope (left path);
+#X obj 389 311 *~, f 26;
+#X obj 389 332 vol_sjf~ out;
+#X obj 389 390 dac~;
+#X obj 581 273 osc~ 100;
+#X obj 389 122 f 50, f 15;
+#X floatatom 491 86 5 10 500 0 length - -;
+#X text 59 14 First we'll create our amplitude envelope;
+#X text 59 26 We could get creative \, but I'll keep it simple;
+#X text 405 16 <---- Turn Me on;
+#X text 469 352 <---- Turn Me up;
+#X text 638 271 The Oscillator fixed pitch;
+#X text 26 121 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 12 205 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X text 135 311 3 - multiply by signal for amplitude ramp;
+#X connect 0 0 3 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 11 0;
+#X connect 4 0 7 0;
+#X connect 5 0 4 0;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 8 0 9 1;
+#X connect 10 0 7 1;
+#X connect 11 0 5 0;
+#X connect 12 0 11 1;
+#X restore 226 107 pd kick_1;
+#X text 190 130 2 - sweeping the frequency;
+#N canvas 0 23 922 421 kick_2 0;
+#X obj 389 60 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 389 16 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 389 36 metro 500;
+#X obj 389 80 t b;
+#X obj 389 178 vline~;
+#X msg 389 147 1 1 \, 0 \$1 1;
+#X text 469 148 This ramp will act as both the control for the overall
+amlitude envelope (left path);
+#X obj 389 311 *~, f 26;
+#X obj 389 332 vol_sjf~ out;
+#X obj 389 390 dac~;
+#X obj 581 273 osc~ 100;
+#X obj 389 122 f 50, f 15;
+#X floatatom 491 86 5 10 500 0 length - -;
+#X text 59 14 First we'll create our amplitude envelope;
+#X text 59 26 We could get creative \, but I'll keep it simple;
+#X text 405 16 <---- Turn Me on;
+#X text 469 352 <---- Turn Me up;
+#X text 26 121 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 12 149 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X text 135 311 3 - multiply by signal for amplitude ramp;
+#X text 469 176 and it controls the frequency of the oscillator;
+#X obj 479 229 *~ 100;
+#X text 526 225 4 - use ramp to sweep frequency (from maxfreq --> 0
+as ramp goes from 1 --> 0);
+#X floatatom 512 201 5 50 150 0 maxfreq - -;
+#X text 638 271 The Oscillator;
+#X text 585 293 The article also has a lpf here \, but I'm not sure
+it's necessary;
+#X connect 0 0 3 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 11 0;
+#X connect 4 0 7 0;
+#X connect 4 0 21 0;
+#X connect 5 0 4 0;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 8 0 9 1;
+#X connect 10 0 7 1;
+#X connect 11 0 5 0;
+#X connect 12 0 11 1;
+#X connect 21 0 10 0;
+#X connect 23 0 21 1;
+#X restore 226 157 pd kick_2;
+#X text 188 181 3 - adding the click;
+#N canvas 59 68 1280 751 kick_3 0;
+#X obj 389 60 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 389 16 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 389 36 metro 500;
+#X obj 389 178 vline~;
+#X msg 389 147 1 1 \, 0 \$1 1;
+#X text 469 148 This ramp will act as both the control for the overall
+amlitude envelope (left path);
+#X obj 389 122 f 50, f 15;
+#X floatatom 506 106 5 10 500 0 length - -;
+#X text 59 14 First we'll create our amplitude envelope;
+#X text 59 26 We could get creative \, but I'll keep it simple;
+#X text 405 16 <---- Turn Me on;
+#X text 26 121 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 12 149 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X text 469 176 and it controls the frequency of the oscillator;
+#X obj 359 240 cnv 15 450 200 empty empty empty 20 12 0 14 -233017
+-66577 0;
+#X obj 388 331 osc~ 100;
+#X obj 388 296 *~ 100;
+#X text 435 292 4 - use ramp to sweep frequency (from maxfreq --> 0
+as ramp goes from 1 --> 0);
+#X floatatom 451 272 5 50 150 0 maxfreq - -;
+#X text 444 331 The Oscillator;
+#X text 405 368 (<---The article also has a lpf in here \, but I'm
+not sure it's necessary);
+#X text 463 250 Low frequency components with downward frequency sweep
+;
+#X obj 40 522 cnv 15 400 100 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 308 534 *~, f 19;
+#X obj 308 555 vol_sjf~ out;
+#X obj 308 600 dac~;
+#X text 388 575 <---- Turn Me up;
+#X text 56 540 3 - multiply by signal for amplitude ramp;
+#X text 45 520 Amplitude ramp;
+#X obj 827 247 cnv 15 430 200 empty empty empty 20 12 0 14 -233017
+-66577 0;
+#X obj 389 80 t b b, f 87;
+#X obj 851 219 vline~;
+#X obj 852 347 *~, f 4;
+#X obj 944 279 noise~;
+#X obj 1041 336 hsl 128 15 10 10000 1 0 empty empty click_tone -2 -8
+0 10 -262144 -1 -1 0 1;
+#X text 918 117 for the click I used the same ramp for amplitude and
+the cutoff of the lfp;
+#X text 918 141 I decided not to give control over the length of the
+click;
+#X text 988 278 our noise source is just white noise;
+#X obj 852 368 lop~ 1000, f 19;
+#X text 907 181 I found 0.1 was a good maximum l3evel for the click
+\, but you can change this;
+#X text 907 156 the message tells vline~ to jump to 0.1 \, and then
+go down to 0 over 5 milliseconds;
+#X msg 852 119 0.1 \, 0 5;
+#X text 886 345 amplitude ramp;
+#X text 858 398 I simplified things by making the lpf cuttoff fixed
+(rather than sweeping);
+#X connect 0 0 30 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 16 0;
+#X connect 3 0 23 0;
+#X connect 4 0 3 0;
+#X connect 6 0 4 0;
+#X connect 7 0 6 1;
+#X connect 15 0 23 1;
+#X connect 16 0 15 0;
+#X connect 18 0 16 1;
+#X connect 23 0 24 0;
+#X connect 24 0 25 0;
+#X connect 24 0 25 1;
+#X connect 30 0 6 0;
+#X connect 30 1 41 0;
+#X connect 31 0 32 0;
+#X connect 32 0 38 0;
+#X connect 33 0 32 1;
+#X connect 34 0 38 1;
+#X connect 38 0 23 1;
+#X connect 41 0 31 0;
+#X restore 224 208 pd kick_3;
+#X text 190 231 4 - finally the mixer;
+#X text 188 282 5 - kicksynth abstraction;
+#N canvas 41 62 1279 751 kick_4 0;
+#X obj 389 60 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 389 16 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 389 36 metro 500;
+#X obj 389 178 vline~;
+#X msg 389 147 1 1 \, 0 \$1 1;
+#X text 469 148 This ramp will act as both the control for the overall
+amlitude envelope (left path);
+#X obj 389 122 f 50, f 15;
+#X text 59 14 First we'll create our amplitude envelope;
+#X text 59 26 We could get creative \, but I'll keep it simple;
+#X text 405 16 <---- Turn Me on;
+#X text 26 121 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 12 149 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X text 469 176 and it controls the frequency of the oscillator;
+#X obj 359 240 cnv 15 450 200 empty empty empty 20 12 0 14 -233017
+-66577 0;
+#X obj 388 331 osc~ 100;
+#X obj 388 296 *~ 100;
+#X text 435 292 4 - use ramp to sweep frequency (from maxfreq --> 0
+as ramp goes from 1 --> 0);
+#X floatatom 451 272 5 50 150 0 maxfreq - -;
+#X text 444 331 The Oscillator;
+#X text 405 368 (<---The article also has a lpf in here \, but I'm
+not sure it's necessary);
+#X text 463 250 Low frequency components with downward frequency sweep
+;
+#X obj 11 620 cnv 15 400 100 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 279 632 *~, f 19;
+#X obj 279 653 vol_sjf~ out;
+#X obj 279 698 dac~;
+#X text 359 673 <---- Turn Me up;
+#X text 27 638 3 - multiply by signal for amplitude ramp;
+#X text 16 618 Amplitude ramp;
+#X obj 827 247 cnv 15 430 200 empty empty empty 20 12 0 14 -233017
+-66577 0;
+#X obj 389 80 t b b, f 87;
+#X obj 851 219 vline~;
+#X obj 852 347 *~, f 4;
+#X obj 944 279 noise~;
+#X obj 1041 336 hsl 60 10 10 20000 1 0 empty empty click -2 -8 0 10
+-262144 -1 -1 0 1;
+#X text 918 117 for the click I used the same ramp for amplitude and
+the cutoff of the lfp;
+#X text 918 141 I decided not to give control over the length of the
+click;
+#X text 988 278 our noise source is just white noise;
+#X obj 852 368 lop~ 1000, f 19;
+#X text 907 181 I found 0.1 was a good maximum l3evel for the click
+\, but you can change this;
+#X text 907 156 the message tells vline~ to jump to 0.1 \, and then
+go down to 0 over 5 milliseconds;
+#X text 886 345 amplitude ramp;
+#X text 858 398 I simplified things by making the lpf cuttoff fixed
+(rather than sweeping);
+#X obj 445 460 cnv 15 450 200 empty empty empty 20 12 0 14 -233017
+-66577 0;
+#X obj 543 530 vol_sjf~ tone;
+#X obj 639 530 vol_sjf~ click;
+#X text 549 466 MIXER;
+#X obj 772 474 loadbang;
+#X msg 771 495 1;
+#X floatatom 1038 356 10 0 0 0 - - -;
+#X text 1103 356 Hz;
+#X obj 548 117 hsl 60 10 10 250 0 0 empty empty length -2 -8 0 10 -262144
+-1 -1 0 1;
+#X msg 852 119 0.1 \, 0 5;
+#X connect 0 0 29 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 15 0;
+#X connect 3 0 22 0;
+#X connect 4 0 3 0;
+#X connect 6 0 4 0;
+#X connect 14 0 43 0;
+#X connect 15 0 14 0;
+#X connect 17 0 15 1;
+#X connect 22 0 23 0;
+#X connect 23 0 24 0;
+#X connect 23 0 24 1;
+#X connect 29 0 6 0;
+#X connect 29 1 51 0;
+#X connect 30 0 31 0;
+#X connect 31 0 37 0;
+#X connect 32 0 31 1;
+#X connect 33 0 37 1;
+#X connect 33 0 48 0;
+#X connect 37 0 44 0;
+#X connect 43 0 22 1;
+#X connect 44 0 22 1;
+#X connect 46 0 47 0;
+#X connect 47 0 44 1;
+#X connect 47 0 43 1;
+#X connect 50 0 6 1;
+#X connect 51 0 30 0;
+#X restore 226 258 pd kick_4;
+#N canvas 289 373 709 441 kick_5 0;
+#X obj 113 30 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 113 71 100;
+#X obj 113 92 kick_sjf~;
+#X obj 114 214 dac~;
+#X obj 113 50 metro 500;
+#X text 139 71 MIDI Velocity;
+#X connect 0 0 4 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 1 0;
+#X restore 224 309 pd kick_5;
+#X restore 160 123 pd kick_synthesis;
+#N canvas 457 273 548 529 snare_synthesis 0;
+#X text 83 157 1 - Creating the amplitude ramp;
+#N canvas 82 113 1280 751 snr_1 0;
+#X obj 424 253 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 424 209 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 424 229 metro 500;
+#X obj 424 273 t b;
+#X obj 424 454 vline~;
+#X obj 424 504 *~, f 26;
+#X obj 424 525 vol_sjf~ out;
+#X obj 424 583 dac~;
+#X floatatom 526 279 5 10 500 0 length - -;
+#X text 94 207 First we'll create our amplitude envelope;
+#X text 94 219 We could get creative \, but I'll keep it simple;
+#X text 440 209 <---- Turn Me on;
+#X text 504 545 <---- Turn Me up;
+#X text 637 445 The Oscillator fixed pitch;
+#X text 61 314 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 170 504 3 - multiply by signal for amplitude ramp;
+#X text 674 475 The Oscillator fixed pitch;
+#X obj 564 444 osc~ 180;
+#X obj 601 474 osc~ 330;
+#X text 189 38 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X text 188 9 This is based on the bottom half of Figure 6 in this
+article:;
+#X text 191 70 2 sine wave oscillators \, summed together \, and then
+contoured with an amplitude envelope;
+#X obj 424 315 f 100, f 15;
+#X text 652 500 We want the two frequencies to be inharmonic (I've
+just copied the frequencies from the diagram in the article);
+#X msg 424 396 1 1 \, 0 \$1 1;
+#X text 47 398 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X connect 0 0 3 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 22 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 6 0 7 1;
+#X connect 8 0 22 1;
+#X connect 17 0 5 1;
+#X connect 18 0 5 1;
+#X connect 22 0 24 0;
+#X connect 24 0 4 0;
+#X restore 119 184 pd snr_1;
+#X text 62 78 This is a little more complex than the kick drum \, but
+the idea is the same;
+#X text 61 6 This is based on on a combination of elements from these
+articles https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+https://www.soundonsound.com/techniques/practical-snare-drum-synthesis
+;
+#N canvas 96 105 1280 751 snr_2 0;
+#X obj 71 123 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 71 79 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 71 99 metro 500;
+#X obj 349 630 vol_sjf~ out;
+#X obj 349 688 dac~;
+#X floatatom 126 298 5 10 500 0 length - -;
+#X text 87 79 <---- Turn Me on;
+#X text 429 650 <---- Turn Me up;
+#X text 318 39 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#N canvas 0 23 947 434 snr_sinewaves_envLogic 0;
+#X obj 408 135 inlet;
+#X obj 407 314 vline~;
+#X text 499 249 This ramp will act as both the control for the overall
+amlitude envelope (left path);
+#X obj 407 364 *~, f 26;
+#X text 44 174 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 153 364 3 - multiply by signal for amplitude ramp;
+#X text 404 107 Trigger;
+#X obj 486 140 inlet;
+#X text 482 112 env length;
+#X obj 407 385 outlet~;
+#X text 72 38 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X text 71 9 This is based on the bottom half of Figure 6 in this article:
+;
+#X text 74 70 2 sine wave oscillators \, summed together \, and then
+contoured with an amplitude envelope;
+#X obj 407 175 f, f 6;
+#X msg 407 256 1 1 \, 0 \$1 1;
+#X text 30 258 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X obj 572 304 osc~ 180;
+#X obj 609 334 osc~ 330;
+#X text 650 307 Sinewave frequencies taken from diagram;
+#X connect 0 0 13 0;
+#X connect 1 0 3 0;
+#X connect 3 0 9 0;
+#X connect 7 0 13 1;
+#X connect 13 0 14 0;
+#X connect 14 0 1 0;
+#X connect 16 0 3 1;
+#X connect 17 0 3 1;
+#X restore 75 342 pd snr_sinewaves_envLogic;
+#X obj 126 257 loadbang;
+#X msg 126 278 90;
+#X text 320 71 A triangle wave passed through 2 frequency shifters
+\, mixed together \, and then contoured with an amplitude envelope
+;
+#X obj 660 469 vline~;
+#X obj 660 506 *~, f 26;
+#X text 297 329 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 406 506 3 - multiply by signal for amplitude ramp;
+#X obj 660 330 f, f 6;
+#X floatatom 683 301 5 10 500 0 length - -;
+#X obj 683 260 loadbang;
+#X msg 683 281 120;
+#X obj 71 143 t b b;
+#X text 319 97 My envelope is just copied and pasted from before;
+#X text 319 111 I've used a 4 osc~ additive synth approach to create
+the triangle wave (see Synthesis_1 lesson);
+#X text 319 134 For the frequency shifter I literally just looked at
+the _pd-refcard-en.pdf and noted there were twoobjects/patches listed
+as frequency shifting \, I checked the helpfiles for both and it seems
+they work in combination together to give positive and negative frequency
+shifting;
+#X text 798 14 NOTE: Frequency shifting is not the same as transposing
+or pitch shifting. Rather than multiplying all of the component harmonics
+by a values (as would be the result when pitch shifting) \, frequency
+shifting ADDS a certain value to the frequency of each component harmonic
+- this distorts the harmonic relationship of the component frequencies
+;
+#X text 798 83 For example \, if we had a sound containing two frequencies
+\, 100Hz + 200Hz \, and we pitch shifted up an octave our new wave
+would have frequencies 200Hz + 400Hz (the octave relationship between
+the waves is retained.;
+#X text 800 128 If we were to frequency shift our wave up by 100 Hz
+the frequency content would become 200Hz + 300Hz !!!;
+#N canvas 533 298 450 300 4oscTri 0;
+#X obj 115 110 osc~;
+#X obj 150 110 osc~;
+#X obj 185 110 osc~;
+#X obj 221 110 osc~;
+#X obj 115 131 /~ 1;
+#X obj 185 131 /~ 25;
+#X obj 150 89 *~ 3;
+#X obj 185 89 *~ 5;
+#X obj 221 89 *~ 7;
+#X obj 115 89 *~ 1;
+#X obj 175 171 *~ 1;
+#X obj 101 48 sig~;
+#X obj 94 12 inlet;
+#X obj 175 192 outlet~;
+#X obj 150 131 /~ -9;
+#X obj 221 131 /~ -49;
+#X connect 0 0 4 0;
+#X connect 1 0 14 0;
+#X connect 2 0 5 0;
+#X connect 3 0 15 0;
+#X connect 4 0 10 0;
+#X connect 5 0 10 0;
+#X connect 6 0 1 0;
+#X connect 7 0 2 0;
+#X connect 8 0 3 0;
+#X connect 9 0 0 0;
+#X connect 10 0 13 0;
+#X connect 11 0 9 0;
+#X connect 11 0 6 0;
+#X connect 11 0 7 0;
+#X connect 11 0 8 0;
+#X connect 12 0 11 0;
+#X connect 14 0 10 0;
+#X connect 15 0 10 0;
+#X restore 836 350 pd 4oscTri;
+#X text 902 351 <--- click me to see a simple 4 osc triangle wave;
+#X obj 851 283 loadbang;
+#X msg 835 323 111;
+#N canvas 0 23 450 300 freqShift 0;
+#X obj 80 34 inlet~;
+#X obj 80 84 complex-mod~, f 18;
+#X obj 80 59 hilbert~, f 9;
+#X obj 201 31 inlet;
+#X text 198 8 freq shift (Hz);
+#X obj 80 105 outlet~;
+#X connect 0 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 1 2;
+#X restore 837 411 pd freqShift;
+#X msg 903 323 175;
+#N canvas 0 23 645 300 freqShift 0;
+#X obj 80 34 inlet~;
+#X obj 80 84 complex-mod~, f 18;
+#X obj 80 59 hilbert~, f 9;
+#X obj 201 31 inlet;
+#X text 198 8 freq shift (Hz);
+#X obj 80 105 outlet~;
+#X text 240 71 Both of these abstractions come with PD;
+#X text 240 84 The math is v complex (i.e. beyond my abilities) \,
+but fortunately we only need to use them not actually clalculate the
+answers;
+#X connect 0 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 1 2;
+#X restore 919 411 pd freqShift;
+#X msg 936 323 224;
+#X msg 660 411 1 1 \, 0 \$1 1;
+#X text 283 413 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X text 317 10 This is based on Figure 6 in this article:;
+#X text 966 322 tri & freq shift values take from diagram;
+#X text 322 201 NOTE: the diagram seems to imply the frequency shifted
+triangle wave has a slightly longer envelope than the sinewaves so
+I've just chosen an arbitrary length here;
+#X connect 0 0 21 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 4 0;
+#X connect 3 0 4 1;
+#X connect 5 0 9 1;
+#X connect 9 0 3 0;
+#X connect 10 0 11 0;
+#X connect 11 0 5 0;
+#X connect 13 0 14 0;
+#X connect 14 0 3 0;
+#X connect 17 0 36 0;
+#X connect 18 0 17 1;
+#X connect 19 0 20 0;
+#X connect 20 0 18 0;
+#X connect 21 0 9 0;
+#X connect 21 1 17 0;
+#X connect 28 0 32 0;
+#X connect 28 0 34 0;
+#X connect 30 0 31 0;
+#X connect 30 0 33 0;
+#X connect 30 0 35 0;
+#X connect 31 0 28 0;
+#X connect 32 0 14 1;
+#X connect 33 0 32 1;
+#X connect 34 0 14 1;
+#X connect 35 0 34 1;
+#X connect 36 0 13 0;
+#X restore 119 229 pd snr_2;
+#X text 82 209 2 - adding the triangle wave & frequency shifting;
+#N canvas 135 100 1280 751 snr_3 0;
+#X obj 71 123 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 71 79 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 71 99 metro 500;
+#X obj 349 630 vol_sjf~ out;
+#X obj 349 688 dac~;
+#X floatatom 126 298 5 10 500 0 length - -;
+#X text 87 79 <---- Turn Me on;
+#X text 429 650 <---- Turn Me up;
+#N canvas 0 23 947 434 snr_sinewaves_envLogic 0;
+#X obj 408 135 inlet;
+#X obj 407 314 vline~;
+#X text 499 249 This ramp will act as both the control for the overall
+amlitude envelope (left path);
+#X obj 407 364 *~, f 26;
+#X text 44 174 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 153 364 3 - multiply by signal for amplitude ramp;
+#X text 404 107 Trigger;
+#X obj 486 140 inlet;
+#X text 482 112 env length;
+#X obj 407 385 outlet~;
+#X text 72 38 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X text 71 9 This is based on the bottom half of Figure 6 in this article:
+;
+#X text 74 70 2 sine wave oscillators \, summed together \, and then
+contoured with an amplitude envelope;
+#X obj 407 175 f, f 6;
+#X msg 407 256 1 1 \, 0 \$1 1;
+#X text 30 258 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X obj 572 304 osc~ 180;
+#X obj 609 334 osc~ 330;
+#X text 650 307 Sinewave frequencies taken from diagram;
+#X connect 0 0 13 0;
+#X connect 1 0 3 0;
+#X connect 3 0 9 0;
+#X connect 7 0 13 1;
+#X connect 13 0 14 0;
+#X connect 14 0 1 0;
+#X connect 16 0 3 1;
+#X connect 17 0 3 1;
+#X restore 75 342 pd snr_sinewaves_envLogic;
+#X obj 126 257 loadbang;
+#X msg 126 278 90;
+#X floatatom 338 305 5 10 500 0 length - -;
+#X obj 338 264 loadbang;
+#X msg 338 285 120;
+#N canvas 147 123 1280 755 tri+freqShift_envLogic 0;
+#X obj 399 280 inlet;
+#X obj 399 447 vline~;
+#X obj 399 484 *~, f 26;
+#X text 36 307 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 145 484 3 - multiply by signal for amplitude ramp;
+#X obj 399 308 f, f 6;
+#N canvas 0 23 450 300 4oscTri 0;
+#X obj 115 110 osc~;
+#X obj 150 110 osc~;
+#X obj 185 110 osc~;
+#X obj 221 110 osc~;
+#X obj 115 131 /~ 1;
+#X obj 185 131 /~ 25;
+#X obj 150 89 *~ 3;
+#X obj 185 89 *~ 5;
+#X obj 221 89 *~ 7;
+#X obj 115 89 *~ 1;
+#X obj 175 171 *~ 1;
+#X obj 101 48 sig~;
+#X obj 94 12 inlet;
+#X obj 175 192 outlet~;
+#X obj 150 131 /~ -9;
+#X obj 221 131 /~ -49;
+#X connect 0 0 4 0;
+#X connect 1 0 14 0;
+#X connect 2 0 5 0;
+#X connect 3 0 15 0;
+#X connect 4 0 10 0;
+#X connect 5 0 10 0;
+#X connect 6 0 1 0;
+#X connect 7 0 2 0;
+#X connect 8 0 3 0;
+#X connect 9 0 0 0;
+#X connect 10 0 13 0;
+#X connect 11 0 9 0;
+#X connect 11 0 6 0;
+#X connect 11 0 7 0;
+#X connect 11 0 8 0;
+#X connect 12 0 11 0;
+#X connect 14 0 10 0;
+#X connect 15 0 10 0;
+#X restore 575 328 pd 4oscTri;
+#X text 641 329 <--- click me to see a simple 4 osc triangle wave;
+#X obj 590 261 loadbang;
+#X msg 574 301 111;
+#N canvas 0 23 450 300 freqShift 0;
+#X obj 80 34 inlet~;
+#X obj 80 84 complex-mod~, f 18;
+#X obj 80 59 hilbert~, f 9;
+#X obj 201 31 inlet;
+#X text 198 8 freq shift (Hz);
+#X obj 80 105 outlet~;
+#X connect 0 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 1 2;
+#X restore 576 389 pd freqShift;
+#X msg 642 301 175;
+#N canvas 0 23 645 300 freqShift 0;
+#X obj 80 34 inlet~;
+#X obj 80 84 complex-mod~, f 18;
+#X obj 80 59 hilbert~, f 9;
+#X obj 201 31 inlet;
+#X text 198 8 freq shift (Hz);
+#X obj 80 105 outlet~;
+#X text 240 71 Both of these abstractions come with PD;
+#X text 240 84 The math is v complex (i.e. beyond my abilities) \,
+but fortunately we only need to use them not actually clalculate the
+answers;
+#X connect 0 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 1 2;
+#X restore 658 389 pd freqShift;
+#X msg 675 301 224;
+#X msg 399 389 1 1 \, 0 \$1 1;
+#X text 22 391 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X text 705 300 tri & freq shift values take from diagram;
+#X obj 399 505 outlet~;
+#X obj 461 280 inlet;
+#X text 392 257 Trigger;
+#X text 456 258 Length;
+#X text 46 37 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X text 48 69 A triangle wave passed through 2 frequency shifters \,
+mixed together \, and then contoured with an amplitude envelope;
+#X text 47 95 My envelope is just copied and pasted from before;
+#X text 47 109 I've used a 4 osc~ additive synth approach to create
+the triangle wave (see Synthesis_1 lesson);
+#X text 47 132 For the frequency shifter I literally just looked at
+the _pd-refcard-en.pdf and noted there were twoobjects/patches listed
+as frequency shifting \, I checked the helpfiles for both and it seems
+they work in combination together to give positive and negative frequency
+shifting;
+#X text 526 12 NOTE: Frequency shifting is not the same as transposing
+or pitch shifting. Rather than multiplying all of the component harmonics
+by a values (as would be the result when pitch shifting) \, frequency
+shifting ADDS a certain value to the frequency of each component harmonic
+- this distorts the harmonic relationship of the component frequencies
+;
+#X text 526 81 For example \, if we had a sound containing two frequencies
+\, 100Hz + 200Hz \, and we pitch shifted up an octave our new wave
+would have frequencies 200Hz + 400Hz (the octave relationship between
+the waves is retained.;
+#X text 528 126 If we were to frequency shift our wave up by 100 Hz
+the frequency content would become 200Hz + 300Hz !!!;
+#X text 45 8 This is based on Figure 6 in this article:;
+#X connect 0 0 5 0;
+#X connect 1 0 2 0;
+#X connect 2 0 17 0;
+#X connect 5 0 14 0;
+#X connect 6 0 10 0;
+#X connect 6 0 12 0;
+#X connect 8 0 9 0;
+#X connect 8 0 11 0;
+#X connect 8 0 13 0;
+#X connect 9 0 6 0;
+#X connect 10 0 2 1;
+#X connect 11 0 10 1;
+#X connect 12 0 2 1;
+#X connect 13 0 12 1;
+#X connect 14 0 1 0;
+#X connect 18 0 5 1;
+#X restore 273 338 pd tri+freqShift_envLogic;
+#X text 372 16 Finally \, we will create the sound of the snares using
+white noise and filtering;
+#X text 373 41 This is based on Figure 14 of this article:;
+#X text 370 57 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X obj 728 458 vline~;
+#X obj 728 488 *~, f 16;
+#X text 474 246 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 474 488 3 - multiply by signal for amplitude ramp;
+#X obj 837 247 f, f 6;
+#X msg 837 328 1 1 \, 0 \$1 1;
+#X text 460 330 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X floatatom 898 194 5 10 500 0 length - -;
+#X obj 898 153 loadbang;
+#X obj 1020 237 noise~;
+#X text 369 86 Here I am literallyjust adding white noise \, filtering
+it \, and contouring it with an amplitude envelope;
+#X obj 71 143 t b b b;
+#X obj 928 326 lop~ 5000, f 16;
+#X text 370 112 Note: I didn't bother with thenotch filter mentioned
+as it didn't seem to change much when I tested;
+#X text 1066 235 white noise;
+#X text 940 343 an arbitrary cutoff frequency for the lpf to begin
+;
+#X text 378 140 NOTE: the diagram seems to imply the noise has a slightly
+longer envelope than the frequency shifted triangle wave so I've just
+chosen an arbitrary length here;
+#X msg 898 174 150;
+#X obj 924 390 hip~ 500;
+#X text 855 416 an arbitrary cutoff frequency for the hpf to begin
+(I added this to try and make the sound a touch less oomphy);
+#X connect 0 0 29 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 4 0;
+#X connect 3 0 4 1;
+#X connect 5 0 8 1;
+#X connect 8 0 3 0;
+#X connect 9 0 10 0;
+#X connect 10 0 5 0;
+#X connect 11 0 14 1;
+#X connect 12 0 13 0;
+#X connect 13 0 11 0;
+#X connect 14 0 3 0;
+#X connect 18 0 19 0;
+#X connect 19 0 3 0;
+#X connect 22 0 23 0;
+#X connect 23 0 18 0;
+#X connect 25 0 22 1;
+#X connect 26 0 35 0;
+#X connect 27 0 30 0;
+#X connect 29 0 8 0;
+#X connect 29 1 14 0;
+#X connect 29 2 22 0;
+#X connect 30 0 36 0;
+#X connect 35 0 25 0;
+#X connect 36 0 19 1;
+#X restore 119 274 pd snr_3;
+#X text 82 251 3 - adding the snare sound 1;
+#X text 82 293 4 - adding some level controls;
+#N canvas 292 131 745 747 snr_4 0;
+#X obj 70 53 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 70 9 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 70 29 metro 500;
+#X obj 349 630 vol_sjf~ out;
+#X obj 349 688 dac~;
+#X floatatom 126 298 5 10 500 0 length - -;
+#X text 86 9 <---- Turn Me on;
+#X text 429 650 <---- Turn Me up;
+#N canvas 0 23 947 434 snr_sinewaves_envLogic 0;
+#X obj 408 135 inlet;
+#X obj 407 314 vline~;
+#X text 499 249 This ramp will act as both the control for the overall
+amlitude envelope (left path);
+#X obj 407 364 *~, f 26;
+#X text 44 174 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 153 364 3 - multiply by signal for amplitude ramp;
+#X text 404 107 Trigger;
+#X obj 486 140 inlet;
+#X text 482 112 env length;
+#X obj 407 385 outlet~;
+#X text 72 38 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X text 71 9 This is based on the bottom half of Figure 6 in this article:
+;
+#X text 74 70 2 sine wave oscillators \, summed together \, and then
+contoured with an amplitude envelope;
+#X obj 407 175 f, f 6;
+#X msg 407 256 1 1 \, 0 \$1 1;
+#X text 30 258 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X obj 572 304 osc~ 180;
+#X obj 609 334 osc~ 330;
+#X text 650 307 Sinewave frequencies taken from diagram;
+#X connect 0 0 13 0;
+#X connect 1 0 3 0;
+#X connect 3 0 9 0;
+#X connect 7 0 13 1;
+#X connect 13 0 14 0;
+#X connect 14 0 1 0;
+#X connect 16 0 3 1;
+#X connect 17 0 3 1;
+#X restore 75 342 pd snr_sinewaves_envLogic;
+#X obj 126 257 loadbang;
+#X msg 126 278 90;
+#X floatatom 338 305 5 10 500 0 length - -;
+#X obj 338 264 loadbang;
+#X msg 338 285 120;
+#N canvas 160 123 1280 755 tri+freqShift_envLogic 0;
+#X obj 399 280 inlet;
+#X obj 399 447 vline~;
+#X obj 399 484 *~, f 26;
+#X text 36 307 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 145 484 3 - multiply by signal for amplitude ramp;
+#X obj 399 308 f, f 6;
+#N canvas 0 23 450 300 4oscTri 0;
+#X obj 115 110 osc~;
+#X obj 150 110 osc~;
+#X obj 185 110 osc~;
+#X obj 221 110 osc~;
+#X obj 115 131 /~ 1;
+#X obj 185 131 /~ 25;
+#X obj 150 89 *~ 3;
+#X obj 185 89 *~ 5;
+#X obj 221 89 *~ 7;
+#X obj 115 89 *~ 1;
+#X obj 175 171 *~ 1;
+#X obj 101 48 sig~;
+#X obj 94 12 inlet;
+#X obj 175 192 outlet~;
+#X obj 150 131 /~ -9;
+#X obj 221 131 /~ -49;
+#X connect 0 0 4 0;
+#X connect 1 0 14 0;
+#X connect 2 0 5 0;
+#X connect 3 0 15 0;
+#X connect 4 0 10 0;
+#X connect 5 0 10 0;
+#X connect 6 0 1 0;
+#X connect 7 0 2 0;
+#X connect 8 0 3 0;
+#X connect 9 0 0 0;
+#X connect 10 0 13 0;
+#X connect 11 0 9 0;
+#X connect 11 0 6 0;
+#X connect 11 0 7 0;
+#X connect 11 0 8 0;
+#X connect 12 0 11 0;
+#X connect 14 0 10 0;
+#X connect 15 0 10 0;
+#X restore 575 328 pd 4oscTri;
+#X text 641 329 <--- click me to see a simple 4 osc triangle wave;
+#X obj 590 261 loadbang;
+#X msg 574 301 111;
+#N canvas 0 23 450 300 freqShift 0;
+#X obj 80 34 inlet~;
+#X obj 80 84 complex-mod~, f 18;
+#X obj 80 59 hilbert~, f 9;
+#X obj 201 31 inlet;
+#X text 198 8 freq shift (Hz);
+#X obj 80 105 outlet~;
+#X connect 0 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 1 2;
+#X restore 576 389 pd freqShift;
+#X msg 642 301 175;
+#N canvas 0 23 645 300 freqShift 0;
+#X obj 80 34 inlet~;
+#X obj 80 84 complex-mod~, f 18;
+#X obj 80 59 hilbert~, f 9;
+#X obj 201 31 inlet;
+#X text 198 8 freq shift (Hz);
+#X obj 80 105 outlet~;
+#X text 240 71 Both of these abstractions come with PD;
+#X text 240 84 The math is v complex (i.e. beyond my abilities) \,
+but fortunately we only need to use them not actually clalculate the
+answers;
+#X connect 0 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 1 2;
+#X restore 658 389 pd freqShift;
+#X msg 675 301 224;
+#X msg 399 389 1 1 \, 0 \$1 1;
+#X text 22 391 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X text 705 300 tri & freq shift values take from diagram;
+#X obj 399 505 outlet~;
+#X obj 461 280 inlet;
+#X text 392 257 Trigger;
+#X text 456 258 Length;
+#X text 46 37 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X text 48 69 A triangle wave passed through 2 frequency shifters \,
+mixed together \, and then contoured with an amplitude envelope;
+#X text 47 95 My envelope is just copied and pasted from before;
+#X text 47 109 I've used a 4 osc~ additive synth approach to create
+the triangle wave (see Synthesis_1 lesson);
+#X text 47 132 For the frequency shifter I literally just looked at
+the _pd-refcard-en.pdf and noted there were twoobjects/patches listed
+as frequency shifting \, I checked the helpfiles for both and it seems
+they work in combination together to give positive and negative frequency
+shifting;
+#X text 526 12 NOTE: Frequency shifting is not the same as transposing
+or pitch shifting. Rather than multiplying all of the component harmonics
+by a values (as would be the result when pitch shifting) \, frequency
+shifting ADDS a certain value to the frequency of each component harmonic
+- this distorts the harmonic relationship of the component frequencies
+;
+#X text 526 81 For example \, if we had a sound containing two frequencies
+\, 100Hz + 200Hz \, and we pitch shifted up an octave our new wave
+would have frequencies 200Hz + 400Hz (the octave relationship between
+the waves is retained.;
+#X text 528 126 If we were to frequency shift our wave up by 100 Hz
+the frequency content would become 200Hz + 300Hz !!!;
+#X text 45 8 This is based on Figure 6 in this article:;
+#X connect 0 0 5 0;
+#X connect 1 0 2 0;
+#X connect 2 0 17 0;
+#X connect 5 0 14 0;
+#X connect 6 0 10 0;
+#X connect 6 0 12 0;
+#X connect 8 0 9 0;
+#X connect 8 0 11 0;
+#X connect 8 0 13 0;
+#X connect 9 0 6 0;
+#X connect 10 0 2 1;
+#X connect 11 0 10 1;
+#X connect 12 0 2 1;
+#X connect 13 0 12 1;
+#X connect 14 0 1 0;
+#X connect 18 0 5 1;
+#X restore 273 338 pd tri+freqShift_envLogic;
+#X floatatom 529 305 5 10 500 0 length - -;
+#X obj 529 264 loadbang;
+#N canvas 0 23 992 607 noise_envLogic 0;
+#X obj 484 198 inlet;
+#X text 26 8 Finally \, we will create the sound of the snares using
+white noise and filtering;
+#X text 27 33 This is based on Figure 14 of this article:;
+#X text 24 49 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X obj 491 378 vline~;
+#X obj 491 415 *~, f 26;
+#X text 128 238 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 237 415 3 - multiply by signal for amplitude ramp;
+#X obj 491 239 f, f 6;
+#X msg 491 320 1 1 \, 0 \$1 1;
+#X text 114 322 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X obj 674 229 noise~;
+#X text 23 78 Here I am literallyjust adding white noise \, filtering
+it \, and contouring it with an amplitude envelope;
+#X obj 674 250 lop~ 5000, f 16;
+#X text 24 104 Note: I didn't bother with thenotch filter mentioned
+as it didn't seem to change much when I tested;
+#X text 473 169 Trigger;
+#X obj 568 200 inlet;
+#X text 557 171 length;
+#X obj 491 436 outlet~;
+#X obj 758 199 inlet;
+#X text 690 153 brightness of snare;
+#X text 740 180 lpf cutoff;
+#X text 587 274 an arbitrary cutoff frequency for the lpf to begin
+;
+#X obj 581 324 hip~ 500;
+#X text 601 345 an arbitrary cutoff frequency for the hpf to begin
+(I added this to try and make the sound a touch less oomphy);
+#X connect 0 0 8 0;
+#X connect 4 0 5 0;
+#X connect 5 0 18 0;
+#X connect 8 0 9 0;
+#X connect 9 0 4 0;
+#X connect 11 0 13 0;
+#X connect 13 0 23 0;
+#X connect 16 0 8 1;
+#X connect 19 0 13 1;
+#X connect 23 0 5 1;
+#X restore 464 338 pd noise_envLogic;
+#X obj 74 424 vol_sjf~;
+#X obj 272 420 vol_sjf~;
+#X obj 463 420 vol_sjf~;
+#X msg 529 285 150;
+#X obj 71 143 t b b b, f 53;
+#X obj 333 361 loadbang;
+#X msg 333 382 1;
+#X text 284 7 This is identical to the last patch \, but tidied up
+and with a separate level control for each component (sinewaves \,
+triangle freq shift waves \, noise;
+#X text 285 43 based on Fig 15 of this article:;
+#X text 290 57 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X connect 0 0 22 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 4 0;
+#X connect 3 0 4 1;
+#X connect 5 0 8 1;
+#X connect 8 0 18 0;
+#X connect 9 0 10 0;
+#X connect 10 0 5 0;
+#X connect 11 0 14 1;
+#X connect 12 0 13 0;
+#X connect 13 0 11 0;
+#X connect 14 0 19 0;
+#X connect 15 0 17 1;
+#X connect 16 0 21 0;
+#X connect 17 0 20 0;
+#X connect 18 0 3 0;
+#X connect 19 0 3 0;
+#X connect 20 0 3 0;
+#X connect 21 0 15 0;
+#X connect 22 0 8 0;
+#X connect 22 1 14 0;
+#X connect 22 2 17 0;
+#X connect 23 0 24 0;
+#X connect 24 0 18 1;
+#X connect 24 0 19 1;
+#X connect 24 0 20 1;
+#X restore 119 319 pd snr_4;
+#N canvas 172 125 1268 747 snr_5 0;
+#X obj 70 53 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 70 9 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 70 29 metro 500;
+#X text 86 9 <---- Turn Me on;
+#X text 141 606 <---- Turn Me up;
+#N canvas 0 23 947 434 snr_sinewaves_envLogic 0;
+#X obj 408 135 inlet;
+#X obj 407 314 vline~;
+#X text 499 249 This ramp will act as both the control for the overall
+amlitude envelope (left path);
+#X obj 407 364 *~, f 26;
+#X text 44 174 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 153 364 3 - multiply by signal for amplitude ramp;
+#X text 404 107 Trigger;
+#X obj 486 140 inlet;
+#X text 482 112 env length;
+#X obj 407 385 outlet~;
+#X text 72 38 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X text 71 9 This is based on the bottom half of Figure 6 in this article:
+;
+#X text 74 70 2 sine wave oscillators \, summed together \, and then
+contoured with an amplitude envelope;
+#X obj 407 175 f, f 6;
+#X msg 407 256 1 1 \, 0 \$1 1;
+#X text 30 258 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X obj 572 304 osc~ 180;
+#X obj 609 334 osc~ 330;
+#X text 650 307 Sinewave frequencies taken from diagram;
+#X connect 0 0 13 0;
+#X connect 1 0 3 0;
+#X connect 3 0 9 0;
+#X connect 7 0 13 1;
+#X connect 13 0 14 0;
+#X connect 14 0 1 0;
+#X connect 16 0 3 1;
+#X connect 17 0 3 1;
+#X restore 71 355 pd snr_sinewaves_envLogic;
+#X f 14;
+#N canvas 160 120 1280 755 tri+freqShift_envLogic 0;
+#X obj 399 280 inlet;
+#X obj 399 447 vline~;
+#X obj 399 484 *~, f 26;
+#X text 36 307 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 145 484 3 - multiply by signal for amplitude ramp;
+#X obj 399 308 f, f 6;
+#N canvas 0 23 450 300 4oscTri 0;
+#X obj 115 110 osc~;
+#X obj 150 110 osc~;
+#X obj 185 110 osc~;
+#X obj 221 110 osc~;
+#X obj 115 131 /~ 1;
+#X obj 185 131 /~ 25;
+#X obj 150 89 *~ 3;
+#X obj 185 89 *~ 5;
+#X obj 221 89 *~ 7;
+#X obj 115 89 *~ 1;
+#X obj 175 171 *~ 1;
+#X obj 101 48 sig~;
+#X obj 94 12 inlet;
+#X obj 175 192 outlet~;
+#X obj 150 131 /~ -9;
+#X obj 221 131 /~ -49;
+#X connect 0 0 4 0;
+#X connect 1 0 14 0;
+#X connect 2 0 5 0;
+#X connect 3 0 15 0;
+#X connect 4 0 10 0;
+#X connect 5 0 10 0;
+#X connect 6 0 1 0;
+#X connect 7 0 2 0;
+#X connect 8 0 3 0;
+#X connect 9 0 0 0;
+#X connect 10 0 13 0;
+#X connect 11 0 9 0;
+#X connect 11 0 6 0;
+#X connect 11 0 7 0;
+#X connect 11 0 8 0;
+#X connect 12 0 11 0;
+#X connect 14 0 10 0;
+#X connect 15 0 10 0;
+#X restore 575 328 pd 4oscTri;
+#X text 641 329 <--- click me to see a simple 4 osc triangle wave;
+#X obj 590 261 loadbang;
+#X msg 574 301 111;
+#N canvas 0 23 450 300 freqShift 0;
+#X obj 80 34 inlet~;
+#X obj 80 84 complex-mod~, f 18;
+#X obj 80 59 hilbert~, f 9;
+#X obj 201 31 inlet;
+#X text 198 8 freq shift (Hz);
+#X obj 80 105 outlet~;
+#X connect 0 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 1 2;
+#X restore 576 389 pd freqShift;
+#X msg 642 301 175;
+#N canvas 0 23 645 300 freqShift 0;
+#X obj 80 34 inlet~;
+#X obj 80 84 complex-mod~, f 18;
+#X obj 80 59 hilbert~, f 9;
+#X obj 201 31 inlet;
+#X text 198 8 freq shift (Hz);
+#X obj 80 105 outlet~;
+#X text 240 71 Both of these abstractions come with PD;
+#X text 240 84 The math is v complex (i.e. beyond my abilities) \,
+but fortunately we only need to use them not actually clalculate the
+answers;
+#X connect 0 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 1 2;
+#X restore 658 389 pd freqShift;
+#X msg 675 301 224;
+#X msg 399 389 1 1 \, 0 \$1 1;
+#X text 22 391 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X text 705 300 tri & freq shift values take from diagram;
+#X obj 399 505 outlet~;
+#X obj 461 280 inlet;
+#X text 392 257 Trigger;
+#X text 456 258 Length;
+#X text 46 37 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X text 48 69 A triangle wave passed through 2 frequency shifters \,
+mixed together \, and then contoured with an amplitude envelope;
+#X text 47 95 My envelope is just copied and pasted from before;
+#X text 47 109 I've used a 4 osc~ additive synth approach to create
+the triangle wave (see Synthesis_1 lesson);
+#X text 47 132 For the frequency shifter I literally just looked at
+the _pd-refcard-en.pdf and noted there were twoobjects/patches listed
+as frequency shifting \, I checked the helpfiles for both and it seems
+they work in combination together to give positive and negative frequency
+shifting;
+#X text 526 12 NOTE: Frequency shifting is not the same as transposing
+or pitch shifting. Rather than multiplying all of the component harmonics
+by a values (as would be the result when pitch shifting) \, frequency
+shifting ADDS a certain value to the frequency of each component harmonic
+- this distorts the harmonic relationship of the component frequencies
+;
+#X text 526 81 For example \, if we had a sound containing two frequencies
+\, 100Hz + 200Hz \, and we pitch shifted up an octave our new wave
+would have frequencies 200Hz + 400Hz (the octave relationship between
+the waves is retained.;
+#X text 528 126 If we were to frequency shift our wave up by 100 Hz
+the frequency content would become 200Hz + 300Hz !!!;
+#X text 45 8 This is based on Figure 6 in this article:;
+#X connect 0 0 5 0;
+#X connect 1 0 2 0;
+#X connect 2 0 17 0;
+#X connect 5 0 14 0;
+#X connect 6 0 10 0;
+#X connect 6 0 12 0;
+#X connect 8 0 9 0;
+#X connect 8 0 11 0;
+#X connect 8 0 13 0;
+#X connect 9 0 6 0;
+#X connect 10 0 2 1;
+#X connect 11 0 10 1;
+#X connect 12 0 2 1;
+#X connect 13 0 12 1;
+#X connect 14 0 1 0;
+#X connect 18 0 5 1;
+#X restore 212 355 pd tri+freqShift_envLogic;
+#X f 14;
+#X floatatom 253 244 5 50 500 0 length - -;
+#X obj 253 203 loadbang;
+#N canvas 0 23 947 607 noise_envLogic 0;
+#X obj 415 224 inlet;
+#X text 26 8 Finally \, we will create the sound of the snares using
+white noise and filtering;
+#X text 27 33 This is based on Figure 14 of this article:;
+#X text 24 49 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X obj 422 404 vline~;
+#X obj 422 441 *~, f 26;
+#X text 59 264 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 168 441 3 - multiply by signal for amplitude ramp;
+#X obj 422 265 f, f 6;
+#X msg 422 346 1 1 \, 0 \$1 1;
+#X text 45 348 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X obj 605 255 noise~;
+#X text 23 78 Here I am literallyjust adding white noise \, filtering
+it \, and contouring it with an amplitude envelope;
+#X obj 605 276 lop~ 5000, f 16;
+#X text 24 104 Note: I didn't bother with thenotch filter mentioned
+as it didn't seem to change much when I tested;
+#X text 404 195 Trigger;
+#X obj 499 226 inlet;
+#X text 488 197 length;
+#X obj 422 462 outlet~;
+#X obj 689 225 inlet;
+#X text 621 179 brightness of snare;
+#X text 671 206 lpf cutoff;
+#X text 518 300 an arbitrary cutoff frequency for the lpf to begin
+;
+#X obj 516 347 hip~ 500;
+#X text 536 368 an arbitrary cutoff frequency for the hpf to begin
+(I added this to try and make the sound a touch less oomphy);
+#X connect 0 0 8 0;
+#X connect 4 0 5 0;
+#X connect 5 0 18 0;
+#X connect 8 0 9 0;
+#X connect 9 0 4 0;
+#X connect 11 0 13 0;
+#X connect 13 0 23 0;
+#X connect 16 0 8 1;
+#X connect 19 0 13 1;
+#X connect 23 0 5 1;
+#X restore 353 408 pd noise_envLogic;
+#X f 18;
+#X obj 70 459 vol_sjf~;
+#X obj 211 459 vol_sjf~;
+#X obj 353 459 vol_sjf~;
+#X msg 253 224 150;
+#X obj 247 398 loadbang;
+#X msg 247 419 1;
+#X text 284 59 based on Fig 15 of this article:;
+#X text 289 73 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X obj 70 73 f 100;
+#X obj 124 70 hsl 128 15 1 127 0 0 empty empty MIDI_Velocity -2 -8
+0 10 -262144 -1 -1 0 1;
+#X obj 71 142 t b b b f, f 71;
+#X obj 494 175 / 127;
+#X obj 529 479 line~;
+#X obj 70 595 vol_sjf~;
+#X obj 70 656 dac~;
+#X obj 70 542 *~, f 77;
+#X text 533 173 divide by 127 to convert MIDI vel (0--> 127) to 0-->1
+range;
+#X text 498 374 <----;
+#X floatatom 121 90 5 0 0 0 - - -;
+#X msg 529 459 \$1 1;
+#X obj 458 385 + 100;
+#N canvas -1280 581 1163 553 lengthLogic 0;
+#X obj 123 97 inlet;
+#X obj 18 254 * 0.6;
+#X floatatom 18 275 5 0 0 0 - - -;
+#X floatatom 331 276 5 0 0 0 - - -;
+#X obj 331 255 * 0.8;
+#X obj 372 431 *;
+#X obj 592 419 *;
+#X obj 771 335 * 0.5;
+#X obj 771 356 + 0.5;
+#X obj 699 419 *;
+#X obj 633 257 * 1.2;
+#X obj 771 311 inlet;
+#X text 672 299 MIDI velocity scaled to between 0--> 1;
+#X obj 372 452 outlet;
+#X obj 592 440 outlet;
+#X obj 699 440 outlet;
+#X text 41 9 I decided to use the same length control for all components
+\, but to scale each one differently;
+#X text 133 80 Length;
+#X text 367 256 The triangle is a maximum of 80% of length;
+#X text 53 253 The sines are a maximum of 60% of length;
+#X text 809 334 scale from 0-->1 to a range of 0--> 0.5;
+#X text 807 358 move to a range of 0.5 --> 1;
+#X text 758 396 Now velocity input (0-->127) is scaled from 0.5-->1
+;
+#X text 759 413 I use this to set the length (for each component) to
+be at least half its maximum length and at most it's maximum length
+;
+#X text 760 454 Higher velocity == longer notes;
+#X obj 632 188 inlet;
+#X obj 632 209 t b f;
+#X text 675 208 I made the snare sound variable (min 50% of length
+\, max 200%);
+#X text 619 161 snare length;
+#X connect 0 0 1 0;
+#X connect 0 0 4 0;
+#X connect 0 0 10 0;
+#X connect 1 0 2 0;
+#X connect 2 0 5 1;
+#X connect 3 0 6 1;
+#X connect 4 0 3 0;
+#X connect 5 0 13 0;
+#X connect 6 0 14 0;
+#X connect 7 0 8 0;
+#X connect 8 0 6 0;
+#X connect 8 0 5 0;
+#X connect 8 0 9 0;
+#X connect 9 0 15 0;
+#X connect 10 0 9 1;
+#X connect 11 0 7 0;
+#X connect 25 0 26 0;
+#X connect 26 0 10 0;
+#X connect 26 1 10 1;
+#X restore 253 264 pd lengthLogic;
+#X obj 458 364 * 6000;
+#X text 532 369 I have again choosen an arbityrary frequency range
+for the lpf (min: 100Hz --> max 6100Hz);
+#X text 341 262 <--- click me;
+#X floatatom 401 205 5 50 500 0 snrLength - -;
+#X obj 401 164 loadbang;
+#X msg 401 185 1;
+#X text 284 7 This is essentially the same as the last patch \, but
+I have set the LPF cutoff to be determined by the incomming MIDI velocity
+\, and added some logic to make the velocity also impact on the length
+of each component;
+#X connect 0 0 18 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 5 0 10 0;
+#X connect 6 0 11 0;
+#X connect 7 0 31 0;
+#X connect 8 0 13 0;
+#X connect 9 0 12 0;
+#X connect 10 0 25 0;
+#X connect 11 0 25 0;
+#X connect 12 0 25 0;
+#X connect 13 0 7 0;
+#X connect 14 0 15 0;
+#X connect 15 0 10 1;
+#X connect 15 0 11 1;
+#X connect 15 0 12 1;
+#X connect 18 0 20 0;
+#X connect 19 0 18 1;
+#X connect 19 0 28 0;
+#X connect 20 0 5 0;
+#X connect 20 1 6 0;
+#X connect 20 2 9 0;
+#X connect 20 3 21 0;
+#X connect 21 0 29 0;
+#X connect 21 0 31 2;
+#X connect 21 0 32 0;
+#X connect 22 0 25 1;
+#X connect 23 0 24 0;
+#X connect 23 0 24 1;
+#X connect 25 0 23 0;
+#X connect 29 0 22 0;
+#X connect 30 0 9 2;
+#X connect 31 0 5 1;
+#X connect 31 1 6 1;
+#X connect 31 2 9 1;
+#X connect 32 0 30 0;
+#X connect 35 0 31 1;
+#X connect 36 0 37 0;
+#X connect 37 0 35 0;
+#X restore 119 371 pd snr_5;
+#X text 82 342 5 - converting MIDI velocity input to changes in amplitude
+\, tone lengths & frequency content;
+#X text 82 395 6 - some frequency control;
+#N canvas 260 123 939 724 snr_6 0;
+#X obj 70 53 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 70 9 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 70 29 metro 500;
+#X text 86 9 <---- Turn Me on;
+#X text 141 606 <---- Turn Me up;
+#N canvas 0 23 947 434 snr_sinewaves_envLogic 0;
+#X obj 408 135 inlet;
+#X obj 407 314 vline~;
+#X text 499 249 This ramp will act as both the control for the overall
+amlitude envelope (left path);
+#X obj 407 364 *~, f 26;
+#X text 44 174 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 153 364 3 - multiply by signal for amplitude ramp;
+#X text 404 107 Trigger;
+#X obj 486 140 inlet;
+#X text 482 112 env length;
+#X obj 407 385 outlet~;
+#X text 72 38 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X text 71 9 This is based on the bottom half of Figure 6 in this article:
+;
+#X text 74 70 2 sine wave oscillators \, summed together \, and then
+contoured with an amplitude envelope;
+#X obj 407 175 f, f 6;
+#X msg 407 256 1 1 \, 0 \$1 1;
+#X text 30 258 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X obj 572 304 osc~ 180;
+#X obj 609 334 osc~ 330;
+#X text 650 307 Sinewave frequencies taken from diagram;
+#X obj 571 281 inlet;
+#X obj 643 284 inlet;
+#X connect 0 0 13 0;
+#X connect 1 0 3 0;
+#X connect 3 0 9 0;
+#X connect 7 0 13 1;
+#X connect 13 0 14 0;
+#X connect 14 0 1 0;
+#X connect 16 0 3 1;
+#X connect 17 0 3 1;
+#X connect 19 0 16 0;
+#X connect 20 0 17 0;
+#X restore 71 355 pd snr_sinewaves_envLogic;
+#X f 14;
+#N canvas 383 314 1125 581 tri+freqShift_envLogic 0;
+#X obj 399 280 inlet;
+#X obj 399 447 vline~;
+#X obj 399 484 *~, f 26;
+#X text 36 307 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 145 484 3 - multiply by signal for amplitude ramp;
+#X obj 399 308 f, f 6;
+#N canvas 0 23 450 300 4oscTri 0;
+#X obj 115 110 osc~;
+#X obj 150 110 osc~;
+#X obj 185 110 osc~;
+#X obj 221 110 osc~;
+#X obj 115 131 /~ 1;
+#X obj 185 131 /~ 25;
+#X obj 150 89 *~ 3;
+#X obj 185 89 *~ 5;
+#X obj 221 89 *~ 7;
+#X obj 115 89 *~ 1;
+#X obj 175 171 *~ 1;
+#X obj 101 48 sig~;
+#X obj 94 12 inlet;
+#X obj 175 192 outlet~;
+#X obj 150 131 /~ -9;
+#X obj 221 131 /~ -49;
+#X connect 0 0 4 0;
+#X connect 1 0 14 0;
+#X connect 2 0 5 0;
+#X connect 3 0 15 0;
+#X connect 4 0 10 0;
+#X connect 5 0 10 0;
+#X connect 6 0 1 0;
+#X connect 7 0 2 0;
+#X connect 8 0 3 0;
+#X connect 9 0 0 0;
+#X connect 10 0 13 0;
+#X connect 11 0 9 0;
+#X connect 11 0 6 0;
+#X connect 11 0 7 0;
+#X connect 11 0 8 0;
+#X connect 12 0 11 0;
+#X connect 14 0 10 0;
+#X connect 15 0 10 0;
+#X restore 575 328 pd 4oscTri;
+#X text 641 329 <--- click me to see a simple 4 osc triangle wave;
+#N canvas 0 23 450 300 freqShift 0;
+#X obj 80 34 inlet~;
+#X obj 80 84 complex-mod~, f 18;
+#X obj 80 59 hilbert~, f 9;
+#X obj 201 31 inlet;
+#X text 198 8 freq shift (Hz);
+#X obj 80 105 outlet~;
+#X connect 0 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 1 2;
+#X restore 576 389 pd freqShift;
+#N canvas 0 23 645 300 freqShift 0;
+#X obj 80 34 inlet~;
+#X obj 80 84 complex-mod~, f 18;
+#X obj 80 59 hilbert~, f 9;
+#X obj 201 31 inlet;
+#X text 198 8 freq shift (Hz);
+#X obj 80 105 outlet~;
+#X text 240 71 Both of these abstractions come with PD;
+#X text 240 84 The math is v complex (i.e. beyond my abilities) \,
+but fortunately we only need to use them not actually clalculate the
+answers;
+#X connect 0 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 1 2;
+#X restore 658 389 pd freqShift;
+#X msg 399 389 1 1 \, 0 \$1 1;
+#X text 22 391 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X obj 399 505 outlet~;
+#X obj 461 280 inlet;
+#X text 392 257 Trigger;
+#X text 456 258 Length;
+#X text 46 37 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X text 48 69 A triangle wave passed through 2 frequency shifters \,
+mixed together \, and then contoured with an amplitude envelope;
+#X text 47 95 My envelope is just copied and pasted from before;
+#X text 47 109 I've used a 4 osc~ additive synth approach to create
+the triangle wave (see Synthesis_1 lesson);
+#X text 47 132 For the frequency shifter I literally just looked at
+the _pd-refcard-en.pdf and noted there were twoobjects/patches listed
+as frequency shifting \, I checked the helpfiles for both and it seems
+they work in combination together to give positive and negative frequency
+shifting;
+#X text 526 12 NOTE: Frequency shifting is not the same as transposing
+or pitch shifting. Rather than multiplying all of the component harmonics
+by a values (as would be the result when pitch shifting) \, frequency
+shifting ADDS a certain value to the frequency of each component harmonic
+- this distorts the harmonic relationship of the component frequencies
+;
+#X text 526 81 For example \, if we had a sound containing two frequencies
+\, 100Hz + 200Hz \, and we pitch shifted up an octave our new wave
+would have frequencies 200Hz + 400Hz (the octave relationship between
+the waves is retained.;
+#X text 528 126 If we were to frequency shift our wave up by 100 Hz
+the frequency content would become 200Hz + 300Hz !!!;
+#X text 45 8 This is based on Figure 6 in this article:;
+#X obj 587 287 inlet;
+#X obj 632 287 inlet;
+#X obj 673 287 inlet;
+#X connect 0 0 5 0;
+#X connect 1 0 2 0;
+#X connect 2 0 12 0;
+#X connect 5 0 10 0;
+#X connect 6 0 8 0;
+#X connect 6 0 9 0;
+#X connect 8 0 2 1;
+#X connect 9 0 2 1;
+#X connect 10 0 1 0;
+#X connect 13 0 5 1;
+#X connect 25 0 6 0;
+#X connect 26 0 8 1;
+#X connect 27 0 9 1;
+#X restore 212 355 pd tri+freqShift_envLogic;
+#X f 14;
+#X floatatom 253 206 5 50 500 0 length - -;
+#X obj 252 126 loadbang;
+#N canvas -1273 581 1198 607 noise_envLogic 0;
+#X obj 484 198 inlet;
+#X text 26 8 Finally \, we will create the sound of the snares using
+white noise and filtering;
+#X text 27 33 This is based on Figure 14 of this article:;
+#X text 24 49 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X obj 491 378 vline~;
+#X obj 491 415 *~, f 26;
+#X text 128 238 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 237 415 3 - multiply by signal for amplitude ramp;
+#X obj 491 239 f, f 6;
+#X msg 491 320 1 1 \, 0 \$1 1;
+#X text 114 322 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X obj 674 229 noise~;
+#X text 23 78 Here I am literallyjust adding white noise \, filtering
+it \, and contouring it with an amplitude envelope;
+#X obj 674 250 lop~ 5000, f 16;
+#X text 24 104 Note: I didn't bother with thenotch filter mentioned
+as it didn't seem to change much when I tested;
+#X text 473 169 Trigger;
+#X obj 568 200 inlet;
+#X text 557 171 length;
+#X obj 491 436 outlet~;
+#X obj 761 103 inlet;
+#X text 770 178 lpf cutoff;
+#X text 587 274 an arbitrary cutoff frequency for the lpf to begin
+;
+#X text 800 140 <----;
+#X obj 760 151 + 100;
+#X obj 760 130 * 6000;
+#X text 834 135 I have again choosen an arbityrary frequency range
+for the lpf (min: 100Hz --> max 6100Hz);
+#X text 704 80 brightness of snare 0--> 1;
+#X obj 673 317 hip~ 500;
+#X text 693 338 an arbitrary cutoff frequency for the hpf to begin
+(I added this to try and make the sound a touch less oomphy);
+#X connect 0 0 8 0;
+#X connect 4 0 5 0;
+#X connect 5 0 18 0;
+#X connect 8 0 9 0;
+#X connect 9 0 4 0;
+#X connect 11 0 13 0;
+#X connect 13 0 27 0;
+#X connect 16 0 8 1;
+#X connect 19 0 24 0;
+#X connect 23 0 13 1;
+#X connect 24 0 23 0;
+#X connect 27 0 5 1;
+#X restore 353 408 pd noise_envLogic;
+#X f 18;
+#X obj 70 459 vol_sjf~;
+#X obj 211 459 vol_sjf~;
+#X obj 353 459 vol_sjf~;
+#X msg 253 186 150;
+#X obj 247 398 loadbang;
+#X msg 247 419 1;
+#X text 284 59 based on Fig 15 of this article:;
+#X text 289 73 https://www.soundonsound.com/techniques/synthesizing-drums-snare-drum
+;
+#X obj 70 73 f 100;
+#X obj 124 70 hsl 128 15 1 127 0 0 empty empty MIDI_Velocity -2 -8
+0 10 -262144 -1 -1 0 1;
+#X obj 70 273 t b b b f, f 71;
+#X obj 493 298 / 127;
+#X obj 529 479 line~;
+#X obj 70 595 vol_sjf~;
+#X obj 70 656 dac~;
+#X obj 70 542 *~, f 77;
+#X text 532 296 divide by 127 to convert MIDI vel (0--> 127) to 0-->1
+range;
+#X floatatom 121 90 5 0 0 0 - - -;
+#X msg 529 459 \$1 1;
+#N canvas -1280 581 1163 553 lengthLogic 0;
+#X obj 123 97 inlet;
+#X obj 18 254 * 0.6;
+#X floatatom 18 275 5 0 0 0 - - -;
+#X floatatom 331 276 5 0 0 0 - - -;
+#X obj 331 255 * 0.8;
+#X obj 372 431 *;
+#X obj 592 419 *;
+#X obj 771 335 * 0.5;
+#X obj 771 356 + 0.5;
+#X obj 699 419 *;
+#X obj 633 257 * 1.2;
+#X obj 771 311 inlet;
+#X text 672 299 MIDI velocity scaled to between 0--> 1;
+#X obj 372 452 outlet;
+#X obj 592 440 outlet;
+#X obj 699 440 outlet;
+#X text 41 9 I decided to use the same length control for all components
+\, but to scale each one differently;
+#X text 133 80 Length;
+#X text 367 256 The triangle is a maximum of 80% of length;
+#X text 53 253 The sines are a maximum of 60% of length;
+#X text 809 334 scale from 0-->1 to a range of 0--> 0.5;
+#X text 807 358 move to a range of 0.5 --> 1;
+#X text 758 396 Now velocity input (0-->127) is scaled from 0.5-->1
+;
+#X text 759 413 I use this to set the length (for each component) to
+be at least half its maximum length and at most it's maximum length
+;
+#X text 760 454 Higher velocity == longer notes;
+#X obj 632 188 inlet;
+#X obj 632 209 t b f;
+#X text 675 208 I made the snare sound variable (min 50% of length
+\, max 200%);
+#X text 619 161 snare length;
+#X connect 0 0 1 0;
+#X connect 0 0 4 0;
+#X connect 0 0 10 0;
+#X connect 1 0 2 0;
+#X connect 2 0 5 1;
+#X connect 3 0 6 1;
+#X connect 4 0 3 0;
+#X connect 5 0 13 0;
+#X connect 6 0 14 0;
+#X connect 7 0 8 0;
+#X connect 8 0 6 0;
+#X connect 8 0 5 0;
+#X connect 8 0 9 0;
+#X connect 9 0 15 0;
+#X connect 10 0 9 1;
+#X connect 11 0 7 0;
+#X connect 25 0 26 0;
+#X connect 26 0 10 0;
+#X connect 26 1 10 1;
+#X restore 245 324 pd lengthLogic;
+#X text 336 324 <--- click me;
+#X floatatom 371 205 5 0.5 2 0 snrLength - -;
+#X obj 371 164 loadbang;
+#X msg 371 185 1;
+#X text 281 4 Here I wanted to get some control over the frequency
+content;
+#X text 281 19 I used the frequencies given in the diagram to determin
+the ratios between each oscillator;
+#X floatatom 170 205 5 100 500 0 baseFreq - -;
+#N canvas 36 53 868 496 freq_logic 0;
+#X obj 37 37 inlet;
+#X text 29 18 frequency;
+#X text 331 11 I decided to base everything off the 111Hz Triangle
+as the base oscillator as the base;
+#X obj 166 288 * 1.62162;
+#X floatatom 166 309 5 0 0 0 - - -;
+#X text 110 287 sine 1;
+#X floatatom 231 309 5 0 0 0 - - -;
+#X obj 231 288 * 2.97297;
+#X text 293 287 sine 2;
+#X text 335 44 to work out each ratio I simply divided the frequency
+given by 111 ==> e.g. 180/111 = 1.62162 \; ==> 111 * 1.62162 == 180
+;
+#X obj 373 288 * 1;
+#X floatatom 373 309 5 0 0 0 - - -;
+#X text 397 287 triangle pre-shift;
+#X floatatom 519 309 5 0 0 0 - - -;
+#X obj 519 288 * 1.57658;
+#X text 582 289 freq shift 1;
+#X floatatom 675 310 5 0 0 0 - - -;
+#X obj 675 289 * 2.01801;
+#X text 738 290 freq shift 2;
+#X floatatom 37 58 5 0 0 0 - - -;
+#X text 335 81 SO when you set the frequency to 111 you get the relationships
+given in the diagram \, other frequencie will result in different values
+\, but the proportions remain the same;
+#X obj 166 329 outlet;
+#X obj 231 329 outlet;
+#X obj 373 329 outlet;
+#X obj 519 329 outlet;
+#X obj 675 330 outlet;
+#X connect 0 0 19 0;
+#X connect 3 0 4 0;
+#X connect 4 0 21 0;
+#X connect 6 0 22 0;
+#X connect 7 0 6 0;
+#X connect 10 0 11 0;
+#X connect 11 0 23 0;
+#X connect 13 0 24 0;
+#X connect 14 0 13 0;
+#X connect 16 0 25 0;
+#X connect 17 0 16 0;
+#X connect 19 0 3 0;
+#X connect 19 0 7 0;
+#X connect 19 0 10 0;
+#X connect 19 0 14 0;
+#X connect 19 0 17 0;
+#X restore 119 304 pd freq_logic;
+#X msg 172 178 111;
+#X text 42 305 click me--->;
+#X text 385 108 Turn on the metro and then try changing each of the
+paramenters to see how they impact upon the sound;
+#X connect 0 0 18 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 5 0 10 0;
+#X connect 6 0 11 0;
+#X connect 7 0 29 0;
+#X connect 8 0 13 0;
+#X connect 8 0 38 0;
+#X connect 9 0 12 0;
+#X connect 10 0 25 0;
+#X connect 11 0 25 0;
+#X connect 12 0 25 0;
+#X connect 13 0 7 0;
+#X connect 14 0 15 0;
+#X connect 15 0 10 1;
+#X connect 15 0 11 1;
+#X connect 15 0 12 1;
+#X connect 18 0 20 0;
+#X connect 19 0 18 1;
+#X connect 19 0 27 0;
+#X connect 20 0 5 0;
+#X connect 20 1 6 0;
+#X connect 20 2 9 0;
+#X connect 20 3 21 0;
+#X connect 21 0 28 0;
+#X connect 21 0 29 2;
+#X connect 21 0 9 2;
+#X connect 22 0 25 1;
+#X connect 23 0 24 0;
+#X connect 23 0 24 1;
+#X connect 25 0 23 0;
+#X connect 28 0 22 0;
+#X connect 29 0 5 1;
+#X connect 29 1 6 1;
+#X connect 29 2 9 1;
+#X connect 31 0 29 1;
+#X connect 32 0 33 0;
+#X connect 33 0 31 0;
+#X connect 36 0 37 0;
+#X connect 37 0 5 2;
+#X connect 37 1 5 3;
+#X connect 37 2 6 2;
+#X connect 37 3 6 3;
+#X connect 37 4 6 4;
+#X connect 38 0 36 0;
+#X restore 119 416 pd snr_6;
+#X text 82 437 7 - my snare synth abstraction;
+#X text 63 108 Instead of one tone and a noise source we will have
+2 pure tones \, 2 frequency shifted triangle waves \, and a noise source
+(acting as the metal snares);
+#N canvas 273 23 430 324 snr_7 0;
+#X obj 70 38 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X msg 70 79 100;
+#X obj 71 222 dac~;
+#X obj 70 58 metro 500;
+#X text 96 79 MIDI Velocity;
+#X obj 70 100 snr_sjf~;
+#X connect 0 0 3 0;
+#X connect 1 0 5 0;
+#X connect 3 0 1 0;
+#X connect 5 0 2 0;
+#X connect 5 0 2 1;
+#X restore 116 458 pd snr_7;
+#X restore 160 157 pd snare_synthesis;
+#N canvas 273 23 1095 848 synthDrms 0;
+#X obj 75 91 drummachine_sjf;
+#X obj 275 630 vol_sjf~;
+#X obj 275 672 dac~;
+#X obj 75 391 kick_sjf~;
+#X obj 275 468 ovrdr_sjf~;
+#X obj 75 24 conductor_sjf 125 16;
+#X obj 75 468 ovrdr_sjf~;
+#X obj 75 326 route 36 38 42 46, f 134;
+#X obj 526 468 ovrdr_sjf~;
+#X obj 275 391 snr_sjf~;
+#X obj 526 391 hh_sjf~;
+#X text 681 469 <--- everything is better with distortion...;
+#X connect 0 0 7 0;
+#X connect 1 0 2 0;
+#X connect 1 0 2 1;
+#X connect 3 0 6 0;
+#X connect 4 0 1 0;
+#X connect 5 0 0 0;
+#X connect 6 0 1 0;
+#X connect 7 0 3 0;
+#X connect 7 1 9 0;
+#X connect 7 2 10 0;
+#X connect 7 3 10 1;
+#X connect 8 0 1 0;
+#X connect 9 0 4 0;
+#X connect 10 0 8 0;
+#X restore 160 225 pd synthDrms;
+#N canvas 0 23 450 300 hihat_synthesis 0;
+#X text 52 4 These hihats are super simple \, no article involved;
+#X text 54 24 They are just filtered white noise with ampltiude envelopes
+;
+#X text 54 41 Open hihat just has a longer envelope than closed;
+#X msg 133 159 100;
+#X msg 206 161 100;
+#X obj 133 244 dac~;
+#X text 197 141 open HH;
+#X text 116 141 closed HH;
+#N canvas 527 303 854 467 simpleHat 0;
+#X obj 161 68 inlet;
+#X obj 161 88 t b f, f 16;
+#X msg 161 131 1 \, 0 50;
+#X obj 161 152 line~;
+#X obj 161 173 *~, f 17;
+#X obj 254 110 / 127;
+#X obj 161 231 *~, f 29;
+#X obj 357 109 noise~;
+#X obj 357 130 hip~ 7000;
+#X obj 568 60 inlet;
+#X obj 568 80 t b f, f 16;
+#X obj 568 154 line~;
+#X obj 568 175 *~, f 17;
+#X obj 485 224 *~, f 29;
+#X msg 568 133 1 \, 0 150;
+#X obj 320 349 outlet~;
+#X obj 657 106 / 127;
+#X text 345 89 filtered noise;
+#X text 698 101 Convert MIDI to 0--> 1;
+#X text 464 133 Open HH envelope;
+#X text 26 132 closed hihat envelope;
+#X text 154 44 closed hh MIDI vel;
+#X text 523 39 open hh MIDI vel;
+#X obj 321 277 lop~ 8000;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 1 1 5 0;
+#X connect 2 0 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 6 0;
+#X connect 5 0 4 1;
+#X connect 6 0 23 0;
+#X connect 7 0 8 0;
+#X connect 8 0 6 1;
+#X connect 8 0 13 0;
+#X connect 9 0 10 0;
+#X connect 10 0 14 0;
+#X connect 10 1 16 0;
+#X connect 11 0 12 0;
+#X connect 12 0 13 1;
+#X connect 13 0 23 0;
+#X connect 14 0 11 0;
+#X connect 16 0 12 1;
+#X connect 23 0 15 0;
+#X restore 133 181 pd simpleHat;
+#X obj 133 203 vol_sjf~;
+#X connect 3 0 8 0;
+#X connect 4 0 8 1;
+#X connect 8 0 9 0;
+#X connect 9 0 5 0;
+#X connect 9 0 5 1;
+#X restore 160 191 pd hihat_synthesis;
+#X restore 140 137 pd drum_synthesis;
+#X text 111 155 ------------------------------------------------------------
+;
+#N canvas -1280 581 801 709 fm_synthesis 0;
+#X text 5 15 So far we have looked at additive and subtractive synthesis
+(e.g. filtering noise for our elements of our drum sounds);
+#X text 5 48 FM synthesis involves using one oscillator (or signal)
+to modulate the frequency of another (this is the technique behind
+fm radio as well);
+#X text 368 15 The maths is very complex (i.e. beyond my capabilities)
+but the usage is quite simple;
+#X text 368 48 FM has an advantage over additive as we can begin to
+create complex waveforms with only 2 oscillators;
+#N canvas -1279 581 1280 751 fm_synthesis_1 0;
+#X floatatom 103 174 5 0 0 0 carrier - -;
+#X obj 238 403 osc~;
+#X obj 238 464 *~, f 64;
+#X obj 103 488 +~, f 23;
+#X obj 102 585 osc~;
+#X text 267 401 modulating oscillator;
+#X obj 617 347 *~;
+#X floatatom 878 174 5 0 0 0 index - -;
+#X obj 102 614 vol_sjf~;
+#X obj 102 654 dac~;
+#X obj 238 347 *~;
+#X floatatom 475 174 5 0 0 0 ratio - -;
+#X obj 103 194 sig~ 220;
+#X text 416 122 2 - this sets the frequency of the modulator(so if
+the fundamental frequency is 220 \, and the ratio is set to 2 \, then
+the modulator is at a frequency of 440Hz);
+#X text 18 122 1 - This is the frequency everything else will be calculated
+off \, at harmonious ratios it will be the fundamental (the pitch of
+the note) \, but at most other ratios this will not necessarily be
+the case...;
+#X text 263 346 2b - ratio * carrier freq to give modulator freq;
+#X text 784 122 3 - This sets the depth of the modulation (0 - no modulation
+\, 2 - very modulated \, 10 - massively modulated);
+#X text 643 346 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 646 458 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 134 583 carrier oscillator;
+#X text 248 487 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X text 54 238 ------------------------------------------------------------
+;
+#X text 413 238 ------------------------------------------------------------
+;
+#X text 774 238 ------------------------------------------------------------
+;
+#X text 62 559 ------------------------------------------------------------
+;
+#X text 421 559 ------------------------------------------------------------
+;
+#X text 782 559 ------------------------------------------------------------
+;
+#X text 415 254 I'm gonna put all of this section into a subpatcher
+for the next patch;
+#X text 176 620 <----- Turn me up;
+#X obj 878 194 sig~ 1;
+#X obj 475 194 sig~ 1;
+#X text 16 6 To begin try integer values for the ratio (1 \, 2 \, 3
+\, 4 \, 5 \, 6 \, 7...);
+#X text 15 30 Note how the ratio controls the frequencies present in
+the sound \, and the index controls the amplitude of the upper harmics
+;
+#X text 415 4 Then try fractional ratios (e.g. 1.1 \, 2.31246 \, 3.14157
+\, etc.);
+#X text 417 28 Note how fractional ratios introduce inharmonic relationships
+(often creating bell like tones);
+#X connect 0 0 12 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 1;
+#X connect 3 0 4 0;
+#X connect 4 0 8 0;
+#X connect 6 0 2 1;
+#X connect 7 0 29 0;
+#X connect 8 0 9 0;
+#X connect 8 0 9 1;
+#X connect 10 0 1 0;
+#X connect 11 0 30 0;
+#X connect 12 0 6 0;
+#X connect 12 0 10 0;
+#X connect 12 0 3 0;
+#X connect 29 0 6 1;
+#X connect 30 0 10 1;
+#X restore 243 231 pd fm_synthesis_1;
+#N canvas -1280 581 1172 511 fm_synthesis_2 0;
+#X floatatom 103 174 5 0 0 0 carrier - -;
+#X floatatom 878 174 5 0 0 0 index - -;
+#X obj 103 356 vol_sjf~;
+#X obj 103 396 dac~;
+#X floatatom 475 174 5 0 0 0 ratio - -;
+#X text 416 122 2 - this sets the frequency of the modulator(so if
+the fundamental frequency is 220 \, and the ratio is set to 2 \, then
+the modulator is at a frequency of 440Hz);
+#X text 18 122 1 - This is the frequency everything else will be calculated
+off \, at harmonious ratios it will be the fundamental (the pitch of
+the note) \, but at most other ratios this will not necessarily be
+the case...;
+#X text 784 122 3 - This sets the depth of the modulation (0 - no modulation
+\, 2 - very modulated \, 10 - massively modulated);
+#X text 135 325 carrier oscillator;
+#X text 177 362 <----- Turn me up;
+#X text 16 6 To begin try integer values for the ratio (1 \, 2 \, 3
+\, 4 \, 5 \, 6 \, 7...);
+#X text 15 30 Note how the ratio controls the frequencies present in
+the sound \, and the index controls the amplitude of the upper harmics
+;
+#X text 415 4 Then try fractional ratios (e.g. 1.1 \, 2.31246 \, 3.14157
+\, etc.);
+#N canvas -1280 581 1070 512 fmModulator 0;
+#X obj 214 270 osc~;
+#X obj 214 331 *~, f 64;
+#X obj 79 355 +~, f 23;
+#X text 243 268 modulating oscillator;
+#X obj 593 214 *~;
+#X obj 214 214 *~;
+#X text 239 213 2b - ratio * carrier freq to give modulator freq;
+#X text 619 213 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 622 325 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 224 354 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X obj 79 61 inlet~;
+#X text 74 33 Carrier Frequency;
+#X obj 227 61 inlet~;
+#X text 226 33 Ratio;
+#X obj 630 61 inlet~;
+#X text 626 33 index;
+#X obj 78 452 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 2 1;
+#X connect 2 0 16 0;
+#X connect 4 0 1 1;
+#X connect 5 0 0 0;
+#X connect 10 0 4 0;
+#X connect 10 0 5 0;
+#X connect 10 0 2 0;
+#X connect 12 0 5 1;
+#X connect 14 0 4 1;
+#X restore 103 233 pd fmModulator;
+#X f 129;
+#X obj 103 281 osc~;
+#X obj 103 194 sig~ 220;
+#X obj 475 194 sig~ 1;
+#X obj 878 194 sig~ 1;
+#X obj 103 302 *~, f 45;
+#X obj 635 310 adsr_sjf~;
+#X obj 635 261 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 635 281 * 100;
+#X text 655 258 <--- toggle note on/off;
+#X text 670 279 <--- I'm triggering my envelope generator with a MIDI
+velocity of 100;
+#X text 417 28 Note how fractional ratios introduce inharmonic relationships
+(often creating bell like tones... or just noise);
+#X connect 0 0 15 0;
+#X connect 1 0 17 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 16 0;
+#X connect 13 0 14 0;
+#X connect 14 0 18 0;
+#X connect 15 0 13 0;
+#X connect 16 0 13 1;
+#X connect 17 0 13 2;
+#X connect 18 0 2 0;
+#X connect 19 0 18 1;
+#X connect 20 0 21 0;
+#X connect 21 0 19 0;
+#X restore 240 298 pd fm_synthesis_2;
+#X text 235 275 Add an amplitude envelope to the synthesiser;
+#X text 205 251 ------------------------------------------------------------
+;
+#X text 189 179 ------------------------------------------------------------
+;
+#X text 217 197 FM Synthesis basics;
+#X text 190 330 ------------------------------------------------------------
+;
+#X text 233 353 Try expanding on the FM synthesiser by including (for
+example):;
+#X text 235 380 - envelopes for ratio & index;
+#X text 236 401 Multiple modulators (either in series or parallel...)
+;
+#N canvas -1280 581 1180 703 fm_synth_w/tone_envelope 0;
+#X floatatom 80 203 5 0 0 0 carrier - -;
+#X floatatom 255 200 5 0 0 0 index - -;
+#X obj 79 626 vol_sjf~;
+#X obj 79 666 dac~;
+#X floatatom 167 201 5 0 0 0 ratio - -;
+#X text 111 595 carrier oscillator;
+#X text 153 632 <----- Turn me up;
+#N canvas -1280 581 1070 512 fmModulator 0;
+#X obj 214 270 osc~;
+#X obj 214 331 *~, f 64;
+#X obj 79 355 +~, f 23;
+#X text 243 268 modulating oscillator;
+#X obj 593 214 *~;
+#X obj 214 214 *~;
+#X text 239 213 2b - ratio * carrier freq to give modulator freq;
+#X text 619 213 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 622 325 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 224 354 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X obj 79 61 inlet~;
+#X text 74 33 Carrier Frequency;
+#X obj 227 61 inlet~;
+#X text 226 33 Ratio;
+#X obj 630 61 inlet~;
+#X text 626 33 index;
+#X obj 78 452 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 2 1;
+#X connect 2 0 16 0;
+#X connect 4 0 1 1;
+#X connect 5 0 0 0;
+#X connect 10 0 4 0;
+#X connect 10 0 5 0;
+#X connect 10 0 2 0;
+#X connect 12 0 5 1;
+#X connect 14 0 4 1;
+#X restore 79 452 pd fmModulator;
+#X f 30;
+#X obj 79 551 osc~;
+#X obj 80 223 sig~ 220;
+#X obj 167 221 sig~ 1;
+#X obj 255 220 sig~ 1;
+#X obj 79 572 *~, f 45;
+#X obj 889 241 adsr_sjf~;
+#X obj 440 18 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 440 71 * 100;
+#X text 460 15 <--- toggle note on/off;
+#X text 475 69 <--- I'm triggering my envelope generator with a MIDI
+velocity of 100;
+#X obj 255 426 *~;
+#X obj 440 220 adsr_sjf~;
+#X text 908 211 Amplitude envelope;
+#X text 492 187 index envelope;
+#X text 50 14 try different values for the ratio \, index \, and index
+envelope and note how the timbre changes over time as the index is
+increased/decreased;
+#X connect 0 0 9 0;
+#X connect 1 0 11 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 10 0;
+#X connect 7 0 8 0;
+#X connect 8 0 12 0;
+#X connect 9 0 7 0;
+#X connect 10 0 7 1;
+#X connect 11 0 18 0;
+#X connect 12 0 2 0;
+#X connect 13 0 12 1;
+#X connect 14 0 15 0;
+#X connect 15 0 13 0;
+#X connect 15 0 19 0;
+#X connect 18 0 7 2;
+#X connect 19 0 18 1;
+#X restore 223 432 pd fm_synth_w/tone_envelope;
+#N canvas -1280 581 912 543 fm_droneMachine 0;
+#X obj 71 425 vol_sjf~;
+#X obj 71 465 dac~;
+#X text 104 317 carrier oscillator;
+#X text 145 431 <----- Turn me up;
+#N canvas -1280 581 1070 512 fmModulator 0;
+#X obj 214 270 osc~;
+#X obj 214 331 *~, f 64;
+#X obj 79 355 +~, f 23;
+#X text 243 268 modulating oscillator;
+#X obj 593 214 *~;
+#X obj 214 214 *~;
+#X text 239 213 2b - ratio * carrier freq to give modulator freq;
+#X text 619 213 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 622 325 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 224 354 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X obj 79 61 inlet~;
+#X text 74 33 Carrier Frequency;
+#X obj 227 61 inlet~;
+#X text 226 33 Ratio;
+#X obj 630 61 inlet~;
+#X text 626 33 index;
+#X obj 78 452 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 2 1;
+#X connect 2 0 16 0;
+#X connect 4 0 1 1;
+#X connect 5 0 0 0;
+#X connect 10 0 4 0;
+#X connect 10 0 5 0;
+#X connect 10 0 2 0;
+#X connect 12 0 5 1;
+#X connect 14 0 4 1;
+#X restore 71 179 pd fmModulator;
+#X f 15;
+#X obj 71 318 osc~;
+#X floatatom 95 12 5 0 0 0 - - -;
+#N canvas -1280 581 1070 512 fmModulator 0;
+#X obj 214 270 osc~;
+#X obj 214 331 *~, f 64;
+#X obj 79 355 +~, f 23;
+#X text 243 268 modulating oscillator;
+#X obj 593 214 *~;
+#X obj 214 214 *~;
+#X text 239 213 2b - ratio * carrier freq to give modulator freq;
+#X text 619 213 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 622 325 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 224 354 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X obj 79 61 inlet~;
+#X text 74 33 Carrier Frequency;
+#X obj 227 61 inlet~;
+#X text 226 33 Ratio;
+#X obj 630 61 inlet~;
+#X text 626 33 index;
+#X obj 78 452 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 2 1;
+#X connect 2 0 16 0;
+#X connect 4 0 1 1;
+#X connect 5 0 0 0;
+#X connect 10 0 4 0;
+#X connect 10 0 5 0;
+#X connect 10 0 2 0;
+#X connect 12 0 5 1;
+#X connect 14 0 4 1;
+#X restore 211 216 pd fmModulator;
+#X f 15;
+#N canvas -1280 581 1070 512 fmModulator 0;
+#X obj 214 270 osc~;
+#X obj 214 331 *~, f 64;
+#X obj 79 355 +~, f 23;
+#X text 243 268 modulating oscillator;
+#X obj 593 214 *~;
+#X obj 214 214 *~;
+#X text 239 213 2b - ratio * carrier freq to give modulator freq;
+#X text 619 213 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 622 325 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 224 354 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X obj 79 61 inlet~;
+#X text 74 33 Carrier Frequency;
+#X obj 227 61 inlet~;
+#X text 226 33 Ratio;
+#X obj 630 61 inlet~;
+#X text 626 33 index;
+#X obj 78 452 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 2 1;
+#X connect 2 0 16 0;
+#X connect 4 0 1 1;
+#X connect 5 0 0 0;
+#X connect 10 0 4 0;
+#X connect 10 0 5 0;
+#X connect 10 0 2 0;
+#X connect 12 0 5 1;
+#X connect 14 0 4 1;
+#X restore 71 255 pd fmModulator;
+#X f 15;
+#X text 498 46 Trial and error led me to this this arrangement \, 3
+modulators interacting;
+#X text 499 76 1 - controls the ratio of 2 & the base frequency of
+3;
+#X text 500 92 2 - controls the index of 3;
+#X obj 95 66 sig~ 15, f 9;
+#X text 500 106 3 - is the final stage of modulation and controls the
+frquency of the carrier;
+#X text 33 177 mod 1;
+#X text 175 215 mod 2;
+#X text 34 255 mod 3;
+#X obj 71 339 *~ 0.05, f 8;
+#X text 134 3 <--- change me for different drones \, but be warned
+too low just gives sub frequencies/rhythms \, too high gives noise
+;
+#X text 500 139 All this from just 4 oscillators and a constant value
+;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
+#X connect 4 0 7 1;
+#X connect 4 0 8 0;
+#X connect 5 0 17 0;
+#X connect 6 0 12 0;
+#X connect 7 0 8 2;
+#X connect 8 0 5 0;
+#X connect 12 0 4 0;
+#X connect 12 0 4 1;
+#X connect 12 0 4 2;
+#X connect 12 0 7 2;
+#X connect 12 0 7 0;
+#X connect 17 0 0 0;
+#X restore 248 525 pd fm_droneMachine;
+#X text 214 550 ------------------------------------------------------------
+;
+#X text 223 573 Create a FM synthesis abstraction that can receive
+MIDI notes \, converting midi pitch to carrier frequency ad MIDI velocity
+to amplitude envelopes;
+#X text 193 125 NOTE: I will control everything with audio signals
+so I can use audio rate envelopes later on;
+#N canvas -1280 581 1056 724 FM_synth_w/2*mods_series 0;
+#X floatatom 83 219 5 0 0 0 carrier - -;
+#X floatatom 258 216 5 0 0 0 index - -;
+#X obj 79 627 vol_sjf~;
+#X obj 79 667 dac~;
+#X floatatom 170 217 5 0 0 0 ratio - -;
+#X text 111 596 carrier oscillator;
+#X text 153 633 <----- Turn me up;
+#N canvas -1280 581 1070 512 fmModulator 0;
+#X obj 214 270 osc~;
+#X obj 214 331 *~, f 64;
+#X obj 79 355 +~, f 23;
+#X text 243 268 modulating oscillator;
+#X obj 593 214 *~;
+#X obj 214 214 *~;
+#X text 239 213 2b - ratio * carrier freq to give modulator freq;
+#X text 619 213 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 622 325 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 224 354 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X obj 79 61 inlet~;
+#X text 74 33 Carrier Frequency;
+#X obj 227 61 inlet~;
+#X text 226 33 Ratio;
+#X obj 630 61 inlet~;
+#X text 626 33 index;
+#X obj 78 452 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 2 1;
+#X connect 2 0 16 0;
+#X connect 4 0 1 1;
+#X connect 5 0 0 0;
+#X connect 10 0 4 0;
+#X connect 10 0 5 0;
+#X connect 10 0 2 0;
+#X connect 12 0 5 1;
+#X connect 14 0 4 1;
+#X restore 83 296 pd fmModulator;
+#X f 30;
+#X obj 79 552 osc~;
+#X obj 83 239 sig~ 220;
+#X obj 79 573 *~, f 45;
+#X obj 631 443 adsr_sjf~;
+#X obj 573 8 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 641 60 * 100;
+#X text 593 5 <--- toggle note on/off;
+#X text 676 58 <--- I'm triggering my envelope generator with a MIDI
+velocity of 100;
+#X obj 258 275 *~;
+#X obj 380 155 adsr_sjf~;
+#X floatatom 253 442 5 0 0 0 index - -;
+#X floatatom 165 443 5 0 0 0 ratio - -;
+#N canvas -1280 581 1070 512 fmModulator 0;
+#X obj 214 270 osc~;
+#X obj 214 331 *~, f 64;
+#X obj 79 355 +~, f 23;
+#X text 243 268 modulating oscillator;
+#X obj 593 214 *~;
+#X obj 214 214 *~;
+#X text 239 213 2b - ratio * carrier freq to give modulator freq;
+#X text 619 213 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 622 325 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 224 354 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X obj 79 61 inlet~;
+#X text 74 33 Carrier Frequency;
+#X obj 227 61 inlet~;
+#X text 226 33 Ratio;
+#X obj 630 61 inlet~;
+#X text 626 33 index;
+#X obj 78 452 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 2 1;
+#X connect 2 0 16 0;
+#X connect 4 0 1 1;
+#X connect 5 0 0 0;
+#X connect 10 0 4 0;
+#X connect 10 0 5 0;
+#X connect 10 0 2 0;
+#X connect 12 0 5 1;
+#X connect 14 0 4 1;
+#X restore 78 522 pd fmModulator;
+#X f 30;
+#X obj 253 501 *~;
+#X obj 375 381 adsr_sjf~;
+#X text 46 9 experiment with different settings and envelopes for each
+modulator;
+#X text 46 33 Note the first (top) modulator only connects to the second
+modulator \, therefore you will only hear it's effect if the index
+(intensity) for the second modulator is >0;
+#X text 45 75 This means we can create timbers that evolve over time
+;
+#X obj 464 42 loadbang;
+#X obj 494 311 loadbang;
+#X msg 487 78 0.01;
+#X obj 258 236 sig~ 2;
+#X obj 171 237 sig~ 2.5465;
+#X msg 426 78 400;
+#X msg 456 78 600;
+#X msg 482 348 1200;
+#X obj 166 463 sig~ 2;
+#X msg 517 346 0.5;
+#X obj 253 462 sig~ 2;
+#X connect 0 0 9 0;
+#X connect 1 0 29 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 30 0;
+#X connect 7 0 20 0;
+#X connect 8 0 10 0;
+#X connect 9 0 7 0;
+#X connect 10 0 2 0;
+#X connect 11 0 10 1;
+#X connect 12 0 13 0;
+#X connect 13 0 11 0;
+#X connect 13 0 17 0;
+#X connect 13 0 22 0;
+#X connect 16 0 7 2;
+#X connect 17 0 16 1;
+#X connect 18 0 36 0;
+#X connect 19 0 34 0;
+#X connect 20 0 8 0;
+#X connect 21 0 20 2;
+#X connect 22 0 21 1;
+#X connect 26 0 32 0;
+#X connect 26 0 28 0;
+#X connect 26 0 31 0;
+#X connect 27 0 35 0;
+#X connect 27 0 33 0;
+#X connect 28 0 17 3;
+#X connect 29 0 16 0;
+#X connect 30 0 7 1;
+#X connect 31 0 17 1;
+#X connect 32 0 17 2;
+#X connect 33 0 22 2;
+#X connect 34 0 20 1;
+#X connect 35 0 22 3;
+#X connect 36 0 21 0;
+#X restore 404 432 pd FM_synth_w/2*mods_series;
+#N canvas -1280 581 1056 724 FM_synth_w/2*mods_parallel 0;
+#X floatatom 83 219 5 0 0 0 carrier - -;
+#X floatatom 258 216 5 0 0 0 index - -;
+#X obj 79 627 vol_sjf~;
+#X obj 79 667 dac~;
+#X floatatom 170 217 5 0 0 0 ratio - -;
+#X text 111 596 carrier oscillator;
+#X text 153 633 <----- Turn me up;
+#N canvas -1280 581 1070 512 fmModulator 0;
+#X obj 214 270 osc~;
+#X obj 214 331 *~, f 64;
+#X obj 79 355 +~, f 23;
+#X text 243 268 modulating oscillator;
+#X obj 593 214 *~;
+#X obj 214 214 *~;
+#X text 239 213 2b - ratio * carrier freq to give modulator freq;
+#X text 619 213 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 622 325 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 224 354 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X obj 79 61 inlet~;
+#X text 74 33 Carrier Frequency;
+#X obj 227 61 inlet~;
+#X text 226 33 Ratio;
+#X obj 630 61 inlet~;
+#X text 626 33 index;
+#X obj 78 452 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 2 1;
+#X connect 2 0 16 0;
+#X connect 4 0 1 1;
+#X connect 5 0 0 0;
+#X connect 10 0 4 0;
+#X connect 10 0 5 0;
+#X connect 10 0 2 0;
+#X connect 12 0 5 1;
+#X connect 14 0 4 1;
+#X restore 83 296 pd fmModulator;
+#X f 30;
+#X obj 79 552 osc~;
+#X obj 83 239 sig~ 220;
+#X obj 79 573 *~, f 45;
+#X obj 631 443 adsr_sjf~;
+#X obj 573 8 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 641 60 * 100;
+#X text 593 5 <--- toggle note on/off;
+#X text 676 58 <--- I'm triggering my envelope generator with a MIDI
+velocity of 100;
+#X obj 258 275 *~;
+#X obj 380 155 adsr_sjf~;
+#X floatatom 333 370 5 0 0 0 index - -;
+#X floatatom 245 371 5 0 0 0 ratio - -;
+#N canvas -1280 581 1070 512 fmModulator 0;
+#X obj 214 270 osc~;
+#X obj 214 331 *~, f 64;
+#X obj 79 355 +~, f 23;
+#X text 243 268 modulating oscillator;
+#X obj 593 214 *~;
+#X obj 214 214 *~;
+#X text 239 213 2b - ratio * carrier freq to give modulator freq;
+#X text 619 213 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 622 325 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 224 354 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X obj 79 61 inlet~;
+#X text 74 33 Carrier Frequency;
+#X obj 227 61 inlet~;
+#X text 226 33 Ratio;
+#X obj 630 61 inlet~;
+#X text 626 33 index;
+#X obj 78 452 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 2 1;
+#X connect 2 0 16 0;
+#X connect 4 0 1 1;
+#X connect 5 0 0 0;
+#X connect 10 0 4 0;
+#X connect 10 0 5 0;
+#X connect 10 0 2 0;
+#X connect 12 0 5 1;
+#X connect 14 0 4 1;
+#X restore 158 450 pd fmModulator;
+#X f 30;
+#X obj 333 429 *~;
+#X obj 455 309 adsr_sjf~;
+#X text 46 9 experiment with different settings and envelopes for each
+modulator;
+#X obj 464 42 loadbang;
+#X obj 575 239 loadbang;
+#X obj 171 237 sig~ 2.5465;
+#X msg 562 276 1200;
+#X obj 246 391 sig~ 2;
+#X msg 426 78 1200;
+#X msg 456 78 2400;
+#X msg 526 275 600;
+#X msg 487 78 0.01;
+#X msg 597 274 0.52;
+#X obj 258 236 sig~ 10;
+#X obj 333 390 sig~ 10;
+#X connect 0 0 9 0;
+#X connect 1 0 34 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 26 0;
+#X connect 7 0 8 0;
+#X connect 8 0 10 0;
+#X connect 9 0 7 0;
+#X connect 9 0 20 0;
+#X connect 10 0 2 0;
+#X connect 11 0 10 1;
+#X connect 12 0 13 0;
+#X connect 13 0 11 0;
+#X connect 13 0 17 0;
+#X connect 13 0 22 0;
+#X connect 16 0 7 2;
+#X connect 17 0 16 1;
+#X connect 18 0 35 0;
+#X connect 19 0 28 0;
+#X connect 20 0 8 0;
+#X connect 21 0 20 2;
+#X connect 22 0 21 1;
+#X connect 24 0 30 0;
+#X connect 24 0 32 0;
+#X connect 24 0 29 0;
+#X connect 25 0 33 0;
+#X connect 25 0 27 0;
+#X connect 25 0 31 0;
+#X connect 26 0 7 1;
+#X connect 27 0 22 2;
+#X connect 28 0 20 1;
+#X connect 29 0 17 1;
+#X connect 30 0 17 2;
+#X connect 31 0 22 1;
+#X connect 32 0 17 3;
+#X connect 33 0 22 3;
+#X connect 34 0 16 0;
+#X connect 35 0 21 0;
+#X restore 404 456 pd FM_synth_w/2*mods_parallel;
+#X text 212 486 Or how about using our FM modulator to modulate the
+ratio and/or index of another modulator;
+#N canvas -1280 581 519 653 fm_synth_abstraction 0;
+#X obj 76 480 fmSyn1_sjf~;
+#X obj 76 18 conductor_sjf 250 16;
+#X obj 76 595 dac~;
+#X obj 76 426 makenote 100 250;
+#X obj 76 91 stpseq16_sjf;
+#X connect 0 0 2 0;
+#X connect 0 0 2 1;
+#X connect 1 0 4 0;
+#X connect 3 0 0 0;
+#X connect 3 1 0 1;
+#X connect 4 0 3 0;
+#X restore 262 641 pd fm_synth_abstraction;
+#X restore 143 197 pd fm_synthesis;
+#X text 125 113 synthesising drum sounds;
+#X text 128 173 frequency modulation synthesis;
+#X text 117 10 Our second synthesis lesson will look some sound design
+for drum sythesis \, and some FM synthesis;

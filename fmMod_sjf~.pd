@@ -1,0 +1,35 @@
+#N canvas 0 23 1036 527 10;
+#X obj 214 270 osc~;
+#X obj 214 331 *~, f 64;
+#X obj 79 355 +~, f 23;
+#X text 243 268 modulating oscillator;
+#X obj 593 214 *~;
+#X obj 214 214 *~;
+#X text 239 213 2b - ratio * carrier freq to give modulator freq;
+#X text 619 213 3b - index is multiplied by the carrier frequency too
+\, this gives the total range of frequencies the carrier will be modulated
+by. e.g. if the carrier is 220 and the index is 2 \, the max modulation
+will be +440Hz \, the min will be -440Hz (because the oscillator has
+a max of +1 and a min of -1);
+#X text 622 325 4 - The output of the modulator output is multiplied
+by (carrier * index) to give the modulation;
+#X text 224 354 5 - the modulatorOutput * carrier * index (step 4)
+is added to the carrier frequency. This constantly varies the frequency
+of the carrieraround the base frequency;
+#X obj 79 61 inlet~;
+#X text 74 33 Carrier Frequency;
+#X obj 227 61 inlet~;
+#X text 226 33 Ratio;
+#X obj 630 61 inlet~;
+#X text 626 33 index;
+#X obj 78 452 outlet~;
+#X connect 0 0 1 0;
+#X connect 1 0 2 1;
+#X connect 2 0 16 0;
+#X connect 4 0 1 1;
+#X connect 5 0 0 0;
+#X connect 10 0 4 0;
+#X connect 10 0 5 0;
+#X connect 10 0 2 0;
+#X connect 12 0 5 1;
+#X connect 14 0 4 1;

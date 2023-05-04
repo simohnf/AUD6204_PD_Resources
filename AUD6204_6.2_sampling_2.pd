@@ -1,0 +1,927 @@
+#N canvas -809 581 681 481 10;
+#X text 522 434 sjf \, SAE London \, 2020;
+#X text 121 57 Firstly \, go to Media >> Audio Settings and ensure
+your drivers are set correctly;
+#X text 123 83 Turn on DSP from the PD Window;
+#X text 123 5 Our previous sampling example looked at recording \,
+storing \, and triggering samples;
+#X text 121 29 This lesson will explore looping and variable speed
+playback of samples;
+#X text 109 153 ------------------------------------------------------------
+;
+#X text 135 171 Looping samples;
+#N canvas -1176 581 954 751 looped_sample_playback 0;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-loopedSamp 209801 float 2;
+#X coords 0 1 209801 -1 100 60 1 0 0;
+#X restore 424 20 graph;
+#X obj 552 68 openpanel;
+#X obj 552 49 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 552 90 pack s \$0;
+#X text 573 46 <--- load a different file;
+#X obj 773 27 loadbang;
+#X obj 552 134 soundfiler;
+#X msg 747 48 ./breaks/funkyDrummer.wav;
+#X msg 752 67 ./breaks/amenBreak.wav;
+#X msg 751 89 ./breaks/PlanetaryCitizen.wav;
+#X msg 552 114 read -resize \$1 \$2-loopedSamp;
+#X obj 552 155 s \$0-loopedSamp_len;
+#X text 64 14 To load and store our samples we will again use an array
+;
+#X text 67 42 But this time we are going to use "tabread4~ to play
+back the sample;
+#X floatatom 428 316 10 0 0 0 - - -;
+#X obj 428 356 / 44100;
+#X floatatom 428 377 10 0 0 0 - - -;
+#X floatatom 428 468 10 0 0 0 - - -;
+#X obj 428 528 phasor~;
+#X obj 428 679 vol_sjf~;
+#X obj 428 726 dac~;
+#X obj 428 549 *~, f 17;
+#X obj 527 474 - 2;
+#X obj 428 593 +~ 1;
+#X text 460 592 <--- according to tabread~ helpfile the indices begin
+at 1 ???;
+#X text 504 699 <---- turn me up;
+#X text 558 474 <--- according to tabread~ helpfile the indices end
+at (file size - 2 samples) ???;
+#X text 302 316 File size in samples;
+#N canvas 0 23 450 300 1/\$1 0;
+#X obj 93 65 t b f;
+#X msg 93 86 1;
+#X obj 93 107 /, f 5;
+#X obj 95 39 inlet;
+#X obj 93 128 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 2 1;
+#X connect 1 0 2 0;
+#X connect 2 0 4 0;
+#X connect 3 0 0 0;
+#X restore 428 429 pd 1/\$1;
+#X text 188 376 this is the size of the file in seconds;
+#X text 281 429 frequency == 1 / period;
+#X text 160 528 phasor~ gives us a ramp that goes from 0-->1;
+#X text 74 546 We multiply the phasor~ output (0--> 1) by the number
+of samples to move tabread~ through the audio file one sample ata time
+;
+#X text 95 626 tabread~ reads the array (where the audiofile has been
+loaded into) and outputs the signal;
+#X text 124 469 frequency necessary to play file at original speed
+;
+#X obj 428 297 r \$0-loopedSamp_len;
+#X obj 428 624 tabread4~ \$0-loopedSamp;
+#X obj 172 64 tabread4~ \$0-loopedSamp;
+#X text 267 81 ^----name of array to play;
+#X text 67 104 Unlike tabplay~ \, tabread4~ is controlled by audio
+signals;
+#X text 68 121 In it's right inlet tabread4~ receives a sample index
+\, and outputs the value stored at that index;
+#X text 68 148 To play back a sample \, we can use a phasor~ object
+to ramp through each sample;
+#X text 70 199 But we will need to do a little bit of calculation to
+determine the frequency the phasor needs to play at \, and then scale
+the output of the phasor~ (0-->1) to count through the samples;
+#X text 66 390 If we want to read from the beginning of the file to
+the end at normal speed \, we will need a ramp that has this value
+as it's period;
+#X obj 428 336 t f f, f 17;
+#X obj 196 165 phasor~;
+#X text 89 268 ------------------------------------------------------------
+;
+#X text 454 269 ------------------------------------------------------------
+;
+#X text 588 293 Try changing the frequency and seeing the effect it
+has on the loop;
+#X connect 1 0 3 0;
+#X connect 2 0 1 0;
+#X connect 3 0 10 0;
+#X connect 5 0 7 0;
+#X connect 6 0 11 0;
+#X connect 7 0 3 0;
+#X connect 8 0 3 0;
+#X connect 9 0 3 0;
+#X connect 10 0 6 0;
+#X connect 14 0 44 0;
+#X connect 15 0 16 0;
+#X connect 16 0 28 0;
+#X connect 17 0 18 0;
+#X connect 18 0 21 0;
+#X connect 19 0 20 0;
+#X connect 19 0 20 1;
+#X connect 21 0 23 0;
+#X connect 22 0 21 1;
+#X connect 23 0 36 0;
+#X connect 28 0 17 0;
+#X connect 35 0 14 0;
+#X connect 36 0 19 0;
+#X connect 44 0 15 0;
+#X connect 44 1 22 0;
+#X restore 132 197 pd looped_sample_playback;
+#X text 115 215 ------------------------------------------------------------
+;
+#X text 123 230 varying the speed of playback;
+#X text 105 92 ------------------------------------------------------------
+;
+#X text 131 110 Another approach to one-shot samples;
+#N canvas -1176 581 967 667 one-shot_samples_2 0;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-oneshotSamp 209801 float 2;
+#X coords 0 1 209801 -1 100 60 1 0 0;
+#X restore 426 25 graph;
+#X obj 554 73 openpanel;
+#X obj 554 54 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 554 95 pack s \$0;
+#X text 575 51 <--- load a different file;
+#X obj 775 32 loadbang;
+#X obj 554 139 soundfiler;
+#X msg 749 53 ./breaks/funkyDrummer.wav;
+#X msg 749 72 ./breaks/amenBreak.wav;
+#X msg 749 91 ./breaks/PlanetaryCitizen.wav;
+#X text 66 19 To load and store our samples we will again use an array
+;
+#X text 69 47 But this time we are going to use "tabread4~ to play
+back the sample;
+#X obj 441 553 vol_sjf~;
+#X obj 441 600 dac~;
+#X obj 441 485 +~ 1;
+#X text 473 483 <--- according to tabread~ helpfile the indices begin
+at 1 ???;
+#X text 517 573 <---- turn me up;
+#X text 108 517 tabread~ reads the array (where the audiofile has been
+loaded into) and outputs the signal;
+#X text 269 86 ^----name of array to play;
+#X text 69 109 Unlike tabplay~ \, tabread4~ is controlled by audio
+signals;
+#X text 70 126 In it's right inlet tabread4~ receives a sample index
+\, and outputs the value stored at that index;
+#X text 99 312 ------------------------------------------------------------
+;
+#X text 464 312 ------------------------------------------------------------
+;
+#X msg 554 119 read -resize \$1 \$2-oneshotSamp;
+#X obj 174 69 tabread4~ \$0-oneshotSamp;
+#X obj 243 172 line~;
+#X text 70 153 To play back a sample \, we can use a line~ or vline~
+object to ramp through each sample;
+#X obj 290 172 vline~;
+#X obj 554 160 s \$0-oneshotSamp_len;
+#X obj 441 515 tabread4~ \$0-oneshotSamp;
+#X text 70 258 If we use a sample rate of 44.1kHz \, then there are
+44100 samples per second;
+#X text 70 283 So then we end up with 44.1 samples per millisecond
+;
+#X floatatom 459 243 5 0 0 0 ms - -;
+#X obj 459 263 * 44.1;
+#X floatatom 459 284 5 0 0 0 samples - -;
+#X obj 441 441 line~;
+#X text 70 196 So tabread~ works in samples \, but we tell line/vline
+how long the ramp is in milliseconds...;
+#X text 71 230 We probably don't want to work in samples \, so we'll
+need to convert from milliseconds into samples for tabread~;
+#X obj 441 461 *~ 44.1;
+#X msg 196 351 0 \, 500 500;
+#X msg 501 352 500 \, 1000 500;
+#X text 584 351 Click me to play from 500ms-->1000ms;
+#X text 91 334 Click me to play the first 500ms (0-->500ms over 500ms)
+;
+#X msg 495 390 500 \, 1000 250;
+#X text 581 387 Click me to play from 500ms-->1000ms at double speed
+(over 250ms);
+#X text 44 391 Click me to play the first 500ms backwards (500-->0ms
+over 500ms);
+#X msg 149 408 500 \, 0 500;
+#X text 603 422 Click me to play from 500ms-->1000ms at half speed
+(over 1s);
+#X msg 512 422 500 \, 1000 1000;
+#X connect 1 0 3 0;
+#X connect 2 0 1 0;
+#X connect 3 0 23 0;
+#X connect 5 0 7 0;
+#X connect 6 0 28 0;
+#X connect 7 0 3 0;
+#X connect 8 0 3 0;
+#X connect 9 0 3 0;
+#X connect 12 0 13 0;
+#X connect 12 0 13 1;
+#X connect 14 0 29 0;
+#X connect 23 0 6 0;
+#X connect 29 0 12 0;
+#X connect 32 0 33 0;
+#X connect 33 0 34 0;
+#X connect 35 0 38 0;
+#X connect 38 0 14 0;
+#X connect 39 0 35 0;
+#X connect 40 0 35 0;
+#X connect 43 0 35 0;
+#X connect 46 0 35 0;
+#X connect 48 0 35 0;
+#X restore 128 136 pd one-shot_samples_2;
+#X text 114 275 ------------------------------------------------------------
+;
+#X text 122 290 looping subsections of a sample;
+#N canvas -1279 581 952 281 variposition_sample_looping 0;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-VariPosSamp 209801 float 2;
+#X coords 0 1 209801 -1 100 60 1 0 0;
+#X restore 413 32 graph;
+#X obj 532 49 openpanel;
+#X obj 532 28 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 532 71 pack s \$0;
+#X text 553 25 <--- load a different file;
+#X obj 765 5 loadbang;
+#X obj 532 115 soundfiler;
+#X msg 739 26 ./breaks/funkyDrummer.wav;
+#X msg 739 45 ./breaks/amenBreak.wav;
+#X msg 739 64 ./breaks/PlanetaryCitizen.wav;
+#X obj 532 136 s \$0-VariPosSamp_len;
+#X msg 532 95 read -resize \$1 \$2-VariPosSamp;
+#X text 32 13 We have already seen that tabread~ allows us to begin
+playback from different positions in the sample as well;
+#X text 33 46 If we want to loop subsections of our sample we need
+to use a phase ramp with a period equal in length to that subdivision
+;
+#N canvas -1177 581 1151 608 vari_speed_sampling_1 0;
+#X floatatom 530 203 10 0 0 0 - - -;
+#X obj 530 336 phasor~;
+#X obj 530 455 vol_sjf~;
+#X obj 530 502 dac~;
+#X obj 530 357 *~, f 17;
+#X obj 530 401 +~ 1;
+#X text 562 400 <--- according to tabread~ helpfile the indices begin
+at 1 ???;
+#X text 606 475 <---- turn me up;
+#N canvas 0 23 450 300 1/\$1 0;
+#X obj 93 65 t b f;
+#X msg 93 86 1;
+#X obj 93 107 /, f 5;
+#X obj 95 39 inlet;
+#X obj 93 128 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 2 1;
+#X connect 1 0 2 0;
+#X connect 2 0 4 0;
+#X connect 3 0 0 0;
+#X restore 530 180 pd 1/\$1;
+#X text 385 180 frequency == 1 / period;
+#X text 262 336 phasor~ gives us a ramp that goes from 0-->1;
+#X text 176 354 We multiply the phasor~ output (0--> 1) by the number
+of samples to move tabread~ through the audio file one sample ata time
+;
+#X text 175 422 tabread~ reads the array (where the audiofile has been
+loaded into) and outputs the signal;
+#X obj 530 432 tabread4~ \$0-VariPosSamp;
+#X floatatom 531 115 5 0 0 0 loop_length_(ms) - -;
+#X obj 531 159 / 1000;
+#X text 33 46 If we want to loop subsections of our sample we need
+to use a phase ramp with a period equal in length to that subdivision
+;
+#X text 226 204 frequency necessary to play loop at original speed
+;
+#X obj 531 135 t f f, f 18;
+#X text 475 161 ms --> s;
+#X obj 656 155 * 44.1;
+#X text 701 154 ms --> samps;
+#X obj 530 66 loadbang;
+#X msg 530 87 250;
+#X floatatom 656 176 10 0 0 0 - - -;
+#X text 727 175 samples in loop;
+#X connect 0 0 1 0;
+#X connect 1 0 4 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 5 0;
+#X connect 5 0 13 0;
+#X connect 8 0 0 0;
+#X connect 13 0 2 0;
+#X connect 14 0 18 0;
+#X connect 15 0 8 0;
+#X connect 18 0 15 0;
+#X connect 18 1 20 0;
+#X connect 20 0 24 0;
+#X connect 22 0 23 0;
+#X connect 23 0 14 0;
+#X connect 24 0 4 1;
+#X restore 86 93 pd vari_speed_sampling_1;
+#X text 33 124 If we want to loop subsections of our sample we need
+to use a phase ramp with a period equal in length to that subdivision
+;
+#N canvas -1177 581 1151 608 vari_speed_sampling_2 0;
+#X floatatom 530 203 10 0 0 0 - - -;
+#X obj 530 336 phasor~;
+#X obj 530 527 vol_sjf~;
+#X obj 530 574 dac~;
+#X obj 530 357 *~, f 17;
+#X obj 530 482 +~ 1;
+#X text 562 481 <--- according to tabread~ helpfile the indices begin
+at 1 ???;
+#X text 606 547 <---- turn me up;
+#N canvas 0 23 450 300 1/\$1 0;
+#X obj 93 65 t b f;
+#X msg 93 86 1;
+#X obj 93 107 /, f 5;
+#X obj 95 39 inlet;
+#X obj 93 128 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 2 1;
+#X connect 1 0 2 0;
+#X connect 2 0 4 0;
+#X connect 3 0 0 0;
+#X restore 530 180 pd 1/\$1;
+#X text 385 180 frequency == 1 / period;
+#X text 262 336 phasor~ gives us a ramp that goes from 0-->1;
+#X text 176 354 We multiply the phasor~ output (0--> 1) by the number
+of samples to move tabread~ through the audio file one sample ata time
+;
+#X text 175 494 tabread~ reads the array (where the audiofile has been
+loaded into) and outputs the signal;
+#X obj 530 504 tabread4~ \$0-VariPosSamp;
+#X floatatom 531 115 5 0 0 0 loop_length_(ms) - -;
+#X obj 531 159 / 1000;
+#X text 226 204 frequency necessary to play loop at original speed
+;
+#X obj 531 135 t f f, f 18;
+#X text 475 161 ms --> s;
+#X obj 656 155 * 44.1;
+#X text 701 154 ms --> samps;
+#X obj 530 66 loadbang;
+#X msg 530 87 250;
+#X floatatom 656 176 10 0 0 0 - - -;
+#X text 727 175 samples in loop;
+#X obj 530 453 +~;
+#X text 558 447 We change the starting point by simply adding the necessary
+number of samples to the ramp;
+#X floatatom 108 125 5 0 0 0 loop_start_(ms) - -;
+#X obj 108 145 * 44.1;
+#X obj 108 186 sig~;
+#X text 33 46 We can change the starting point of the loop by simplying
+adding a fixed number of samples to the ramp (instead of 0-->9 \; we
+ad 10 and get 10-->19);
+#X text 29 147 ms --> samps;
+#X floatatom 108 166 10 0 0 0 - - -;
+#X text 171 166 # of samples start is offset by;
+#X connect 0 0 1 0;
+#X connect 1 0 4 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 25 1;
+#X connect 5 0 13 0;
+#X connect 8 0 0 0;
+#X connect 13 0 2 0;
+#X connect 14 0 17 0;
+#X connect 15 0 8 0;
+#X connect 17 0 15 0;
+#X connect 17 1 19 0;
+#X connect 19 0 23 0;
+#X connect 21 0 22 0;
+#X connect 22 0 14 0;
+#X connect 22 0 27 0;
+#X connect 23 0 4 1;
+#X connect 25 0 5 0;
+#X connect 27 0 28 0;
+#X connect 28 0 32 0;
+#X connect 29 0 25 0;
+#X connect 32 0 29 0;
+#X restore 87 171 pd vari_speed_sampling_2;
+#X connect 1 0 3 0;
+#X connect 2 0 1 0;
+#X connect 3 0 11 0;
+#X connect 5 0 7 0;
+#X connect 6 0 10 0;
+#X connect 7 0 3 0;
+#X connect 8 0 3 0;
+#X connect 9 0 3 0;
+#X connect 11 0 6 0;
+#X restore 131 315 pd variposition_sample_looping;
+#N canvas -1279 581 957 427 varispeed_sample_looping 0;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-variSpdSamp 209801 float 2;
+#X coords 0 1 209801 -1 100 60 1 0 0;
+#X restore 415 38 graph;
+#X obj 534 55 openpanel;
+#X obj 534 34 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 534 77 pack s \$0;
+#X msg 534 101 read -resize \$1 \$2-variSpdSamp;
+#X text 555 31 <--- load a different file;
+#X obj 767 11 loadbang;
+#X obj 534 121 soundfiler;
+#X obj 534 142 s \$0-VariSpdSamp_len;
+#X msg 741 32 ./breaks/funkyDrummer.wav;
+#X msg 746 51 ./breaks/amenBreak.wav;
+#X msg 745 73 ./breaks/PlanetaryCitizen.wav;
+#X text 33 19 As I'm sure you noticed we can vary the playack speed
+simply by changing the frequency of the phasor~ object;
+#X text 32 45 Double the frequency \, double the speed \, double the
+pitch;
+#X text 34 58 Half the frequency \, half the speed \, half the pitch
+;
+#X text 33 70 etc.;
+#N canvas -1177 581 1010 649 vari_speed_sampling_1 0;
+#X floatatom 439 45 10 0 0 0 - - -;
+#X obj 439 66 / 44100;
+#X floatatom 439 87 10 0 0 0 - - -;
+#X floatatom 439 161 10 0 0 0 - - -;
+#X obj 439 406 phasor~;
+#X obj 439 525 vol_sjf~;
+#X obj 439 572 dac~;
+#X obj 439 427 *~, f 17;
+#X obj 439 502 tabread4~ \$0-variSpdSamp;
+#X obj 542 270 - 2;
+#X obj 439 471 +~ 1;
+#X text 471 470 <--- according to tabread~ helpfile the indices begin
+at 1 ???;
+#X text 515 545 <---- turn me up;
+#X text 569 270 <--- according to tabread~ helpfile the indices end
+at (file size - 2 samples) ???;
+#X text 504 46 File size in samples;
+#N canvas 0 23 450 300 1/\$1 0;
+#X obj 93 65 t b f;
+#X msg 93 86 1;
+#X obj 93 107 /, f 5;
+#X obj 95 39 inlet;
+#X obj 93 128 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 2 1;
+#X connect 1 0 2 0;
+#X connect 2 0 4 0;
+#X connect 3 0 0 0;
+#X restore 439 138 pd 1/\$1;
+#X text 503 84 this is the size of the file in seconds;
+#X text 505 95 If we want to reead from the beginning of the file to
+the end at normal speed \, we will need a ramp that has this value
+as it's period;
+#X text 501 134 frequency == 1 / period;
+#X text 171 406 phasor~ gives us a ramp that goes from 0-->1;
+#X text 85 424 We multiply the phasor~ output (0--> 1) by the number
+of samples to move tabread~ through the audio file one sample ata time
+;
+#X text 84 492 tabread~ reads the array (where the audiofile has been
+loaded into) and outputs the signal;
+#X text 135 162 frequency necessary to play file at original speed
+;
+#X obj 439 26 r \$0-VariSpdSamp_len;
+#X floatatom 304 256 5 0 0 0 - - -;
+#X obj 307 238 hsl 128 15 0 2 0 1 empty empty empty -2 -8 0 10 -262144
+-1 -1 6350 1;
+#X obj 439 279 *;
+#X obj 441 242 t b f;
+#X text 65 193 To change the playback speed we need to change the frequency
+with which we play back the sample;
+#X text 213 254 playback speed;
+#X floatatom 439 300 10 0 0 0 - - -;
+#X text 338 301 new frequency;
+#X obj 91 231 loadbang;
+#X msg 91 252 1;
+#X obj 391 346 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 439 361 *;
+#X obj 439 336 t b f;
+#X floatatom 439 384 10 0 0 0 - - -;
+#X text 27 347 We can also pause the playback by setting the frequency
+to 0;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 15 0;
+#X connect 3 0 27 0;
+#X connect 4 0 7 0;
+#X connect 5 0 6 0;
+#X connect 5 0 6 1;
+#X connect 7 0 10 0;
+#X connect 8 0 5 0;
+#X connect 9 0 7 1;
+#X connect 10 0 8 0;
+#X connect 15 0 3 0;
+#X connect 23 0 0 0;
+#X connect 23 0 9 0;
+#X connect 24 0 26 0;
+#X connect 25 0 24 0;
+#X connect 26 0 30 0;
+#X connect 27 0 26 0;
+#X connect 27 1 26 1;
+#X connect 30 0 36 0;
+#X connect 32 0 33 0;
+#X connect 33 0 34 0;
+#X connect 33 0 25 0;
+#X connect 34 0 35 0;
+#X connect 35 0 37 0;
+#X connect 36 0 35 0;
+#X connect 36 1 35 1;
+#X connect 37 0 4 0;
+#X restore 131 166 pd vari_speed_sampling_1;
+#N canvas -1177 581 916 608 vari_speed_sampling_2 0;
+#X floatatom 395 35 10 0 0 0 - - -;
+#X obj 395 56 / 44100;
+#X floatatom 395 77 10 0 0 0 - - -;
+#X floatatom 395 151 10 0 0 0 - - -;
+#X obj 395 396 phasor~;
+#X obj 395 515 vol_sjf~;
+#X obj 395 562 dac~;
+#X obj 395 417 *~, f 17;
+#X obj 395 492 tabread4~ \$0-variSpdSamp;
+#X obj 498 260 - 2;
+#X obj 395 461 +~ 1;
+#X text 427 460 <--- according to tabread~ helpfile the indices begin
+at 1 ???;
+#X text 471 535 <---- turn me up;
+#X text 525 260 <--- according to tabread~ helpfile the indices end
+at (file size - 2 samples) ???;
+#X text 460 36 File size in samples;
+#N canvas 0 23 450 300 1/\$1 0;
+#X obj 93 65 t b f;
+#X msg 93 86 1;
+#X obj 93 107 /, f 5;
+#X obj 95 39 inlet;
+#X obj 93 128 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 2 1;
+#X connect 1 0 2 0;
+#X connect 2 0 4 0;
+#X connect 3 0 0 0;
+#X restore 395 128 pd 1/\$1;
+#X text 459 74 this is the size of the file in seconds;
+#X text 461 85 If we want to reead from the beginning of the file to
+the end at normal speed \, we will need a ramp that has this value
+as it's period;
+#X text 457 124 frequency == 1 / period;
+#X text 127 396 phasor~ gives us a ramp that goes from 0-->1;
+#X text 41 414 We multiply the phasor~ output (0--> 1) by the number
+of samples to move tabread~ through the audio file one sample ata time
+;
+#X text 40 482 tabread~ reads the array (where the audiofile has been
+loaded into) and outputs the signal;
+#X text 91 152 frequency necessary to play file at original speed;
+#X obj 395 16 r \$0-VariSpdSamp_len;
+#X floatatom 259 268 5 0 0 0 playback_speed - -;
+#X obj 262 206 hsl 128 15 -12 12 0 1 empty empty empty -2 -8 0 10 -262144
+-1 -1 6350 1;
+#X obj 395 269 *;
+#X obj 397 232 t b f;
+#X text 21 183 To change the playback speed we need to change the frequency
+with which we play back the sample;
+#X floatatom 395 290 10 0 0 0 - - -;
+#X text 313 291 new frequency;
+#X obj 42 214 loadbang;
+#X obj 43 270 tgl 15 0 empty empty on/off 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 395 351 *;
+#X obj 395 326 t b f;
+#X floatatom 395 374 10 0 0 0 - - -;
+#X msg 68 234 0;
+#X msg 42 234 1;
+#X floatatom 259 226 5 0 0 0 semitone_shift - -;
+#X obj 259 246 expr pow(2 \, $f1/12);
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 15 0;
+#X connect 3 0 27 0;
+#X connect 4 0 7 0;
+#X connect 5 0 6 0;
+#X connect 5 0 6 1;
+#X connect 7 0 10 0;
+#X connect 8 0 5 0;
+#X connect 9 0 7 1;
+#X connect 10 0 8 0;
+#X connect 15 0 3 0;
+#X connect 23 0 0 0;
+#X connect 23 0 9 0;
+#X connect 24 0 26 0;
+#X connect 25 0 38 0;
+#X connect 26 0 29 0;
+#X connect 27 0 26 0;
+#X connect 27 1 26 1;
+#X connect 29 0 34 0;
+#X connect 31 0 36 0;
+#X connect 31 0 37 0;
+#X connect 32 0 33 0;
+#X connect 33 0 35 0;
+#X connect 34 0 33 0;
+#X connect 34 1 33 1;
+#X connect 35 0 4 0;
+#X connect 36 0 25 0;
+#X connect 37 0 32 0;
+#X connect 38 0 39 0;
+#X connect 39 0 24 0;
+#X restore 134 363 pd vari_speed_sampling_2;
+#N canvas -1274 581 918 437 semitone_frequency_formula 0;
+#X text 72 19 Most western music we hear is based on 12 tone equal
+temperament (12TET to some...);
+#X text 72 48 This technique of tuning takes an octave (f --> 2f) and
+divides it into 12 equal division \, where the ratio between the frequency
+of any note (say an E) and that of frequency;
+#X floatatom 408 134 5 0 0 0 semitone_shift - -;
+#X floatatom 408 175 5 0 0 0 multiplication_factor - -;
+#X obj 408 154 expr pow(2 \, $f1/12);
+#X obj 408 199 t b f;
+#X obj 270 223 *, f 28;
+#X floatatom 270 249 5 0 0 0 - - -;
+#X floatatom 269 134 5 0 0 0 frequency - -;
+#X text 529 151 the "expr" object allows us to create mathematical
+formulae...;
+#X text 529 175 it's not as difficult as it sounds though;
+#X text 529 188 This object just says raise 2 to the power of (input/12)
+;
+#X text 529 202 We raise "2" to the power of something because our
+reference is an octave (* 2);
+#X text 529 227 we divide by 12 because that is the number of semitones
+the octave is divided into;
+#X obj 185 390 tet_sjf 15;
+#X text 62 328 ------------------------------------------------------------
+;
+#X text 75 344 See if you can create an algorithm that allows you to
+have any number of equal divisions (e.g. 20 tone equal temperament
+;
+#X connect 2 0 4 0;
+#X connect 3 0 5 0;
+#X connect 4 0 3 0;
+#X connect 5 0 6 0;
+#X connect 5 1 6 1;
+#X connect 6 0 7 0;
+#X connect 8 0 6 0;
+#X restore 114 272 pd semitone_frequency_formula;
+#X text 94 240 Do you remember the formula to get the frequency of
+a note 1 semitone above another???;
+#X text 45 126 ------------------------------------------------------------
+;
+#X text 42 195 ------------------------------------------------------------
+;
+#X text 91 211 Brief aside...;
+#X text 91 317 Ok \, now lets look at shifting the playback speed by
+semitones;
+#X connect 1 0 3 0;
+#X connect 2 0 1 0;
+#X connect 3 0 4 0;
+#X connect 4 0 7 0;
+#X connect 6 0 9 0;
+#X connect 7 0 8 0;
+#X connect 9 0 3 0;
+#X connect 10 0 3 0;
+#X connect 11 0 3 0;
+#X restore 132 255 pd varispeed_sample_looping;
+#X text 117 337 ------------------------------------------------------------
+;
+#X text 125 352 finally \, a note on amplitude envelopes;
+#N canvas -1279 581 952 281 amplitude_envelopes 0;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-loopFadeSamp 209801 float 2;
+#X coords 0 1 209801 -1 100 60 1 0 0;
+#X restore 413 32 graph;
+#X obj 532 49 openpanel;
+#X obj 532 28 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 532 71 pack s \$0;
+#X text 553 25 <--- load a different file;
+#X obj 765 5 loadbang;
+#X obj 532 115 soundfiler;
+#X msg 739 26 ./breaks/funkyDrummer.wav;
+#X msg 739 45 ./breaks/amenBreak.wav;
+#X msg 739 64 ./breaks/PlanetaryCitizen.wav;
+#N canvas -1265 581 800 390 vari_speed_sampling_1 0;
+#X obj 397 287 vol_sjf~;
+#X obj 397 334 dac~;
+#X text 473 307 <---- turn me up;
+#X floatatom 535 160 5 0 0 0 loop_length_(ms) - -;
+#X obj 535 87 loadbang;
+#X msg 535 108 250;
+#X floatatom 396 160 5 0 0 0 loop_start_(ms) - -;
+#X obj 525 223 phaseEnv_sjf~, f 14;
+#X obj 397 263 *~, f 9;
+#N canvas 0 23 1094 638 variPosPlaybackLogic 0;
+#X obj 108 120 inlet;
+#X floatatom 530 203 10 0 0 0 - - -;
+#X obj 530 321 phasor~;
+#X obj 530 357 *~, f 17;
+#X obj 530 482 +~ 1;
+#X text 562 481 <--- according to tabread~ helpfile the indices begin
+at 1 ???;
+#N canvas 0 23 450 300 1/\$1 0;
+#X obj 93 65 t b f;
+#X msg 93 86 1;
+#X obj 93 107 /, f 5;
+#X obj 95 39 inlet;
+#X obj 93 128 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 2 1;
+#X connect 1 0 2 0;
+#X connect 2 0 4 0;
+#X connect 3 0 0 0;
+#X restore 530 180 pd 1/\$1;
+#X text 385 180 frequency == 1 / period;
+#X text 262 321 phasor~ gives us a ramp that goes from 0-->1;
+#X text 176 354 We multiply the phasor~ output (0--> 1) by the number
+of samples to move tabread~ through the audio file one sample ata time
+;
+#X text 175 494 tabread~ reads the array (where the audiofile has been
+loaded into) and outputs the signal;
+#X obj 531 159 / 1000;
+#X text 226 204 frequency necessary to play loop at original speed
+;
+#X obj 531 135 t f f, f 18;
+#X text 475 161 ms --> s;
+#X obj 656 155 * 44.1;
+#X text 701 154 ms --> samps;
+#X floatatom 656 176 10 0 0 0 - - -;
+#X text 727 175 samples in loop;
+#X obj 530 453 +~;
+#X text 558 447 We change the starting point by simply adding the necessary
+number of samples to the ramp;
+#X obj 108 145 * 44.1;
+#X text 29 147 ms --> samps;
+#X floatatom 108 166 10 0 0 0 - - -;
+#X text 171 166 # of samples start is offset by;
+#X obj 530 504 tabread4~ \$0-loopFadeSamp;
+#X obj 530 525 outlet~;
+#X obj 531 109 inlet;
+#X text 526 88 loop length (ms);
+#X text 79 96 loop start (ms);
+#X obj 806 317 outlet~;
+#X msg 107 200 \$1 10;
+#X obj 108 219 line~;
+#X msg 656 232 \$1 10;
+#X obj 656 252 line~;
+#X msg 530 235 \$1 10;
+#X obj 530 255 line~;
+#X text 696 238 I've added line~ objects to ensure all changes are
+made smoothly;
+#X connect 0 0 21 0;
+#X connect 1 0 35 0;
+#X connect 2 0 3 0;
+#X connect 2 0 30 0;
+#X connect 3 0 19 1;
+#X connect 4 0 25 0;
+#X connect 6 0 1 0;
+#X connect 11 0 6 0;
+#X connect 13 0 11 0;
+#X connect 13 1 15 0;
+#X connect 15 0 17 0;
+#X connect 17 0 33 0;
+#X connect 19 0 4 0;
+#X connect 21 0 23 0;
+#X connect 23 0 31 0;
+#X connect 25 0 26 0;
+#X connect 27 0 13 0;
+#X connect 31 0 32 0;
+#X connect 32 0 19 0;
+#X connect 33 0 34 0;
+#X connect 34 0 3 1;
+#X connect 35 0 36 0;
+#X connect 36 0 2 0;
+#X restore 396 201 pd variPosPlaybackLogic;
+#X floatatom 664 160 5 0 0 0 fade_time_(ms) - -;
+#X text 63 44 In this example I have chnged all of the changes to occur
+at sample rate (using line~) and also added a fade at the eginning
+and the end of each loop;
+#X msg 568 108 2;
+#X text 65 84 You should now be able to make changes without any discontinuities...
+;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
+#X connect 3 0 9 1;
+#X connect 3 0 7 1;
+#X connect 4 0 5 0;
+#X connect 4 0 12 0;
+#X connect 5 0 3 0;
+#X connect 5 0 6 0;
+#X connect 6 0 9 0;
+#X connect 7 0 8 1;
+#X connect 8 0 0 0;
+#X connect 9 0 8 0;
+#X connect 9 1 7 0;
+#X connect 10 0 7 2;
+#X connect 12 0 10 0;
+#X restore 86 171 pd vari_speed_sampling_1;
+#X text 32 13 You've probably experienced some pops and clicks when
+playing with these examples;
+#X text 31 41 That's because we haven't been applying any fades at
+the beginning or end of the loop points;
+#X text 29 69 There are lots of ways we could apply fades \, but I
+quite like this idea as it is basically the same technique as the panning
+algorithm we saw before;
+#X msg 532 95 read -resize \$1 \$2-loopFadeSamp;
+#X obj 532 136 s \$0-loopFadeSamp_len;
+#X text 29 105 Also \, it works very well with phase ramps (0-->1)
+;
+#X connect 1 0 3 0;
+#X connect 2 0 1 0;
+#X connect 3 0 14 0;
+#X connect 5 0 7 0;
+#X connect 6 0 15 0;
+#X connect 7 0 3 0;
+#X connect 8 0 3 0;
+#X connect 9 0 3 0;
+#X connect 14 0 6 0;
+#X restore 134 377 pd amplitude_envelopes;
+#X text 107 395 ------------------------------------------------------------
+;
+#X text 115 410 And a bit of an extreme example;
+#N canvas -1268 581 1268 737 sample_mangler 0;
+#X obj 259 450 vol_sjf~;
+#X obj 229 569 dac~;
+#X obj 525 510 vol_sjf~;
+#X obj 524 565 monoDel_sjf~;
+#X obj 700 565 monoDel_sjf~;
+#X obj 609 444 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#N canvas 0 23 663 300 let'sGet_random 0;
+#X obj 216 90 inlet;
+#X obj 215 112 metro 1000;
+#X obj 215 133 random 10000;
+#X obj 215 154 / 10000;
+#X obj 215 196 + 100;
+#X msg 215 217 \$1 1000;
+#X obj 215 238 line;
+#X obj 377 133 random 10000;
+#X obj 377 154 / 10000;
+#X obj 377 196 + 100;
+#X msg 377 217 \$1 1000;
+#X obj 377 238 line;
+#X obj 377 175 * 50;
+#X obj 215 175 * 50;
+#X obj 292 157 random 10000;
+#X obj 292 178 / 10000;
+#X obj 292 199 * 0.3;
+#X msg 293 221 \$1 1000;
+#X obj 293 242 line;
+#X obj 492 138 random 10000;
+#X obj 492 159 / 10000;
+#X obj 492 180 * 0.3;
+#X msg 493 202 \$1 1000;
+#X obj 493 223 line;
+#X obj 22 79 random 10000;
+#X obj 22 100 / 10000;
+#X obj 22 121 * 0.9;
+#X msg 22 145 \$1 1000;
+#X obj 22 166 line;
+#X obj 22 187 outlet;
+#X obj 293 263 outlet;
+#X obj 215 259 outlet;
+#X obj 493 244 outlet;
+#X obj 377 259 outlet;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 1 0 7 0;
+#X connect 1 0 14 0;
+#X connect 1 0 19 0;
+#X connect 1 0 24 0;
+#X connect 2 0 3 0;
+#X connect 3 0 13 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 31 0;
+#X connect 7 0 8 0;
+#X connect 8 0 12 0;
+#X connect 9 0 10 0;
+#X connect 10 0 11 0;
+#X connect 11 0 33 0;
+#X connect 12 0 9 0;
+#X connect 13 0 4 0;
+#X connect 14 0 15 0;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 17 0 18 0;
+#X connect 18 0 30 0;
+#X connect 19 0 20 0;
+#X connect 20 0 21 0;
+#X connect 21 0 22 0;
+#X connect 22 0 23 0;
+#X connect 23 0 32 0;
+#X connect 24 0 25 0;
+#X connect 25 0 26 0;
+#X connect 26 0 27 0;
+#X connect 27 0 28 0;
+#X connect 28 0 29 0;
+#X restore 609 464 pd let'sGet_random;
+#X text 72 8 This example uses arrays as sequencers to allow you to
+resequence a sample \, in addition to providing sequences for playback
+speed \, rhythmic subdivisions \, segment reversal \, etc;
+#X text 71 47 I divide the sample into n equal slices \, and then use
+these slices as markers for my phase ramp to jump to;
+#X text 71 73 This would be possible with line~/vline~ \, but here
+I have done it with phasor~ to make creating an amplitude envelope
+easier (phasor~ is always 0-->1) and to synchronise all changes at
+sample rate...;
+#X text 334 461 <--- Turn me up;
+#X text 26 316 try creating different patterns --->;
+#X text 29 258 try generating random patterns --->;
+#X text 70 120 In fact I read all of the information for playing back
+the sample using just one phasor~ object ensuring all changes are sample
+accurate;
+#X text 627 444 <--- Only if it gets very weird;
+#X obj 258 168 mangler_sjf~;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
+#X connect 0 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 0 4 0;
+#X connect 3 0 1 0;
+#X connect 4 0 1 1;
+#X connect 5 0 6 0;
+#X connect 6 0 2 1;
+#X connect 6 1 3 1;
+#X connect 6 2 3 4;
+#X connect 6 3 4 1;
+#X connect 6 4 4 4;
+#X connect 15 0 0 0;
+#X restore 150 428 pd sample_mangler;

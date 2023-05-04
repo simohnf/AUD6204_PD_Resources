@@ -1,0 +1,43 @@
+#N canvas -952 668 643 374 10;
+#X obj 107 79 inlet;
+#X floatatom 111 148 5 0 0 0 - - -;
+#X obj 106 197 tabread \$1-fratios;
+#X obj 220 197 tabread \$1-amplitudes;
+#X obj 111 127 i \$2;
+#X text 210 19 \$1 - (the first argument needed when initiating this
+abstraction) is the unique identifier of the parent patch (i.e. \$0
+should be the first argument);
+#X text 213 59 \$2 - (the second argument needed when initiating this
+abstraction) is the instance of that patch in the parent patch (i.e.
+the first instance should have a second argument of 0 (".... \$0 0")
+\, the second should be "\$0 1" etc.;
+#X text 208 4 This abstraction expects two arguments;
+#X obj 444 143 loadbang;
+#X obj 433 170 i \$1;
+#X obj 480 171 i \$2;
+#X floatatom 433 191 5 0 0 0 - - -;
+#X floatatom 480 192 5 0 0 0 - - -;
+#X obj 59 313 osc~ 330;
+#X obj 59 334 *~, f 26;
+#X obj 59 355 outlet~;
+#X msg 220 218 \$1 5;
+#X obj 220 239 line~;
+#X obj 59 222 *~;
+#X obj 49 120 inlet~;
+#X connect 0 0 4 0;
+#X connect 1 0 2 0;
+#X connect 1 0 3 0;
+#X connect 2 0 18 1;
+#X connect 3 0 16 0;
+#X connect 4 0 1 0;
+#X connect 8 0 9 0;
+#X connect 8 0 10 0;
+#X connect 8 0 4 0;
+#X connect 9 0 11 0;
+#X connect 10 0 12 0;
+#X connect 13 0 14 0;
+#X connect 14 0 15 0;
+#X connect 16 0 17 0;
+#X connect 17 0 14 1;
+#X connect 18 0 13 0;
+#X connect 19 0 18 0;

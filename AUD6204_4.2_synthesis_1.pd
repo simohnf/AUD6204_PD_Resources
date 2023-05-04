@@ -1,0 +1,1509 @@
+#N canvas 0 348 725 530 10;
+#X text 573 457 sjf \, SAE London \, 2020;
+#X text 123 49 Firstly \, go to Media >> Audio Settings and ensure
+your drivers are set correctly;
+#X text 125 75 Turn on DSP from the PD Window;
+#X text 108 101 ------------------------------------------------------------
+;
+#X text 297 152 <---- Click me;
+#X text 149 119 Additive Synthesis;
+#N canvas 0 231 1103 647 additive_synthesis 0;
+#X obj 747 99 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X text 773 97 <--- click me;
+#X obj 385 302 *~, f 61;
+#X text 69 10 Additive synthesis does exactly what the name implies
+\, adds multiple signals together to create a new timbre;
+#X text 71 43 We'll start by just using sine waves;
+#X obj 480 266 *~ 0.7;
+#X obj 569 265 *~ 0.5;
+#X obj 657 265 *~ 0.25;
+#X obj 384 354 dac~;
+#X obj 385 326 *~, f 98;
+#X obj 973 119 vsl 15 128 0 127 0 1 empty empty empty 0 -9 0 10 #fcfcfc
+#000000 #000000 8100 1;
+#X floatatom 973 255 5 0 0 0 - - - 0;
+#X obj 973 275 / 127;
+#X floatatom 973 296 5 0 0 0 - - - 0;
+#X text 955 101 Volume;
+#X obj 657 244 osc~ 550;
+#X obj 569 244 osc~ 440;
+#X obj 480 245 osc~ 330;
+#X text 73 65 Here I have created 4 oscillators all with a different
+pitch and amplitude;
+#X text 71 91 NOTE: I chose the frequencies randomly and just set it
+so that as they increased in frequency they decreased in pitch;
+#X text 72 119 This inverse relationship between frequency and amplitude
+mimicks the harmonic series of acoustic instruments like a violin/piano
+;
+#X text 16 282 Unlike with control rate \, when we connect the outputs
+of multiple audiorate objects to the same inlet their outputs are added
+together!!!;
+#X text 319 383 ------------------------------------------------------------
+;
+#X text 326 411 Create an additive synthesis patch;
+#X text 332 434 Give the user control over the frequency and amplitude
+of each harmonic;
+#N canvas 0 23 1092 421 additiveSynth_w/Interface 0;
+#X obj 748 79 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X text 774 77 <--- click me;
+#X obj 386 282 *~, f 61;
+#X obj 481 246 *~ 0.7, f 11;
+#X obj 571 249 *~ 0.5, f 10;
+#X obj 660 253 *~ 0.25, f 11;
+#X obj 385 334 dac~;
+#X obj 386 306 *~, f 98;
+#X obj 974 99 vsl 15 128 0 127 0 1 empty empty empty 0 -9 0 10 #fcfcfc
+#000000 #000000 8100 1;
+#X floatatom 974 235 5 0 0 0 - - - 0;
+#X obj 974 255 / 127;
+#X floatatom 974 276 5 0 0 0 - - - 0;
+#X obj 660 232 osc~ 550;
+#X obj 571 228 osc~ 440;
+#X obj 481 225 osc~ 330;
+#X text 383 194 Harmonic 0;
+#X text 475 194 Harmonic 1;
+#X text 563 194 Harmonic 2;
+#X text 655 194 Harmonic 3;
+#X obj 386 27 vsl 15 128 20 20000 1 1 empty empty freq 0 -9 0 10 #fcfcfc
+#000000 #000000 3300 1;
+#X obj 491 29 vsl 15 128 20 20000 1 1 empty empty freq 0 -9 0 10 #fcfcfc
+#000000 #000000 4100 1;
+#X obj 579 31 vsl 15 128 20 20000 1 1 empty empty freq 0 -9 0 10 #fcfcfc
+#000000 #000000 6000 1;
+#X obj 670 29 vsl 15 128 20 20000 1 1 empty empty freq 0 -9 0 10 #fcfcfc
+#000000 #000000 7900 1;
+#X obj 422 28 vsl 15 128 0.01 1 1 1 empty empty level 0 -9 0 10 #fcfcfc
+#000000 #000000 12700 1;
+#X obj 387 246 *~ 1;
+#X obj 524 29 vsl 15 128 0.01 1 1 1 empty empty level 0 -9 0 10 #fcfcfc
+#000000 #000000 8300 1;
+#X obj 610 33 vsl 15 128 0.01 1 1 1 empty empty level 0 -9 0 10 #fcfcfc
+#000000 #000000 5900 1;
+#X obj 703 31 vsl 15 128 0.01 1 1 1 empty empty level 0 -9 0 10 #fcfcfc
+#000000 #000000 1800 1;
+#X text 11 29 Check the "Properties" for these sliders;
+#X text 11 47 Note how I have changed the upper and lower limits \,
+set initial values \, and also set them to output ona logarithmic scale!!!
+;
+#X obj 387 225 osc~ 220;
+#N canvas -1280 581 1037 504 oneshot_ADSR 0;
+#X obj 379 420 vline~;
+#X floatatom 361 133 5 0 10000 2 attack - - 0;
+#X floatatom 407 133 5 0 10000 2 decay - - 0;
+#X floatatom 448 133 5 0 1 2 sustain - - 0;
+#X floatatom 494 133 5 0 10000 2 release - - 0;
+#X obj 570 203 t b f;
+#X obj 570 228 +;
+#X obj 377 310 f;
+#X obj 320 289 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 229 289 click me ---->;
+#X text 621 244 This looks more complex than it is;
+#X text 623 290 1) attack time;
+#X text 623 306 2) sustain amount (0-->1 * max volume);
+#X text 623 322 3) decay time;
+#X text 622 338 4) amount of delay before decay portion of envelope
+starts (i.e. the attack time);
+#X text 622 366 5) release time;
+#X text 621 384 6) amount of delay before release portion of envelope
+starts (i.e. the attack time + the decay time);
+#X obj 355 54 loadbang;
+#X obj 355 75 t b b b b, f 33;
+#X text 616 420 This is the same as the order of values we gave the
+vline object in the previous examples \, but now we have interface
+objects to control the different values;
+#X msg 355 97 100;
+#X msg 419 99 500;
+#X msg 474 101 0.4;
+#X msg 534 102 600;
+#X text 614 196 We've seen this technique before \, here I'm making
+sure that whether I change the decay or release \, the delay before
+the release portion of the envelope is always correct;
+#X obj 378 337 pack 0 0 0 0 0, f 32;
+#X text 622 263 If we look at the variables for the message we can
+see that the values it receives are (working left to right);
+#X msg 379 395 1 \$1 \, \$3 \$2 \$1 \, 0 \$4 \$5;
+#X text 619 463 I chose to rearrange the variables within the message
+to keep the cabling tidier;
+#X obj 321 264 inlet;
+#X obj 379 456 outlet~;
+#X text 10 457 NOTE: We have to use dedicated outlet~ and inlet~ objects
+to route audio signals into or out of subpatchers/abstractions;
+#X connect 0 0 30 0;
+#X connect 1 0 7 1;
+#X connect 1 0 6 0;
+#X connect 2 0 5 0;
+#X connect 2 0 25 1;
+#X connect 3 0 25 2;
+#X connect 4 0 25 3;
+#X connect 5 0 6 0;
+#X connect 5 1 6 1;
+#X connect 6 0 25 4;
+#X connect 7 0 25 0;
+#X connect 8 0 7 0;
+#X connect 17 0 18 0;
+#X connect 18 0 20 0;
+#X connect 18 1 21 0;
+#X connect 18 2 22 0;
+#X connect 18 3 23 0;
+#X connect 20 0 1 0;
+#X connect 21 0 2 0;
+#X connect 22 0 3 0;
+#X connect 23 0 4 0;
+#X connect 25 0 27 0;
+#X connect 27 0 0 0;
+#X connect 29 0 8 0;
+#X coords 0 -1 1 1 200 60 1 350 100;
+#X restore 749 107 pd oneshot_ADSR;
+#X connect 0 0 31 0;
+#X connect 2 0 7 0;
+#X connect 3 0 2 0;
+#X connect 4 0 2 0;
+#X connect 5 0 2 0;
+#X connect 7 0 6 0;
+#X connect 7 0 6 1;
+#X connect 8 0 9 0;
+#X connect 9 0 10 0;
+#X connect 10 0 11 0;
+#X connect 11 0 7 1;
+#X connect 12 0 5 0;
+#X connect 13 0 4 0;
+#X connect 14 0 3 0;
+#X connect 19 0 30 0;
+#X connect 20 0 14 0;
+#X connect 21 0 13 0;
+#X connect 22 0 12 0;
+#X connect 23 0 24 1;
+#X connect 24 0 2 0;
+#X connect 26 0 4 1;
+#X connect 27 0 5 1;
+#X connect 30 0 24 0;
+#X connect 31 0 2 1;
+#X restore 392 487 pd additiveSynth_w/Interface;
+#X text 320 515 ------------------------------------------------------------
+;
+#X text 327 542 Experiment with more complex additive synthesis patches
+(e.g more oscillators \, or a different envelope for every harmonic)
+;
+#X obj 386 245 osc~ 220;
+#X text 382 214 Freq 1;
+#X text 474 214 Freq 2;
+#X text 562 214 Freq 3;
+#X text 654 214 Freq 4;
+#X text 16 266 NOTE:;
+#N canvas -1280 23 1037 504 oneshot_ADSR 0;
+#X obj 379 420 vline~;
+#X floatatom 361 133 5 0 10000 2 attack - - 0;
+#X floatatom 407 133 5 0 10000 2 decay - - 0;
+#X floatatom 448 133 5 0 1 2 sustain - - 0;
+#X floatatom 494 133 5 0 10000 2 release - - 0;
+#X obj 570 203 t b f;
+#X obj 570 228 +;
+#X obj 377 310 f;
+#X obj 320 289 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 229 289 click me ---->;
+#X text 621 244 This looks more complex than it is;
+#X text 623 290 1) attack time;
+#X text 623 306 2) sustain amount (0-->1 * max volume);
+#X text 623 322 3) decay time;
+#X text 622 338 4) amount of delay before decay portion of envelope
+starts (i.e. the attack time);
+#X text 622 366 5) release time;
+#X text 621 384 6) amount of delay before release portion of envelope
+starts (i.e. the attack time + the decay time);
+#X obj 355 54 loadbang;
+#X obj 355 75 t b b b b, f 33;
+#X text 616 420 This is the same as the order of values we gave the
+vline object in the previous examples \, but now we have interface
+objects to control the different values;
+#X msg 355 97 100;
+#X msg 419 99 500;
+#X msg 474 101 0.4;
+#X msg 534 102 600;
+#X text 614 196 We've seen this technique before \, here I'm making
+sure that whether I change the decay or release \, the delay before
+the release portion of the envelope is always correct;
+#X obj 378 337 pack 0 0 0 0 0, f 32;
+#X text 622 263 If we look at the variables for the message we can
+see that the values it receives are (working left to right);
+#X msg 379 395 1 \$1 \, \$3 \$2 \$1 \, 0 \$4 \$5;
+#X text 619 463 I chose to rearrange the variables within the message
+to keep the cabling tidier;
+#X obj 321 264 inlet;
+#X obj 379 456 outlet~;
+#X text 10 457 NOTE: We have to use dedicated outlet~ and inlet~ objects
+to route audio signals into or out of subpatchers/abstractions;
+#X connect 0 0 30 0;
+#X connect 1 0 7 1;
+#X connect 1 0 6 0;
+#X connect 2 0 5 0;
+#X connect 2 0 25 1;
+#X connect 3 0 25 2;
+#X connect 4 0 25 3;
+#X connect 5 0 6 0;
+#X connect 5 1 6 1;
+#X connect 6 0 25 4;
+#X connect 7 0 25 0;
+#X connect 8 0 7 0;
+#X connect 17 0 18 0;
+#X connect 18 0 20 0;
+#X connect 18 1 21 0;
+#X connect 18 2 22 0;
+#X connect 18 3 23 0;
+#X connect 20 0 1 0;
+#X connect 21 0 2 0;
+#X connect 22 0 3 0;
+#X connect 23 0 4 0;
+#X connect 25 0 27 0;
+#X connect 27 0 0 0;
+#X connect 29 0 8 0;
+#X coords 0 -1 1 1 200 60 1 350 100;
+#X restore 748 124 pd oneshot_ADSR;
+#X connect 0 0 34 0;
+#X connect 2 0 9 0;
+#X connect 5 0 2 0;
+#X connect 6 0 2 0;
+#X connect 7 0 2 0;
+#X connect 9 0 8 0;
+#X connect 9 0 8 1;
+#X connect 10 0 11 0;
+#X connect 11 0 12 0;
+#X connect 12 0 13 0;
+#X connect 13 0 9 1;
+#X connect 15 0 7 0;
+#X connect 16 0 6 0;
+#X connect 17 0 5 0;
+#X connect 28 0 2 0;
+#X connect 34 0 2 1;
+#X restore 154 153 pd additive_synthesis;
+#X text 298 176 <---- Click me;
+#N canvas 0 194 1032 684 additive_synthesis_2 0;
+#X obj 740 111 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 766 109 <--- click me;
+#X obj 378 314 *~, f 61;
+#X obj 650 278 *~ 0.25, f 12;
+#X obj 377 366 dac~;
+#X obj 378 338 *~, f 98;
+#X obj 966 131 vsl 15 128 0 127 0 1 empty empty empty 0 -9 0 10 #fcfcfc
+#000000 #000000 8100 1;
+#X floatatom 966 267 5 0 0 0 - - - 0;
+#X obj 966 287 / 127;
+#X floatatom 966 308 5 0 0 0 - - - 0;
+#X text 955 113 Volume;
+#X text 336 384 ------------------------------------------------------------
+;
+#X text 68 42 A sawtooth wave consists of the fundamental (the basic
+frequency or what we might consider the pitch) and a series (technically
+an infinite number) of higher frequencies;
+#X obj 379 278 *~ 1;
+#X text 68 83 To create a square wave our fundamental has a frequencuy
+of 1*f and an amplitude of 1 (i.e. "*~ 1");
+#X text 67 110 The second oscillator needs a frequency of 2*f \, and
+an amplitude of 1/2 (i.e. "*~ 0.5" or "~ 2";
+#X text 67 136 The third oscillator needs a frequency of 3*f \, and
+an amplitude of 1/3 (i.e. "*~ 0.33333" or "~ 3");
+#X obj 473 278 *~ 0.5, f 10;
+#X obj 562 277 *~ 0.333333;
+#X obj 379 257 osc~ 110;
+#X obj 473 257 osc~ 220;
+#X obj 562 256 osc~ 330;
+#X obj 650 256 osc~ 440;
+#X text 467 226 Freq 2;
+#X text 555 226 Freq 3;
+#X text 647 226 Freq 4;
+#X text 379 225 Freq 1;
+#X text 365 239 (fundamental);
+#X text 68 167 and this pattern continues until you run out of oscillators
+(the more oscillators the closer you will get to an ideal sawtooth
+wave);
+#X text 68 207 I'm only using 4 out of laziness...;
+#X text 82 405 Create an additive synthesis patch for each of the following
+fundamental waveforms;
+#X text 82 434 square wave - only odd multiples of fundamental (1 \,
+3 \, 5 \, 7 \, 9 \, etc) and amplitude is 1/multiple (i.e. if frequency
+is 5*f \, them ampltiude is 1/5;
+#N canvas 26 443 732 348 squareWave_AS 0;
+#X obj 396 2 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X text 422 0 <--- click me;
+#X obj 34 205 *~, f 61;
+#X obj 33 257 dac~;
+#X obj 34 229 *~, f 98;
+#X obj 622 22 vsl 15 128 0 127 0 1 empty empty empty 0 -9 0 10 #fcfcfc
+#000000 #000000 8100 1;
+#X floatatom 622 158 5 0 0 0 - - - 0;
+#X obj 622 178 / 127;
+#X floatatom 622 199 5 0 0 0 - - - 0;
+#X text 611 4 Volume;
+#X obj 35 169 *~ 1;
+#X obj 35 148 osc~ 110;
+#X text 123 117 Freq 2;
+#X text 211 117 Freq 3;
+#X text 303 117 Freq 4;
+#X text 35 116 Freq 1;
+#X text 21 130 (fundamental);
+#X obj 129 148 osc~ 330;
+#X obj 129 169 /~ 3, f 10;
+#X obj 218 168 /~ 5;
+#X obj 306 169 /~ 7, f 12;
+#X obj 306 147 osc~ 770;
+#X obj 218 147 osc~ 550;
+#X text 25 7 Only odd frequencies (f1 = 110 \, f2 = 330 (f1*3) \, f3
+= 550 (f1*5) \, f4 = 770 (f1*7));
+#X text 25 44 Amplitudes for each frequency is 1/multiple (so f2 was
+f1*3 \, therefore a2 = 1/3);
+#N canvas -1280 23 1037 504 oneshot_ADSR 0;
+#X obj 379 420 vline~;
+#X floatatom 361 133 5 0 10000 2 attack - - 0;
+#X floatatom 407 133 5 0 10000 2 decay - - 0;
+#X floatatom 448 133 5 0 1 2 sustain - - 0;
+#X floatatom 494 133 5 0 10000 2 release - - 0;
+#X obj 570 203 t b f;
+#X obj 570 228 +;
+#X obj 377 310 f;
+#X obj 320 289 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 229 289 click me ---->;
+#X text 621 244 This looks more complex than it is;
+#X text 623 290 1) attack time;
+#X text 623 306 2) sustain amount (0-->1 * max volume);
+#X text 623 322 3) decay time;
+#X text 622 338 4) amount of delay before decay portion of envelope
+starts (i.e. the attack time);
+#X text 622 366 5) release time;
+#X text 621 384 6) amount of delay before release portion of envelope
+starts (i.e. the attack time + the decay time);
+#X obj 355 54 loadbang;
+#X obj 355 75 t b b b b, f 33;
+#X text 616 420 This is the same as the order of values we gave the
+vline object in the previous examples \, but now we have interface
+objects to control the different values;
+#X msg 355 97 100;
+#X msg 419 99 500;
+#X msg 474 101 0.4;
+#X msg 534 102 600;
+#X text 614 196 We've seen this technique before \, here I'm making
+sure that whether I change the decay or release \, the delay before
+the release portion of the envelope is always correct;
+#X obj 378 337 pack 0 0 0 0 0, f 32;
+#X text 622 263 If we look at the variables for the message we can
+see that the values it receives are (working left to right);
+#X msg 379 395 1 \$1 \, \$3 \$2 \$1 \, 0 \$4 \$5;
+#X text 619 463 I chose to rearrange the variables within the message
+to keep the cabling tidier;
+#X obj 321 264 inlet;
+#X obj 379 456 outlet~;
+#X text 10 457 NOTE: We have to use dedicated outlet~ and inlet~ objects
+to route audio signals into or out of subpatchers/abstractions;
+#X connect 0 0 30 0;
+#X connect 1 0 7 1;
+#X connect 1 0 6 0;
+#X connect 2 0 5 0;
+#X connect 2 0 25 1;
+#X connect 3 0 25 2;
+#X connect 4 0 25 3;
+#X connect 5 0 6 0;
+#X connect 5 1 6 1;
+#X connect 6 0 25 4;
+#X connect 7 0 25 0;
+#X connect 8 0 7 0;
+#X connect 17 0 18 0;
+#X connect 18 0 20 0;
+#X connect 18 1 21 0;
+#X connect 18 2 22 0;
+#X connect 18 3 23 0;
+#X connect 20 0 1 0;
+#X connect 21 0 2 0;
+#X connect 22 0 3 0;
+#X connect 23 0 4 0;
+#X connect 25 0 27 0;
+#X connect 27 0 0 0;
+#X connect 29 0 8 0;
+#X coords 0 -1 1 1 200 60 1 350 100;
+#X restore 404 34 pd oneshot_ADSR;
+#X connect 0 0 25 0;
+#X connect 2 0 4 0;
+#X connect 4 0 3 0;
+#X connect 4 0 3 1;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 7 0 8 0;
+#X connect 8 0 4 1;
+#X connect 10 0 2 0;
+#X connect 11 0 10 0;
+#X connect 17 0 18 0;
+#X connect 18 0 2 0;
+#X connect 19 0 2 0;
+#X connect 20 0 2 0;
+#X connect 21 0 20 0;
+#X connect 22 0 19 0;
+#X connect 25 0 2 1;
+#X restore 465 435 pd squareWave_AS;
+#N canvas 0 23 732 348 triWave_AS 0;
+#X obj 396 2 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X text 422 0 <--- click me;
+#X obj 34 205 *~, f 61;
+#X obj 33 257 dac~;
+#X obj 34 229 *~, f 98;
+#X obj 622 22 vsl 15 128 0 127 0 1 empty empty empty 0 -9 0 10 #fcfcfc
+#000000 #000000 8100 1;
+#X floatatom 622 158 5 0 0 0 - - - 0;
+#X obj 622 178 / 127;
+#X floatatom 622 199 5 0 0 0 - - - 0;
+#X text 611 4 Volume;
+#X obj 35 109 *~ 1;
+#X obj 35 88 osc~ 110;
+#X text 123 57 Freq 2;
+#X text 211 57 Freq 3;
+#X text 303 57 Freq 4;
+#X text 35 56 Freq 1;
+#X text 21 70 (fundamental);
+#X obj 129 88 osc~ 330;
+#X obj 306 87 osc~ 770;
+#X obj 218 87 osc~ 550;
+#X obj 218 108 /~ 25;
+#N canvas -1280 23 1037 504 oneshot_ADSR 0;
+#X obj 379 420 vline~;
+#X floatatom 361 133 5 0 10000 2 attack - - 0;
+#X floatatom 407 133 5 0 10000 2 decay - - 0;
+#X floatatom 448 133 5 0 1 2 sustain - - 0;
+#X floatatom 494 133 5 0 10000 2 release - - 0;
+#X obj 570 203 t b f;
+#X obj 570 228 +;
+#X obj 377 310 f;
+#X obj 320 289 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 229 289 click me ---->;
+#X text 621 244 This looks more complex than it is;
+#X text 623 290 1) attack time;
+#X text 623 306 2) sustain amount (0-->1 * max volume);
+#X text 623 322 3) decay time;
+#X text 622 338 4) amount of delay before decay portion of envelope
+starts (i.e. the attack time);
+#X text 622 366 5) release time;
+#X text 621 384 6) amount of delay before release portion of envelope
+starts (i.e. the attack time + the decay time);
+#X obj 355 54 loadbang;
+#X obj 355 75 t b b b b, f 33;
+#X text 616 420 This is the same as the order of values we gave the
+vline object in the previous examples \, but now we have interface
+objects to control the different values;
+#X msg 355 97 100;
+#X msg 419 99 500;
+#X msg 474 101 0.4;
+#X msg 534 102 600;
+#X text 614 196 We've seen this technique before \, here I'm making
+sure that whether I change the decay or release \, the delay before
+the release portion of the envelope is always correct;
+#X obj 378 337 pack 0 0 0 0 0, f 32;
+#X text 622 263 If we look at the variables for the message we can
+see that the values it receives are (working left to right);
+#X msg 379 395 1 \$1 \, \$3 \$2 \$1 \, 0 \$4 \$5;
+#X text 619 463 I chose to rearrange the variables within the message
+to keep the cabling tidier;
+#X obj 321 264 inlet;
+#X obj 379 456 outlet~;
+#X text 10 457 NOTE: We have to use dedicated outlet~ and inlet~ objects
+to route audio signals into or out of subpatchers/abstractions;
+#X connect 0 0 30 0;
+#X connect 1 0 7 1;
+#X connect 1 0 6 0;
+#X connect 2 0 5 0;
+#X connect 2 0 25 1;
+#X connect 3 0 25 2;
+#X connect 4 0 25 3;
+#X connect 5 0 6 0;
+#X connect 5 1 6 1;
+#X connect 6 0 25 4;
+#X connect 7 0 25 0;
+#X connect 8 0 7 0;
+#X connect 17 0 18 0;
+#X connect 18 0 20 0;
+#X connect 18 1 21 0;
+#X connect 18 2 22 0;
+#X connect 18 3 23 0;
+#X connect 20 0 1 0;
+#X connect 21 0 2 0;
+#X connect 22 0 3 0;
+#X connect 23 0 4 0;
+#X connect 25 0 27 0;
+#X connect 27 0 0 0;
+#X connect 29 0 8 0;
+#X coords 0 -1 1 1 200 60 1 350 100;
+#X restore 404 34 pd oneshot_ADSR;
+#X obj 129 109 /~ -9, f 10;
+#X obj 306 109 /~ -49, f 12;
+#X connect 0 0 21 0;
+#X connect 2 0 4 0;
+#X connect 4 0 3 0;
+#X connect 4 0 3 1;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 7 0 8 0;
+#X connect 8 0 4 1;
+#X connect 10 0 2 0;
+#X connect 11 0 10 0;
+#X connect 17 0 22 0;
+#X connect 18 0 23 0;
+#X connect 19 0 20 0;
+#X connect 20 0 2 0;
+#X connect 21 0 2 1;
+#X connect 22 0 2 0;
+#X connect 23 0 2 0;
+#X restore 466 478 pd triWave_AS;
+#X text 83 477 triand wave - only odd multiples of fundamental (1 \,
+3 \, 5 \, 7 \, 9 \, etc) and amplitude is 1/(multiple*multiple) (i.e.
+if frequency is 5*f \, them ampltiude is 1/25;
+#X text 69 10 In this patch we will create one of the fundamental waveforms
+--> a sawtooth wave;
+#X text 339 525 ------------------------------------------------------------
+;
+#X text 84 594 The user should also be able to change the fundamental
+frequency (the harmonics should automatically change frequency with
+the fundamental - i.e. the same fundamental waveform but starting at
+a different frequency;
+#N canvas 372 63 726 515 fundamental_waveforms_AS 0;
+#X obj 445 100 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 472 98 <--- click me;
+#X obj 245 383 dac~;
+#X obj 246 340 *~, f 24;
+#X obj 672 120 vsl 15 128 0 127 0 1 empty empty empty 0 -9 0 10 #fcfcfc
+#000000 #000000 6900 1;
+#X floatatom 672 256 5 0 0 0 - - - 0;
+#X obj 672 276 / 127;
+#X floatatom 672 297 5 0 0 0 - - - 0;
+#X text 661 102 Volume;
+#X obj 93 111 vradio 15 1 0 4 empty empty empty 0 -8 0 10 #fcfcfc #000000
+#000000 0;
+#X text 113 109 Sine;
+#X text 113 125 Sawtooth;
+#X text 114 141 Square;
+#X text 114 157 Triangle;
+#X obj 246 118 vsl 15 128 20 20000 1 1 empty empty fundamental_frequency
+0 -9 0 10 #fcfcfc #000000 #000000 4000 1;
+#N canvas 0 23 814 329 waveformChangeLogic 0;
+#X obj 37 37 inlet;
+#X obj 38 72 sel 0 1 2 3, f 78;
+#X msg 38 116 0, f 4;
+#X msg 143 120 2, f 1;
+#X msg 160 120 3, f 1;
+#X msg 178 120 4, f 1;
+#X obj 92 151 s f2mult;
+#X obj 148 150 s f3mult;
+#X obj 204 151 s f4mult;
+#X obj 15 255 s a2mult;
+#X obj 72 256 s a3mult;
+#X obj 129 257 s a4mult;
+#X obj 83 170 s a2mult;
+#X obj 140 171 s a3mult;
+#X obj 197 172 s a4mult;
+#X obj 276 155 s f2mult;
+#X obj 332 154 s f3mult;
+#X obj 388 155 s f4mult;
+#X obj 267 174 s a2mult;
+#X obj 324 175 s a3mult;
+#X obj 381 176 s a4mult;
+#X msg 285 120 3, f 1;
+#X msg 302 120 5, f 1;
+#X msg 320 120 7, f 1;
+#X obj 453 215 s f2mult;
+#X obj 509 214 s f3mult;
+#X obj 565 215 s f4mult;
+#X msg 468 155 3, f 1;
+#X msg 485 155 5, f 1;
+#X msg 503 155 7, f 1;
+#X obj 621 215 s a2mult;
+#X obj 678 216 s a3mult;
+#X obj 735 217 s a4mult;
+#X msg 622 153 25, f 2;
+#X text 213 6 0 - sine;
+#X text 213 20 1 - saw;
+#X text 213 34 2 - square;
+#X text 213 49 3 - triangle;
+#X text 405 12 This just triggers the required frequency and amplitude
+multipliers for each waveform and sends them via send objects;
+#X text 50 94 0 - sine;
+#X text 171 95 1 - saw;
+#X text 307 93 2 - square;
+#X text 464 91 3 - triangle;
+#X msg 565 153 -9;
+#X msg 683 153 -49, f 4;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 1 1 3 0;
+#X connect 1 1 4 0;
+#X connect 1 1 5 0;
+#X connect 1 2 21 0;
+#X connect 1 2 22 0;
+#X connect 1 2 23 0;
+#X connect 1 3 27 0;
+#X connect 1 3 28 0;
+#X connect 1 3 29 0;
+#X connect 1 3 43 0;
+#X connect 1 3 33 0;
+#X connect 1 3 44 0;
+#X connect 2 0 9 0;
+#X connect 2 0 10 0;
+#X connect 2 0 11 0;
+#X connect 3 0 6 0;
+#X connect 3 0 12 0;
+#X connect 4 0 7 0;
+#X connect 4 0 13 0;
+#X connect 5 0 8 0;
+#X connect 5 0 14 0;
+#X connect 21 0 15 0;
+#X connect 21 0 18 0;
+#X connect 22 0 16 0;
+#X connect 22 0 19 0;
+#X connect 23 0 17 0;
+#X connect 23 0 20 0;
+#X connect 27 0 24 0;
+#X connect 28 0 25 0;
+#X connect 29 0 26 0;
+#X connect 33 0 31 0;
+#X connect 43 0 30 0;
+#X connect 44 0 32 0;
+#X restore 93 176 pd waveformChangeLogic;
+#N canvas 0 23 710 481 4oscAddSynth 0;
+#X obj 46 8 inlet;
+#X obj 46 282 *~ 1;
+#X obj 46 261 osc~ 110;
+#X text 134 230 Freq 2;
+#X text 222 230 Freq 3;
+#X text 314 230 Freq 4;
+#X text 46 229 Freq 1;
+#X text 32 243 (fundamental);
+#X obj 140 261 osc~ 330;
+#X obj 140 282 /~ 3, f 12;
+#X obj 229 281 /~ 5, f 12;
+#X obj 317 282 /~ 7, f 12;
+#X obj 317 260 osc~ 770;
+#X obj 229 260 osc~ 550;
+#X floatatom 46 34 5 0 0 0 - - - 0;
+#X obj 148 142 *;
+#X obj 231 142 *;
+#X obj 317 141 *;
+#X floatatom 167 168 5 0 0 0 - - - 0;
+#X floatatom 246 163 5 0 0 0 - - - 0;
+#X floatatom 328 163 5 0 0 0 - - - 0;
+#X obj 105 113 r f2mult;
+#X obj 184 111 r f3mult;
+#X obj 274 110 r f4mult;
+#X obj 178 206 r a2mult;
+#X obj 256 208 r a3mult;
+#X obj 348 206 r a4mult;
+#X text 80 33 Frequency;
+#X obj 46 347 outlet~, f 9;
+#X obj 46 54 t f f f f, f 52;
+#X text 117 346 NOTE: there are special inlet~ and outlet~ objects
+for routing audio signals into and out of subpatchers/abstractions
+;
+#X connect 0 0 14 0;
+#X connect 1 0 28 0;
+#X connect 2 0 1 0;
+#X connect 8 0 9 0;
+#X connect 9 0 28 0;
+#X connect 10 0 28 0;
+#X connect 11 0 28 0;
+#X connect 12 0 11 0;
+#X connect 13 0 10 0;
+#X connect 14 0 29 0;
+#X connect 15 0 8 0;
+#X connect 15 0 18 0;
+#X connect 16 0 13 0;
+#X connect 16 0 19 0;
+#X connect 17 0 12 0;
+#X connect 17 0 20 0;
+#X connect 21 0 15 0;
+#X connect 22 0 16 0;
+#X connect 23 0 17 0;
+#X connect 24 0 9 1;
+#X connect 25 0 10 1;
+#X connect 26 0 11 1;
+#X connect 29 0 2 0;
+#X connect 29 1 15 1;
+#X connect 29 2 16 1;
+#X connect 29 3 17 1;
+#X restore 246 254 pd 4oscAddSynth;
+#X obj 246 275 *~, f 21;
+#X text 154 253 click me ---->;
+#X text 0 176 click me ---->;
+#X text 61 12 This patch just uses a radiobutton object to allow the
+user to change between waveforms;
+#X text 61 41 Note how I have use "*" \, *~" \, and "~" objects to
+minimise the interface down to just the waveform type and the fundamental
+frequency;
+#N canvas -1280 23 1037 504 oneshot_ADSR 0;
+#X obj 379 420 vline~;
+#X floatatom 361 133 5 0 10000 2 attack - - 0;
+#X floatatom 407 133 5 0 10000 2 decay - - 0;
+#X floatatom 448 133 5 0 1 2 sustain - - 0;
+#X floatatom 494 133 5 0 10000 2 release - - 0;
+#X obj 570 203 t b f;
+#X obj 570 228 +;
+#X obj 377 310 f;
+#X obj 320 289 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 229 289 click me ---->;
+#X text 621 244 This looks more complex than it is;
+#X text 623 290 1) attack time;
+#X text 623 306 2) sustain amount (0-->1 * max volume);
+#X text 623 322 3) decay time;
+#X text 622 338 4) amount of delay before decay portion of envelope
+starts (i.e. the attack time);
+#X text 622 366 5) release time;
+#X text 621 384 6) amount of delay before release portion of envelope
+starts (i.e. the attack time + the decay time);
+#X obj 355 54 loadbang;
+#X obj 355 75 t b b b b, f 33;
+#X text 616 420 This is the same as the order of values we gave the
+vline object in the previous examples \, but now we have interface
+objects to control the different values;
+#X msg 355 97 100;
+#X msg 419 99 500;
+#X msg 474 101 0.4;
+#X msg 534 102 600;
+#X text 614 196 We've seen this technique before \, here I'm making
+sure that whether I change the decay or release \, the delay before
+the release portion of the envelope is always correct;
+#X obj 378 337 pack 0 0 0 0 0, f 32;
+#X text 622 263 If we look at the variables for the message we can
+see that the values it receives are (working left to right);
+#X msg 379 395 1 \$1 \, \$3 \$2 \$1 \, 0 \$4 \$5;
+#X text 619 463 I chose to rearrange the variables within the message
+to keep the cabling tidier;
+#X obj 321 264 inlet;
+#X obj 379 456 outlet~;
+#X text 10 457 NOTE: We have to use dedicated outlet~ and inlet~ objects
+to route audio signals into or out of subpatchers/abstractions;
+#X connect 0 0 30 0;
+#X connect 1 0 7 1;
+#X connect 1 0 6 0;
+#X connect 2 0 5 0;
+#X connect 2 0 25 1;
+#X connect 3 0 25 2;
+#X connect 4 0 25 3;
+#X connect 5 0 6 0;
+#X connect 5 1 6 1;
+#X connect 6 0 25 4;
+#X connect 7 0 25 0;
+#X connect 8 0 7 0;
+#X connect 17 0 18 0;
+#X connect 18 0 20 0;
+#X connect 18 1 21 0;
+#X connect 18 2 22 0;
+#X connect 18 3 23 0;
+#X connect 20 0 1 0;
+#X connect 21 0 2 0;
+#X connect 22 0 3 0;
+#X connect 23 0 4 0;
+#X connect 25 0 27 0;
+#X connect 27 0 0 0;
+#X connect 29 0 8 0;
+#X coords 0 -1 1 1 200 60 1 350 100;
+#X restore 443 124 pd oneshot_ADSR;
+#X connect 0 0 22 0;
+#X connect 3 0 2 0;
+#X connect 3 0 2 1;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 7 0 3 1;
+#X connect 9 0 15 0;
+#X connect 14 0 16 0;
+#X connect 16 0 17 0;
+#X connect 17 0 3 0;
+#X connect 22 0 17 1;
+#X restore 493 596 pd fundamental_waveforms_AS;
+#X text 84 544 Create an additive synthesis patch with a user interface
+that allwaos the user to click buttons in order to change between the
+different fundamental waveforms (sine \, square \, sawtooth \, triangle)
+;
+#N canvas -1280 23 1037 504 oneshot_ADSR 0;
+#X obj 379 420 vline~;
+#X floatatom 361 133 5 0 10000 2 attack - - 0;
+#X floatatom 407 133 5 0 10000 2 decay - - 0;
+#X floatatom 448 133 5 0 1 2 sustain - - 0;
+#X floatatom 494 133 5 0 10000 2 release - - 0;
+#X obj 570 203 t b f;
+#X obj 570 228 +;
+#X obj 377 310 f;
+#X obj 320 289 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 229 289 click me ---->;
+#X text 621 244 This looks more complex than it is;
+#X text 623 290 1) attack time;
+#X text 623 306 2) sustain amount (0-->1 * max volume);
+#X text 623 322 3) decay time;
+#X text 622 338 4) amount of delay before decay portion of envelope
+starts (i.e. the attack time);
+#X text 622 366 5) release time;
+#X text 621 384 6) amount of delay before release portion of envelope
+starts (i.e. the attack time + the decay time);
+#X obj 355 54 loadbang;
+#X obj 355 75 t b b b b, f 33;
+#X text 616 420 This is the same as the order of values we gave the
+vline object in the previous examples \, but now we have interface
+objects to control the different values;
+#X msg 355 97 100;
+#X msg 419 99 500;
+#X msg 474 101 0.4;
+#X msg 534 102 600;
+#X text 614 196 We've seen this technique before \, here I'm making
+sure that whether I change the decay or release \, the delay before
+the release portion of the envelope is always correct;
+#X obj 378 337 pack 0 0 0 0 0, f 32;
+#X text 622 263 If we look at the variables for the message we can
+see that the values it receives are (working left to right);
+#X msg 379 395 1 \$1 \, \$3 \$2 \$1 \, 0 \$4 \$5;
+#X text 619 463 I chose to rearrange the variables within the message
+to keep the cabling tidier;
+#X obj 321 264 inlet;
+#X obj 379 456 outlet~;
+#X text 10 457 NOTE: We have to use dedicated outlet~ and inlet~ objects
+to route audio signals into or out of subpatchers/abstractions;
+#X connect 0 0 30 0;
+#X connect 1 0 7 1;
+#X connect 1 0 6 0;
+#X connect 2 0 5 0;
+#X connect 2 0 25 1;
+#X connect 3 0 25 2;
+#X connect 4 0 25 3;
+#X connect 5 0 6 0;
+#X connect 5 1 6 1;
+#X connect 6 0 25 4;
+#X connect 7 0 25 0;
+#X connect 8 0 7 0;
+#X connect 17 0 18 0;
+#X connect 18 0 20 0;
+#X connect 18 1 21 0;
+#X connect 18 2 22 0;
+#X connect 18 3 23 0;
+#X connect 20 0 1 0;
+#X connect 21 0 2 0;
+#X connect 22 0 3 0;
+#X connect 23 0 4 0;
+#X connect 25 0 27 0;
+#X connect 27 0 0 0;
+#X connect 29 0 8 0;
+#X coords 0 -1 1 1 200 60 1 350 100;
+#X restore 740 132 pd oneshot_ADSR;
+#X connect 0 0 40 0;
+#X connect 2 0 5 0;
+#X connect 3 0 2 0;
+#X connect 5 0 4 0;
+#X connect 5 0 4 1;
+#X connect 6 0 7 0;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 5 1;
+#X connect 13 0 2 0;
+#X connect 17 0 2 0;
+#X connect 18 0 2 0;
+#X connect 19 0 13 0;
+#X connect 20 0 17 0;
+#X connect 21 0 18 0;
+#X connect 22 0 3 0;
+#X connect 40 0 2 1;
+#X restore 155 177 pd additive_synthesis_2;
+#X text 110 199 ------------------------------------------------------------
+;
+#X text 352 250 <---- Click me;
+#X text 135 217 Receiving MIDI notes to trigger our Additive Synthesiser
+;
+#N canvas -1280 581 457 449 audio_envelopes_&_MIDI_Triggers 0;
+#X text 21 207 ------------------------------------------------------------
+;
+#N canvas -1205 581 1082 657 additive_synth_MIDI 0;
+#X obj 34 541 dac~;
+#X obj 34 426 makenote 100 500, f 56;
+#X obj 574 327 makenote 100 100;
+#X obj 574 354 noteout 10, f 32;
+#X obj 574 86 drumMachine_sjf synth;
+#X obj 34 23 conductor_sjf 250 16;
+#X obj 574 20 conductor_sjf 125 16;
+#X obj 395 36 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X text 376 465 <----- my previous examples combined in one abstraction
+;
+#X obj 34 456 basic_AS_sjf~;
+#X obj 34 88 stpSeq16_sjf;
+#X connect 1 0 9 0;
+#X connect 1 1 9 1;
+#X connect 2 0 3 0;
+#X connect 2 1 3 1;
+#X connect 4 0 2 0;
+#X connect 5 0 10 0;
+#X connect 6 0 4 0;
+#X connect 7 0 6 0;
+#X connect 7 0 5 0;
+#X connect 9 0 0 0;
+#X connect 9 0 0 1;
+#X connect 10 0 1 0;
+#X restore 93 291 pd additive_synth_MIDI;
+#X text 19 225 Create an additive synthesiser patch that receives MIDI
+note on and note off message;
+#N canvas -1280 303 1280 618 MIDI_Velocity_triggers 0;
+#X obj 485 505 osc~ 220;
+#X obj 467 582 dac~;
+#X obj 467 526 *~;
+#X text 800 10 (We will also want to scale our maximum amplitude so
+that a MIDI Velocity of 127 creates a louder note than a MIDI Velocity
+of 60);
+#X obj 467 480 vline~, f 18;
+#X floatatom 353 219 5 1 10000 2 attack - - 0;
+#X floatatom 399 219 5 1 10000 2 decay - - 0;
+#X floatatom 440 219 5 0 1 2 sustain - - 0;
+#X floatatom 486 219 5 1 10000 2 release - - 0;
+#X obj 343 115 loadbang;
+#X obj 343 136 t b b b b, f 33;
+#X obj 826 256 / 127;
+#X text 869 281 MIDI Velocities are 0 --> 127 \, so by dividing by
+127 I get between 0 --> 1 for the amplitude;
+#X obj 799 256 t b;
+#X obj 799 413 f;
+#X msg 799 447 0 \$1;
+#X obj 799 216 sel 0;
+#X msg 467 451 \$1 \$2 \, \$4 \$3 \$2;
+#X obj 467 427 pack 0 0 0 0, f 15;
+#X obj 852 356 *;
+#X obj 826 315 t f f;
+#X text 845 217 1 - When a MIDI velosity is received we check whether
+it is note on/off;
+#X text 669 269 then trigger release;
+#X text 887 381 So I multiply the amplitude value (0-->1) by the sustain
+value and use that for the sustain;
+#X text 607 318 value (0-->1) out the left outlet;
+#X text 80 488 then to go to the sustain level (\$4) over the length
+of the decay (\$3) after waiting for the attack to finish (\$2);
+#X text 869 256 2 - If MIDI velocity received is greater than 0 it
+is a note on so we work out the maximum amplitude (between 0 --> 1)
+;
+#X text 866 315 3 - the trigger outputs the amplitude value (0-->1)
+out the right outlet;
+#X text 888 353 4 - sustain is the proportion of the maximumamplitude
+the level drops to;
+#X text 599 304 5 - the trigger outputs the amplitude;
+#X text 77 421 6 - The amplitude value is used as the maximum amplitude
+and causes the pack to output it's list;
+#X text 80 460 7 - the message tells the vline to go to maximum amplitude
+(\$1) over the length of the attack (\$2);
+#X text 641 253 8 - if MIDI velocity = 0;
+#X text 838 445 10 - at end of release there should be silence so this
+message tells the vline~ to go to 0 in x milliseconds;
+#X msg 522 163 400;
+#X text 831 412 9 - length of release is stored using "float" and triggered
+when a MIDI Note off is received (step 8);
+#X msg 724 172 100;
+#X msg 756 172 127;
+#X msg 694 172 40;
+#X msg 880 173 0;
+#X obj 467 553 *~ 0.4;
+#X msg 462 162 0.6;
+#X msg 343 158 50;
+#X msg 407 160 500;
+#X text 689 137 MIDI Note-On;
+#X text 653 155 (Velocity greater than 0);
+#X text 854 137 MIDI Note-Off;
+#X text 833 153 (Velocity equals 0);
+#X text 542 504 <--- The sound source;
+#X text 441 543 |;
+#X text 441 554 |;
+#X text 441 565 |;
+#X text 441 576 |;
+#X text 441 587 |;
+#X text 441 498 |;
+#X text 441 509 |;
+#X text 441 520 |;
+#X text 441 531 |;
+#X text 446 596 ------------------------------------------;
+#X text 444 491 ------------------------------------------;
+#X text 694 545 |;
+#X text 694 556 |;
+#X text 694 567 |;
+#X text 694 578 |;
+#X text 694 589 |;
+#X text 694 500 |;
+#X text 694 511 |;
+#X text 694 522 |;
+#X text 694 533 |;
+#X text 957 166 |;
+#X text 957 177 |;
+#X text 957 188 |;
+#X text 957 121 |;
+#X text 957 132 |;
+#X text 957 143 |;
+#X text 957 154 |;
+#X text 632 115 -------------------------------------------------------
+;
+#X text 630 168 |;
+#X text 630 179 |;
+#X text 630 190 |;
+#X text 630 123 |;
+#X text 630 134 |;
+#X text 630 145 |;
+#X text 630 156 |;
+#X text 631 195 -------------------------------------------------------
+;
+#X text 30 18 When creating oneshot envelopes we knew the entire length
+of the envelope at the beginning;
+#X text 30 44 This meant that we could trigger the entire envelope
+at the beginning of the note;
+#X text 422 15 When receieving MIDI notes (e.g. from a MIDI keyboard)
+we don't know in advance when the note off message will be received
+;
+#X text 420 53 So we want to trigger the attack decay sustain portions
+of the envelope on a note-on message (MIDI Velocity greater than 0
+\, e.g. key pressed on keyboard);
+#X text 802 46 Then when we receive a note-off message (MIDI Velocity
+0 \, e.g. key released on keyboard) we trigger the release portion
+;
+#X text 804 83 (NOTE: I have kept the pitch fixed in this example to
+focus on the envelope);
+#X connect 0 0 2 1;
+#X connect 2 0 40 0;
+#X connect 4 0 2 0;
+#X connect 5 0 18 1;
+#X connect 6 0 18 2;
+#X connect 7 0 19 1;
+#X connect 8 0 14 1;
+#X connect 9 0 10 0;
+#X connect 10 0 42 0;
+#X connect 10 1 43 0;
+#X connect 10 2 41 0;
+#X connect 10 3 34 0;
+#X connect 11 0 20 0;
+#X connect 13 0 14 0;
+#X connect 14 0 15 0;
+#X connect 15 0 4 0;
+#X connect 16 0 13 0;
+#X connect 16 1 11 0;
+#X connect 17 0 4 0;
+#X connect 18 0 17 0;
+#X connect 19 0 18 3;
+#X connect 20 0 18 0;
+#X connect 20 1 19 0;
+#X connect 34 0 8 0;
+#X connect 36 0 16 0;
+#X connect 37 0 16 0;
+#X connect 38 0 16 0;
+#X connect 39 0 16 0;
+#X connect 40 0 1 0;
+#X connect 40 0 1 1;
+#X connect 41 0 7 0;
+#X connect 42 0 5 0;
+#X connect 43 0 6 0;
+#X restore 82 84 pd MIDI_Velocity_triggers;
+#N canvas -1280 303 1280 618 MIDI_pitch_to_frequency 0;
+#X obj 468 489 osc~ 220;
+#X obj 468 566 dac~;
+#X obj 468 510 *~, f 33;
+#X obj 468 537 *~ 0.4;
+#X text 525 488 <--- The sound source;
+#X text 442 527 |;
+#X text 442 538 |;
+#X text 442 549 |;
+#X text 442 560 |;
+#X text 442 571 |;
+#X text 442 482 |;
+#X text 442 493 |;
+#X text 442 504 |;
+#X text 442 515 |;
+#X text 447 580 ------------------------------------------;
+#X text 445 475 ------------------------------------------;
+#X text 695 529 |;
+#X text 695 540 |;
+#X text 695 551 |;
+#X text 695 562 |;
+#X text 695 573 |;
+#X text 695 484 |;
+#X text 695 495 |;
+#X text 695 506 |;
+#X text 695 517 |;
+#N canvas -1280 303 1280 751 MIDI_ADSR 0;
+#X text 51 52 When creating oneshot envelopes we knew the entire length
+of the note at the beginning;
+#X text 51 78 This meant that we could trigger the entire envelope
+at the beginning of the note (as we did with vline~);
+#X text 443 49 When receieving MIDI notes (e.g. from a MIDI keyboard)
+we don't know in advance when the key will be received;
+#X text 441 87 So we want to trigger the attack decay sustain portions
+of the envelope on a note-on message (MIDI Velocity greater than 0)
+;
+#X text 823 80 Then when we receive a note-off message (MIDI Velocity
+0) we trigger the release portion;
+#X text 821 44 (We will also want to scale our maximum amplitude so
+that a MIDI Velocity of 127 creates a louder note than a MIDI Velocity
+of 60);
+#X obj 488 498 vline~, f 18;
+#X floatatom 374 237 5 1 10000 2 attack - - 0;
+#X floatatom 420 237 5 1 10000 2 decay - - 0;
+#X floatatom 461 237 5 0 1 2 sustain - - 0;
+#X floatatom 507 237 5 1 10000 2 release - - 0;
+#X obj 364 133 loadbang;
+#X obj 364 154 t b b b b, f 33;
+#X obj 847 274 / 127;
+#X text 890 299 MIDI Velocities are 0 --> 127 \, so by dividing by
+127 I get between 0 --> 1 for the amplitude;
+#X obj 820 274 t b;
+#X obj 820 431 f;
+#X msg 820 465 0 \$1;
+#X obj 820 234 sel 0;
+#X msg 488 469 \$1 \$2 \, \$4 \$3 \$2;
+#X obj 488 445 pack 0 0 0 0, f 15;
+#X obj 873 374 *;
+#X obj 847 333 t f f;
+#X text 866 235 1 - When a MIDI velosity is received we check whether
+it is note on/off;
+#X text 690 287 then trigger release;
+#X text 908 399 So I multiply the amplitude value (0-->1) by the sustain
+value and use that for the sustain;
+#X text 628 336 value (0-->1) out the left outlet;
+#X text 101 506 then to go to the sustain level (\$4) over the length
+of the decay (\$3) after waiting for the attack to finish (\$2);
+#X text 890 274 2 - If MIDI velocity received is greater than 0 it
+is a note on so we work out the maximum amplitude (between 0 --> 1)
+;
+#X text 887 333 3 - the trigger outputs the amplitude value (0-->1)
+out the right outlet;
+#X text 909 371 4 - sustain is the proportion of the maximumamplitude
+the level drops to;
+#X text 620 322 5 - the trigger outputs the amplitude;
+#X text 98 439 6 - The amplitude value is used as the maximum amplitude
+and causes the pack to output it's list;
+#X text 101 478 7 - the message tells the vline to go to maximum amplitude
+(\$1) over the length of the attack (\$2);
+#X text 662 271 8 - if MIDI velocity = 0;
+#X text 859 463 10 - at end of release there should be silence so this
+message tells the vline~ to go to 0 in x milliseconds;
+#X msg 543 181 400;
+#X text 852 430 9 - length of release is stored using "float" and triggered
+when a MIDI Note off is received (step 8);
+#X msg 483 180 0.6;
+#X msg 364 176 50;
+#X msg 428 178 500;
+#X text 462 561 |;
+#X text 462 572 |;
+#X text 462 583 |;
+#X text 462 594 |;
+#X text 462 605 |;
+#X text 462 516 |;
+#X text 462 527 |;
+#X text 462 538 |;
+#X text 462 549 |;
+#X text 467 614 ------------------------------------------;
+#X text 465 509 ------------------------------------------;
+#X text 715 563 |;
+#X text 715 574 |;
+#X text 715 585 |;
+#X text 715 596 |;
+#X text 715 607 |;
+#X text 715 518 |;
+#X text 715 529 |;
+#X text 715 540 |;
+#X text 715 551 |;
+#X text 978 184 |;
+#X text 978 195 |;
+#X text 978 206 |;
+#X text 978 139 |;
+#X text 978 150 |;
+#X text 978 161 |;
+#X text 978 172 |;
+#X text 653 133 -------------------------------------------------------
+;
+#X text 651 186 |;
+#X text 651 197 |;
+#X text 651 208 |;
+#X text 651 141 |;
+#X text 651 152 |;
+#X text 651 163 |;
+#X text 651 174 |;
+#X text 652 213 -------------------------------------------------------
+;
+#X text 823 107 (NOTE: I have kept the pitch fixed in this example)
+;
+#X obj 488 527 outlet~;
+#X obj 820 184 inlet;
+#X connect 6 0 78 0;
+#X connect 7 0 20 1;
+#X connect 8 0 20 2;
+#X connect 9 0 21 1;
+#X connect 10 0 16 1;
+#X connect 11 0 12 0;
+#X connect 12 0 39 0;
+#X connect 12 1 40 0;
+#X connect 12 2 38 0;
+#X connect 12 3 36 0;
+#X connect 13 0 22 0;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 17 0 6 0;
+#X connect 18 0 15 0;
+#X connect 18 1 13 0;
+#X connect 19 0 6 0;
+#X connect 20 0 19 0;
+#X connect 21 0 20 3;
+#X connect 22 0 20 0;
+#X connect 22 1 21 0;
+#X connect 36 0 10 0;
+#X connect 38 0 9 0;
+#X connect 39 0 7 0;
+#X connect 40 0 8 0;
+#X connect 79 0 18 0;
+#X coords 0 -1 1 1 200 60 1 360 200;
+#X restore 732 647 pd MIDI_ADSR;
+#N canvas -1280 303 1280 751 MIDI_ADSR 0;
+#X text 51 52 When creating oneshot envelopes we knew the entire length
+of the note at the beginning;
+#X text 51 78 This meant that we could trigger the entire envelope
+at the beginning of the note (as we did with vline~);
+#X text 443 49 When receieving MIDI notes (e.g. from a MIDI keyboard)
+we don't know in advance when the key will be received;
+#X text 441 87 So we want to trigger the attack decay sustain portions
+of the envelope on a note-on message (MIDI Velocity greater than 0)
+;
+#X text 823 80 Then when we receive a note-off message (MIDI Velocity
+0) we trigger the release portion;
+#X text 821 44 (We will also want to scale our maximum amplitude so
+that a MIDI Velocity of 127 creates a louder note than a MIDI Velocity
+of 60);
+#X obj 488 498 vline~, f 18;
+#X floatatom 374 237 5 1 10000 2 attack - - 0;
+#X floatatom 420 237 5 1 10000 2 decay - - 0;
+#X floatatom 461 237 5 0 1 2 sustain - - 0;
+#X floatatom 507 237 5 1 10000 2 release - - 0;
+#X obj 364 133 loadbang;
+#X obj 364 154 t b b b b, f 33;
+#X obj 847 274 / 127;
+#X text 890 299 MIDI Velocities are 0 --> 127 \, so by dividing by
+127 I get between 0 --> 1 for the amplitude;
+#X obj 820 274 t b;
+#X obj 820 431 f;
+#X msg 820 465 0 \$1;
+#X obj 820 234 sel 0;
+#X msg 488 469 \$1 \$2 \, \$4 \$3 \$2;
+#X obj 488 445 pack 0 0 0 0, f 15;
+#X obj 873 374 *;
+#X obj 847 333 t f f;
+#X text 866 235 1 - When a MIDI velosity is received we check whether
+it is note on/off;
+#X text 690 287 then trigger release;
+#X text 908 399 So I multiply the amplitude value (0-->1) by the sustain
+value and use that for the sustain;
+#X text 628 336 value (0-->1) out the left outlet;
+#X text 101 506 then to go to the sustain level (\$4) over the length
+of the decay (\$3) after waiting for the attack to finish (\$2);
+#X text 890 274 2 - If MIDI velocity received is greater than 0 it
+is a note on so we work out the maximum amplitude (between 0 --> 1)
+;
+#X text 887 333 3 - the trigger outputs the amplitude value (0-->1)
+out the right outlet;
+#X text 909 371 4 - sustain is the proportion of the maximumamplitude
+the level drops to;
+#X text 620 322 5 - the trigger outputs the amplitude;
+#X text 98 439 6 - The amplitude value is used as the maximum amplitude
+and causes the pack to output it's list;
+#X text 101 478 7 - the message tells the vline to go to maximum amplitude
+(\$1) over the length of the attack (\$2);
+#X text 662 271 8 - if MIDI velocity = 0;
+#X text 859 463 10 - at end of release there should be silence so this
+message tells the vline~ to go to 0 in x milliseconds;
+#X msg 543 181 400;
+#X text 852 430 9 - length of release is stored using "float" and triggered
+when a MIDI Note off is received (step 8);
+#X msg 483 180 0.6;
+#X msg 364 176 50;
+#X msg 428 178 500;
+#X text 462 561 |;
+#X text 462 572 |;
+#X text 462 583 |;
+#X text 462 594 |;
+#X text 462 605 |;
+#X text 462 516 |;
+#X text 462 527 |;
+#X text 462 538 |;
+#X text 462 549 |;
+#X text 467 614 ------------------------------------------;
+#X text 465 509 ------------------------------------------;
+#X text 715 563 |;
+#X text 715 574 |;
+#X text 715 585 |;
+#X text 715 596 |;
+#X text 715 607 |;
+#X text 715 518 |;
+#X text 715 529 |;
+#X text 715 540 |;
+#X text 715 551 |;
+#X text 978 184 |;
+#X text 978 195 |;
+#X text 978 206 |;
+#X text 978 139 |;
+#X text 978 150 |;
+#X text 978 161 |;
+#X text 978 172 |;
+#X text 653 133 -------------------------------------------------------
+;
+#X text 651 186 |;
+#X text 651 197 |;
+#X text 651 208 |;
+#X text 651 141 |;
+#X text 651 152 |;
+#X text 651 163 |;
+#X text 651 174 |;
+#X text 652 213 -------------------------------------------------------
+;
+#X text 823 107 (NOTE: I have kept the pitch fixed in this example)
+;
+#X obj 488 527 outlet~;
+#X obj 820 184 inlet;
+#X connect 6 0 78 0;
+#X connect 7 0 20 1;
+#X connect 8 0 20 2;
+#X connect 9 0 21 1;
+#X connect 10 0 16 1;
+#X connect 11 0 12 0;
+#X connect 12 0 39 0;
+#X connect 12 1 40 0;
+#X connect 12 2 38 0;
+#X connect 12 3 36 0;
+#X connect 13 0 22 0;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 17 0 6 0;
+#X connect 18 0 15 0;
+#X connect 18 1 13 0;
+#X connect 19 0 6 0;
+#X connect 20 0 19 0;
+#X connect 21 0 20 3;
+#X connect 22 0 20 0;
+#X connect 22 1 21 0;
+#X connect 36 0 10 0;
+#X connect 38 0 9 0;
+#X connect 39 0 7 0;
+#X connect 40 0 8 0;
+#X connect 79 0 18 0;
+#X coords 0 -1 1 1 200 60 1 360 200;
+#X restore 742 657 pd MIDI_ADSR;
+#X text 916 371 <---- right click and open \, this is just my last
+example saved as an abstraction (and with an inlet and an outlet added)
+;
+#X obj 463 124 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 463 144 sel 1 0, f 31;
+#X obj 468 237 unpack, f 41;
+#X obj 468 290 mtof;
+#X obj 663 124 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 663 144 sel 1 0, f 31;
+#X obj 872 124 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 872 144 sel 1 0, f 31;
+#X floatatom 367 13 5 0 127 0 - - - 0;
+#X obj 367 33 mtof;
+#X floatatom 367 58 20 0 0 0 - - - 0;
+#X text 407 32 <---- "mtof" is a very convenient object that converts
+MIDI note values to frequency;
+#X text 270 12 change me ---->;
+#X text 459 103 Turn toggles on for note on \, off for note off;
+#X msg 463 165 48 100;
+#X msg 662 165 52 100;
+#X msg 872 165 55 100;
+#X msg 537 167 48 0;
+#X msg 737 167 52 0;
+#X msg 946 167 55 0;
+#X text 162 122 Turn each toggle on and then off (one at a time);
+#X text 105 164 Remember a MIDI note on/off message consists of 2 values
+(MIDI pitch & MIDI Velocity);
+#X text 727 243 the MIDI velocity triggers my amplitude envelope;
+#X text 88 288 "mtof" takes my MIDI pitch and converts it to frequency
+for my oscillator;
+#X floatatom 493 271 5 0 0 0 - - - 0;
+#X floatatom 492 314 5 0 0 0 - - - 0;
+#X obj 706 362 adsr_sjf~;
+#X connect 0 0 2 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 0;
+#X connect 3 0 1 1;
+#X connect 28 0 29 0;
+#X connect 29 0 42 0;
+#X connect 29 1 45 0;
+#X connect 30 0 31 0;
+#X connect 30 0 52 0;
+#X connect 30 1 54 0;
+#X connect 31 0 0 0;
+#X connect 31 0 53 0;
+#X connect 32 0 33 0;
+#X connect 33 0 43 0;
+#X connect 33 1 46 0;
+#X connect 34 0 35 0;
+#X connect 35 0 44 0;
+#X connect 35 1 47 0;
+#X connect 36 0 37 0;
+#X connect 37 0 38 0;
+#X connect 42 0 30 0;
+#X connect 43 0 30 0;
+#X connect 44 0 30 0;
+#X connect 45 0 30 0;
+#X connect 46 0 30 0;
+#X connect 47 0 30 0;
+#X connect 54 0 2 1;
+#X restore 78 173 pd MIDI_pitch_to_frequency;
+#X text 68 43 First we will look at triggering our ADSR amplitude envelopes
+using MIDI velocity information;
+#X text 22 107 ------------------------------------------------------------
+;
+#X text 54 131 We also need to know how toconvert MIDI Pitches into
+frequencies (to control oscillators);
+#X text 19 263 Use the sequencer you have already built to trigger
+your synth;
+#X restore 140 251 pd audio_envelopes_&_MIDI_Triggers;
+#X text 126 21 We will begin exploring synthesis in PD by looking at
+Additive synthesis;
+#X text 123 273 ------------------------------------------------------------
+;
+#X text 148 291 Create a more in depth additive synthesiser patch;
+#X text 149 307 Maybe add more harmonics (8/16 oscillators?);
+#X text 149 323 Maybe add additional envelopes for each harmonic?;
+#X text 150 340 Maybe add the potential to slide/glide between pitches?
+;
+#X text 151 355 Maybe give the user control over the pitch and amplitude
+of each harmonic?;
+#X text 150 381 TIP: use arrays for frequency ratios an amplitudes!
+;
+#N canvas -1280 581 894 755 complex_additive_synth 0;
+#X obj 39 712 dac~;
+#X obj 40 534 makenote 100 500, f 18;
+#X obj 580 435 makenote 100 100;
+#X obj 580 462 noteout 10, f 32;
+#X obj 40 131 conductor_sjf 250 16;
+#X obj 580 128 conductor_sjf 125 16;
+#X obj 281 11 tgl 50 0 empty empty on/off 10 25 0 10 #fcfcfc #000000
+#000000 0 1;
+#X obj 580 194 drumMachine_sjf;
+#X obj 40 561 addSyn1_sjf~;
+#X obj 40 109 t f b, f 38;
+#X obj 580 107 t f b, f 38;
+#X obj 40 196 stpSeq16_sjf;
+#X connect 1 0 8 0;
+#X connect 1 1 8 1;
+#X connect 2 0 3 0;
+#X connect 2 1 3 1;
+#X connect 4 0 11 0;
+#X connect 5 0 7 0;
+#X connect 6 0 9 0;
+#X connect 6 0 10 0;
+#X connect 7 0 2 0;
+#X connect 8 0 0 0;
+#X connect 8 0 0 1;
+#X connect 9 0 4 0;
+#X connect 9 1 4 3;
+#X connect 10 0 5 0;
+#X connect 10 1 5 3;
+#X connect 11 0 1 0;
+#X restore 156 411 pd complex_additive_synth;

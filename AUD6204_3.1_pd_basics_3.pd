@@ -1,0 +1,1467 @@
+#N canvas 650 45 587 382 10;
+#X text 57 5 NOTE: If SimpleSynth was not open before you opened PD
+you will need to close PD \, open SimpleSynth \, and reopen PD;
+#X text 53 72 ------------------------------------------------------------
+;
+#X text 109 117 click me ------->;
+#X text 57 34 NOTE: In the Media menu (along the top ^^^) go to MIDI
+Settings and make sure SimpleSynth is selected;
+#X text 440 356 sjf \, SAE London \, 2020;
+#N canvas 238 352 506 592 arrays_&_data_starage 0;
+#X text 101 23 click me --->;
+#N canvas 14 48 429 296 What_is_an_array_in_PD 0;
+#X obj 1 1 cnv 15 425 20 empty \$0-pddp.cnv.subheading empty 20 10
+1 18 -261106 -33289 0;
+#X text 7 1 What is an Array in Pure Data?;
+#X text 19 36 Arrays \, in most programming environments \, are considered
+to be "a sequence of objects all of which have the same variable type"
+wherein each object is called an element and the elements are numbered
+in a row: 0 \, 1 \, 2 \, 3 \, etc. These numbers are called indices.
+Each index holds a corresponding value.;
+#X text 19 119 All of this is true in Pd \, although the word "array"
+is often used loosely to refer to three different concepts:;
+#X text 19 146 1) an array as defined above.;
+#X text 19 161 2) a graphical representation of an array \, or "garray"
+\, created by:;
+#X text 37 186 a) choosing "Array" from the "Put" menu \, or;
+#X text 37 201 b) creating a [table] object (in which case it's hidden
+inside a subpatch).;
+#X text 19 228 3) (less commonly) an array defined (and possibly represented
+graphically) as part of a data structure.;
+#X text 185 260 (Lifted directly from the helpfile...);
+#X restore 182 22 pd What_is_an_array_in_PD;
+#X text 17 48 In PD we will use "arrays" to store large amounts of
+data (in future we will see we can even store/read audio files using
+arrays);
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-myFirstArray 100 float 1;
+#A 0 0.796 0.951 0.258 0.834 0.748 0.807 0.351 0.778 0.055 0.095 0.355
+0.66 0.753 0.681 0.65 0.58 0.126 0.521 0.112 0.097 0.449 0.647 0.345
+0.715 0.715 0.152 0.917 0.362 0.373 0.177 0.59 0.884 0.061 0.888 0.564
+0.518 0.344 0.468 0.7 0.386 0.443 0.098 0.762 0.975 0.971 0.941 0.648
+0.619 0.67 0.125 0.628 0.991 0.143 0.735 0.571 0.578 0.59 0.787 0.188
+0.172 0.539 0.217 0.262 0.353 0.584 0.87 0.882 0.973 0.119 0.475 0.677
+0.636 0.07 0.636 0.054 0.192 0.631 0.817 0.431 0.213 1 0.32 0.466 0.482
+0.107 0.276 0.299 0.471 0.36 0.627 0.784 0.837 0.365 0.108 0.718 0.892
+0.674 0.237 0.084 0.1;
+#X coords 0 1 99 -1 200 140 1 0 0;
+#X restore 258 162 graph;
+#X text 19 97 We will use an "Array" object (Put >> Array) to store
+our data in;
+#N canvas 942 176 854 606 writing_to_arrays 0;
+#X obj 256 190 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 295 325 t b f;
+#X floatatom 229 433 5 0 0 0 - - -;
+#X floatatom 322 434 5 0 0 0 - - -;
+#X text 154 187 click me --->;
+#N canvas 575 227 447 240 random_between_0_&_1 0;
+#X obj 21 2 inlet;
+#X obj 21 32 t b;
+#X obj 21 101 / 1000;
+#X obj 21 167 outlet;
+#X text 45 31 <--- this trigger just ensures no matter what the input
+\, we always use a bang to trigger the random;
+#X text 93 75 <--- outputs something between 0-->1000;
+#X obj 21 79 random 1001;
+#X text 65 99 <--- if max output of random is 1000 and we divide that
+by 1000 \, then the max output is 1;
+#X text 63 124 Min output is 0 because 0/1000 = 0;
+#X connect 0 0 1 0;
+#X connect 1 0 6 0;
+#X connect 2 0 3 0;
+#X connect 6 0 2 0;
+#X restore 229 362 pd random_between_0_&_1;
+#X text 225 539 Try changing the 'index' and then change the 'value'
+;
+#X text 355 448 that the value will be written to;
+#X text 59 373 I generate random numbers;
+#X text 63 386 between 0&1;
+#X text 12 445 stored in the index (step 3);
+#X text 233 415 value;
+#X text 382 482 <--- the argument to "tabwrite" is the name of thae
+array we want to write information into (in this case the array is
+called "myFirstArray");
+#X text 7 100 It is importnat to remember we need to send an index
+to the tabwrite object before sending the value we want to store in
+that index;
+#X text 8 47 Remember to let tabwrite know which array to write to
+--->;
+#X floatatom 363 22 5 0 0 0 - - -;
+#X floatatom 486 23 5 0 0 0 - - -;
+#X text 482 6 index (i.e. position in array);
+#X text 6 27 When writing to arrays we use --->;
+#X obj 215 27 tabwrite;
+#X text 344 3 value to store;
+#X text 325 417 index;
+#X text 332 324 3 - the trigger outputs the count first;
+#X text 355 434 4 - the count is used to set the index;
+#X text 103 324 5 - the trigger outputs a bang;
+#X text 44 360 6 - click inside to see how;
+#X text 9 431 7 - the random number sets the value;
+#X text 537 23 NOTE: The first position/index;
+#X text 537 40 in the array is 0 NOT 1!!!!!;
+#X msg 256 210 100;
+#X obj 256 252 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 256 271 pd simpleCounter;
+#X obj 256 231 t f f 0, f 16;
+#X text 371 229 1 - using our previous code \, we output 100 numbers
+(0--> 99) as fast as possible;
+#X obj 363 48 tabwrite \$0-myFirstArray;
+#X obj 229 487 tabwrite \$0-myFirstArray;
+#X connect 0 0 29 0;
+#X connect 1 0 5 0;
+#X connect 1 1 3 0;
+#X connect 2 0 35 0;
+#X connect 3 0 35 1;
+#X connect 5 0 2 0;
+#X connect 15 0 34 0;
+#X connect 16 0 34 1;
+#X connect 29 0 32 0;
+#X connect 30 0 31 0;
+#X connect 31 0 1 0;
+#X connect 32 0 30 0;
+#X connect 32 1 31 1;
+#X connect 32 2 31 2;
+#X restore 159 372 pd writing_to_arrays;
+#X text 67 371 click me ---->;
+#X text 67 391 click me ---->;
+#N canvas 285 245 536 241 reading_from_arrays 0;
+#X floatatom 285 123 5 0 0 0 - - -;
+#X text 258 105 index (i.e. position in array);
+#X obj 294 19 tabread;
+#X text 47 17 When reading from arrays we use --->;
+#X text 247 170 --->;
+#X text 45 159 Remember to let tabread know which;
+#X text 45 174 array you want to read from;
+#X floatatom 285 196 5 0 0 0 - - -;
+#X text 321 196 value at index;
+#X obj 285 174 tabread \$0-myFirstArray;
+#X text 320 123 NOTE: the first position in the;
+#X text 361 135 array is index 0!!!;
+#X connect 0 0 9 0;
+#X connect 9 0 7 0;
+#X restore 159 392 pd reading_from_arrays;
+#X text 67 411 click me ---->;
+#X text 20 127 Remember to give your Array a name!;
+#X text 171 232 ---->;
+#X text 44 226 This array is called;
+#N canvas 422 23 785 915 more_on_arrays 0;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-mySecondArray 16 float 3;
+#A 0 3 5 2 4 0 5 6 2 6 0 4 0 3 2 5 4;
+#X coords 0 7 16 0 200 140 1 0 0;
+#X restore 412 28 graph;
+#X text 36 14 In addition to setting the name of the array \, we can
+also set the array values to be stored within our patches (i.e. save
+our data with the patch...) \, the "size" of the array (i.e. the number
+of indices/positions) \, the "range" of the display (i.e. what range
+of values are shown on the graph) \, and how the graph is displayed
+;
+#X text 34 110 This array has a size of 16 (i.e. there are 16 different
+values we can store);
+#X text 415 176 Right click on this array and go;
+#X text 414 190 to its "Properties" to see where;
+#X text 414 201 each of the different parameters;
+#X text 414 214 have been changed;
+#X text 112 548 click me ---->;
+#X text 34 145 This array has a Y-range of 7-->0 (i.e. on the display
+any line at the top of the graph indicates the index has a 7 stored
+in it \, anything at the bottom of the graph indicates a 0);
+#X text 35 201 (REMEMBER 0->7 is 8 different possible values!!! 0 \,
+1 \, 2 \, 3 \, 4 \, 5 \, 6 \, 7);
+#X text 198 494 ------------------------------------------------------------
+;
+#X text 201 354 ------------------------------------------------------------
+;
+#X floatatom 435 256 5 0 0 0 - - -;
+#X floatatom 527 257 5 0 0 0 - - -;
+#X text 439 238 value;
+#X text 530 240 index;
+#X text 435 303 Try changing the value stored at an index to something
+greater than 7 or less than 0;
+#X text 115 642 click me ---->;
+#N canvas 162 23 805 812 array_melody_maker 0;
+#X obj 27 643 noteout 1;
+#X obj 27 615 makenote 100 250;
+#N canvas 479 246 446 320 conductor_sjf 0;
+#X msg 59 98 0;
+#X text 185 18 reset;
+#X floatatom 63 37 5 50 2000 0 - - -;
+#X text 54 19 delta time;
+#X floatatom 133 39 5 0 0 0 - - -;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 6 131 pd simpleCounter;
+#X obj 135 -72 loadbang;
+#X obj 6 67 metro 250;
+#X msg 101 -37 250;
+#X obj 6 37 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X text 3 18 on/off;
+#X text 130 18 #beats;
+#X obj 6 153 outlet;
+#X obj 188 38 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X msg 135 -37 16;
+#X connect 0 0 5 1;
+#X connect 2 0 7 1;
+#X connect 4 0 5 2;
+#X connect 5 0 12 0;
+#X connect 6 0 14 0;
+#X connect 6 0 8 0;
+#X connect 7 0 5 0;
+#X connect 8 0 2 0;
+#X connect 9 0 7 0;
+#X connect 13 0 0 0;
+#X connect 14 0 4 0;
+#X coords 0 -1 1 1 230 60 1 0 0;
+#X restore 26 333 pd conductor_sjf;
+#X obj 26 474 +;
+#X obj 27 592 +;
+#X floatatom 65 476 5 0 11 0 - - -;
+#X floatatom 68 546 5 0 9 0 - - -;
+#X obj 68 567 * 12;
+#X text 102 473 <--- we can change keys simply by adding 'x' semitones
+to every note (+0 = C \, +5 = F \, +7 = G \, +11 = B \, etc);
+#X text 149 399 <--- the melody indicates which degree of the scale
+to play (i.e. the first note \, or the second note \, or the octave
+etc);
+#X text 159 444 <--- that way we can easily use the same melodic shape
+on muliple different scales;
+#X obj 117 35 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 151 160 t b f;
+#X floatatom 86 225 5 0 0 0 - - -;
+#X floatatom 178 226 5 0 0 0 - - -;
+#X text 90 207 value;
+#X text 181 209 index;
+#X text 160 53 There are 16 steps/notes in my melody;
+#X text 142 185 All my scales have 8 pitches;
+#X obj 86 186 random 8;
+#X text 30 684 3 - we can change the scale;
+#X text 54 263 ------------------------------------------------------------
+;
+#X text 46 665 ------------------------------------------------------------
+;
+#X obj 68 506 loadbang;
+#X msg 68 526 4;
+#X floatatom 68 589 5 0 0 0 - - -;
+#X obj 80 703 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X msg 80 723 major;
+#N canvas 169 288 750 444 change_the_scale 0;
+#X obj 24 20 inlet;
+#N canvas 382 323 674 234 Cmajor 0;
+#X obj 54 76 sel 0 1 2 3 4 5 6 7;
+#X obj 54 14 inlet;
+#X obj 54 182 outlet;
+#X text -154 122 '0' is equivalent to MIDI note C;
+#X text 296 122 '12' is equivalent to MIDI note C1;
+#X msg 257 121 12;
+#X msg 229 121 11;
+#X msg 200 121 9;
+#X msg 170 121 7;
+#X msg 141 121 5;
+#X msg 112 121 4;
+#X msg 83 121 2;
+#X msg 54 121 0;
+#X connect 0 0 12 0;
+#X connect 0 1 11 0;
+#X connect 0 2 10 0;
+#X connect 0 3 9 0;
+#X connect 0 4 8 0;
+#X connect 0 5 7 0;
+#X connect 0 6 6 0;
+#X connect 0 7 5 0;
+#X connect 1 0 0 0;
+#X connect 5 0 2 0;
+#X connect 6 0 2 0;
+#X connect 7 0 2 0;
+#X connect 8 0 2 0;
+#X connect 9 0 2 0;
+#X connect 10 0 2 0;
+#X connect 11 0 2 0;
+#X connect 12 0 2 0;
+#X restore 16 176 pd Cmajor;
+#X obj 51 141 t f f;
+#X obj 57 211 pack;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-scale_in_C 8 float 3;
+#A 0 0 2 4 5 7 9 11 12;
+#X coords 0 12 8 0 200 140 1 0 0;
+#X restore 532 29 graph;
+#X obj 166 19 inlet;
+#X obj 193 140 t f f;
+#X obj 199 210 pack;
+#N canvas 382 323 674 234 Charmonicminor 0;
+#X obj 54 76 sel 0 1 2 3 4 5 6 7;
+#X obj 54 14 inlet;
+#X obj 54 182 outlet;
+#X text -154 122 '0' is equivalent to MIDI note C;
+#X text 296 122 '12' is equivalent to MIDI note C1;
+#X msg 257 121 12;
+#X msg 229 121 11;
+#X msg 170 121 7;
+#X msg 141 121 5;
+#X msg 83 121 2;
+#X msg 54 121 0;
+#X msg 112 121 3;
+#X msg 200 121 8;
+#X connect 0 0 10 0;
+#X connect 0 1 9 0;
+#X connect 0 2 11 0;
+#X connect 0 3 8 0;
+#X connect 0 4 7 0;
+#X connect 0 5 12 0;
+#X connect 0 6 6 0;
+#X connect 0 7 5 0;
+#X connect 1 0 0 0;
+#X connect 5 0 2 0;
+#X connect 6 0 2 0;
+#X connect 7 0 2 0;
+#X connect 8 0 2 0;
+#X connect 9 0 2 0;
+#X connect 10 0 2 0;
+#X connect 11 0 2 0;
+#X connect 12 0 2 0;
+#X restore 158 175 pd Charmonicminor;
+#X obj 317 19 inlet;
+#X obj 344 140 t f f;
+#X obj 350 210 pack;
+#N canvas 382 323 674 234 Caltereddominant 0;
+#X obj 54 76 sel 0 1 2 3 4 5 6 7;
+#X obj 54 14 inlet;
+#X obj 54 182 outlet;
+#X text -154 122 '0' is equivalent to MIDI note C;
+#X text 296 122 '12' is equivalent to MIDI note C1;
+#X msg 257 121 12;
+#X msg 54 121 0;
+#X msg 112 121 3;
+#X msg 200 121 8;
+#X msg 83 121 1;
+#X msg 141 121 4;
+#X msg 170 122 6;
+#X msg 229 121 10;
+#X connect 0 0 6 0;
+#X connect 0 1 9 0;
+#X connect 0 2 7 0;
+#X connect 0 3 10 0;
+#X connect 0 4 11 0;
+#X connect 0 5 8 0;
+#X connect 0 6 12 0;
+#X connect 0 7 5 0;
+#X connect 1 0 0 0;
+#X connect 5 0 2 0;
+#X connect 6 0 2 0;
+#X connect 7 0 2 0;
+#X connect 8 0 2 0;
+#X connect 9 0 2 0;
+#X connect 10 0 2 0;
+#X connect 11 0 2 0;
+#X connect 12 0 2 0;
+#X restore 314 175 pd Caltereddominant;
+#X text 67 324 I start every scale on C so that the first note is always
+0 \, and the last is always 12;
+#X text 66 354 This just makes transposition to different keys easier
+;
+#X obj 24 82 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 24 101 pd simpleCounter;
+#X obj 24 61 t f f 0, f 16;
+#X msg 24 41 8;
+#X obj 166 80 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 166 99 pd simpleCounter;
+#X obj 166 59 t f f 0, f 16;
+#X msg 166 39 8;
+#X obj 317 78 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 317 97 pd simpleCounter;
+#X obj 317 57 t f f 0, f 16;
+#X msg 317 37 8;
+#X obj 57 281 tabwrite \$0-scale_in_C;
+#X connect 0 0 18 0;
+#X connect 1 0 3 0;
+#X connect 2 0 1 0;
+#X connect 2 1 3 1;
+#X connect 3 0 27 0;
+#X connect 5 0 22 0;
+#X connect 6 0 8 0;
+#X connect 6 1 7 1;
+#X connect 7 0 27 0;
+#X connect 8 0 7 0;
+#X connect 9 0 26 0;
+#X connect 10 0 12 0;
+#X connect 10 1 11 1;
+#X connect 11 0 27 0;
+#X connect 12 0 11 0;
+#X connect 15 0 16 0;
+#X connect 16 0 2 0;
+#X connect 17 0 15 0;
+#X connect 17 1 16 1;
+#X connect 17 2 16 2;
+#X connect 18 0 17 0;
+#X connect 19 0 20 0;
+#X connect 20 0 6 0;
+#X connect 21 0 19 0;
+#X connect 21 1 20 1;
+#X connect 21 2 20 2;
+#X connect 22 0 21 0;
+#X connect 23 0 24 0;
+#X connect 24 0 10 0;
+#X connect 25 0 23 0;
+#X connect 25 1 24 1;
+#X connect 25 2 24 2;
+#X connect 26 0 25 0;
+#X restore 80 745 pd change_the_scale;
+#X obj 122 703 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 222 703 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X msg 122 723 harmonic minor;
+#X msg 222 723 altered dominant;
+#X text 203 744 <---- click me;
+#X text 34 274 2 - we can read from that melody and apply it to a scale.
+I've chosen to treat the melody as scale degrees (i.e. first \, second
+\, third...octave) so I can apply the same melody to multiple scales
+;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-myMelody 16 float 3;
+#A 0 7 0 7 0 7 5 6 3 4 1 1 6 2 2 1 2;
+#X coords 0 7 16 0 200 140 1 0 0;
+#X restore 469 58 graph;
+#X text 106 544 <--- we can change octaves by add ['y' * 12] to each
+pitch => so if we want the 4th octave up we add 4*12 (= 48) semitones
+to every pitch;
+#X obj 117 97 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 117 116 pd simpleCounter;
+#X obj 117 76 t f f 0, f 16;
+#X msg 117 55 16;
+#X text 36 4 1 - we write a melody to the "\$0-myMelody" Array - I've
+chosen to generate it randomly;
+#X obj 86 250 tabwrite \$0-myMelody;
+#X obj 26 400 tabread \$0-myMelody;
+#X obj 26 448 tabread \$0-scale_in_C;
+#X text 416 202 If edit mode is off you can also draw the melody;
+#X connect 1 0 0 0;
+#X connect 1 1 0 1;
+#X connect 2 0 43 0;
+#X connect 3 0 4 0;
+#X connect 4 0 1 0;
+#X connect 5 0 3 1;
+#X connect 6 0 7 0;
+#X connect 7 0 4 1;
+#X connect 7 0 25 0;
+#X connect 11 0 40 0;
+#X connect 12 0 19 0;
+#X connect 12 1 14 0;
+#X connect 13 0 42 0;
+#X connect 14 0 42 1;
+#X connect 19 0 13 0;
+#X connect 23 0 24 0;
+#X connect 24 0 6 0;
+#X connect 26 0 27 0;
+#X connect 27 0 28 0;
+#X connect 29 0 31 0;
+#X connect 30 0 32 0;
+#X connect 31 0 28 1;
+#X connect 32 0 28 2;
+#X connect 37 0 38 0;
+#X connect 38 0 12 0;
+#X connect 39 0 37 0;
+#X connect 39 1 38 1;
+#X connect 39 2 38 2;
+#X connect 40 0 39 0;
+#X connect 43 0 44 0;
+#X connect 44 0 3 0;
+#X restore 205 644 pd array_melody_maker;
+#X text 202 569 ------------------------------------------------------------
+;
+#X text 66 514 This patch uses code we previously had \, but stores
+the melody to arrays this time;
+#N canvas 934 31 792 394 array_melody_sequencer 0;
+#X obj 18 359 noteout 1;
+#X obj 18 331 makenote 100 250;
+#N canvas 479 246 446 320 conductor_sjf 0;
+#X msg 59 98 0;
+#X text 185 18 reset;
+#X floatatom 63 37 5 50 2000 0 - - -;
+#X text 54 19 delta time;
+#X floatatom 133 39 5 0 0 0 - - -;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 6 131 pd simpleCounter;
+#X obj 135 -72 loadbang;
+#X msg 135 -37 8;
+#X obj 6 67 metro 250;
+#X msg 101 -37 250;
+#X obj 6 37 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X text 3 18 on/off;
+#X text 130 18 #beats;
+#X obj 6 153 outlet;
+#X obj 188 38 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X connect 0 0 5 1;
+#X connect 2 0 8 1;
+#X connect 4 0 5 2;
+#X connect 5 0 13 0;
+#X connect 6 0 7 0;
+#X connect 6 0 9 0;
+#X connect 7 0 4 0;
+#X connect 8 0 5 0;
+#X connect 9 0 2 0;
+#X connect 10 0 8 0;
+#X connect 14 0 0 0;
+#X coords 0 -1 1 1 230 60 1 0 0;
+#X restore 18 13 pd conductor_sjf;
+#X text 260 208 <---- right click me and select "Open";
+#N canvas 0 23 830 537 8stepGUI_w/Arrays 0;
+#X obj 11 4 inlet;
+#X obj 7 349 outlet;
+#X obj 235 16 hradio 25 1 0 8 empty empty empty 0 -8 0 10 -1 -258113
+-1 0;
+#X obj 11 31 t f f f;
+#X obj 8 323 pack;
+#N canvas 0 23 450 278 (subpatch) 0;
+#X array \$0-MIDIpitch 8 float 3;
+#A 0 98 5 103 43 111 79 85 68;
+#X coords 0 127 8 0 200 140 1 0 0;
+#X restore 235 59 graph;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-MIDIvelocity 8 float 3;
+#A 0 20 122 106 37 19 8 38 112;
+#X coords 0 127 8 0 200 20 1 0 0;
+#X restore 235 214 graph;
+#X obj 138 298 tabread \$0-MIDIvelocity;
+#X obj 8 297 tabread \$0-MIDIpitch;
+#X obj 437 336 tabwrite \$0-MIDIpitch;
+#X obj 580 336 tabwrite \$0-MIDIvelocity;
+#X obj 531 250 inlet;
+#X obj 597 249 inlet;
+#X connect 0 0 3 0;
+#X connect 3 0 8 0;
+#X connect 3 1 7 0;
+#X connect 3 2 2 0;
+#X connect 4 0 1 0;
+#X connect 7 0 4 1;
+#X connect 8 0 4 0;
+#X connect 11 0 9 0;
+#X connect 12 0 10 0;
+#X coords 0 0 1 1 230 240 1 220 0;
+#X restore 18 83 pd 8stepGUI_w/Arrays;
+#N canvas 321 59 668 322 randomiser 0;
+#X obj 11 40 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 11 194 random 128;
+#X obj 11 240 pack, f 20;
+#X obj 11 262 outlet;
+#X text 3 24 Random Pattern;
+#X obj 11 122 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 11 141 pd simpleCounter;
+#X obj 11 101 t f f 0, f 16;
+#X msg 11 67 8;
+#X obj 11 170 t b f, f 20;
+#X text 64 271 tabread expects to get a list of (value \, index);
+#X text 76 195 value;
+#X text 136 170 index;
+#X text 208 15 This just creates 8 random numbers (0-->127);
+#X text 208 34 I use until and my simple counter to determine the index
+each random value will be assigned to;
+#X connect 0 0 8 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 5 0 6 0;
+#X connect 6 0 9 0;
+#X connect 7 0 5 0;
+#X connect 7 1 6 1;
+#X connect 7 2 6 2;
+#X connect 8 0 7 0;
+#X connect 9 0 1 0;
+#X connect 9 1 2 1;
+#X coords 0 -1 1 1 100 60 1 0 0;
+#X restore 255 14 pd randomiser;
+#N canvas 321 59 450 300 randomiser 0;
+#X obj 11 40 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 11 194 random 128;
+#X obj 11 240 pack, f 20;
+#X obj 11 262 outlet;
+#X text 3 24 Random Pattern;
+#X obj 11 122 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 11 141 pd simpleCounter;
+#X obj 11 101 t f f 0, f 16;
+#X msg 11 67 8;
+#X obj 11 170 t b f, f 20;
+#X connect 0 0 8 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 5 0 6 0;
+#X connect 6 0 9 0;
+#X connect 7 0 5 0;
+#X connect 7 1 6 1;
+#X connect 7 2 6 2;
+#X connect 8 0 7 0;
+#X connect 9 0 1 0;
+#X connect 9 1 2 1;
+#X coords 0 -1 1 1 100 60 1 0 0;
+#X restore 255 80 pd randomiser;
+#X text 362 33 <---- right click me and select "Open";
+#X connect 1 0 0 0;
+#X connect 1 1 0 1;
+#X connect 2 0 4 0;
+#X connect 4 0 1 0;
+#X connect 5 0 4 1;
+#X connect 6 0 4 2;
+#X restore 202 550 pd array_melody_sequencer;
+#X text 43 374 1 - Create a new patch and experiment with creating
+\, writing to \, and reading from arrays;
+#X text 42 420 2 - Create a new patch that uses an array to store a
+melody (you can generate a random melody if it's easier);
+#X text 40 454 2b - Read from this array and send the melody (as MIDI
+notes) to SimpleSynth;
+#X text 69 595 The patch below demonstrates how we could use an array
+to store and read melodies & transpose those melodies onto differnet
+scales and keys;
+#X text 32 237 Unlike "\$0-myFirstArray" this graph ("\$0-mySecondArray")
+is displayed as points;
+#X obj 435 282 tabwrite \$0-mySecondArray;
+#X connect 12 0 27 0;
+#X connect 13 0 27 1;
+#X restore 159 412 pd more_on_arrays;
+#X text 55 469 NOTE: You can only have one copy of an Array (no 2 arrays
+can have the same name);
+#X text 278 305 Turn edit mode off;
+#X text 233 324 Now click and drag on the display above;
+#X text 46 241 '\$0-myFirstArray';
+#X text 8 257 (we'll get to why I use "\$0-" later on);
+#X restore 221 118 pd arrays_&_data_starage;
+#X text 114 96 1 - Storing and retrieving data;
+#X text 55 136 ------------------------------------------------------------
+;
+#N canvas 417 238 450 300 send_&_receive 0;
+#X text 68 70 click me ------->;
+#X text 68 91 click me ------->;
+#X text 42 6 So far we have been sending information from one object
+to another using patch cables \, but this can get messy fast;
+#X text 44 34 Fortunately there are other ways to get data from one
+place in your patch to another;
+#N canvas 0 23 468 517 send&receive2_symbols 0;
+#X floatatom 80 361 5 0 0 0 - thatNumber thisNumber;
+#X floatatom 63 435 5 0 0 0 - - -;
+#X obj 194 437 s thatNumber;
+#X floatatom 194 414 5 0 0 0 - - -;
+#X obj 63 413 receive thisNumber;
+#X obj 85 385 hsl 128 15 0 127 0 0 thisNumber thatNumber empty -2 -8
+0 10 -262144 -1 -1 0 1;
+#X text 51 12 Some objects allow us to set send & receive "symbols"
+through their "Properties";
+#X text 51 38 This is essentially like attaching a receive object with
+that name to the input \, or a send object with that name to the ouptut
+\, of the object;
+#X text 51 80 NOTE: the actual inlet/outlet is removed when we set
+a receive/send symbol;
+#X floatatom 221 142 5 0 0 0 - - num1;
+#X floatatom 239 197 5 0 0 0 - - -;
+#X text 182 139 ---->;
+#X text 57 173 So this receive object;
+#X text 61 129 This number box has a send;
+#X text 59 186 outputs its value;
+#X text 199 178 ---->;
+#X text 63 114 ------------------------------------------------------------
+;
+#X text 82 290 ------------------------------------------------------------
+;
+#X text 189 244 ---->;
+#X text 68 230 This number box has a receive;
+#X text 71 264 so it receives the value to;
+#X text 256 141 <---- change me;
+#X text 230 414 <--- change me;
+#X text 68 303 Objects can have both a send and receive symbol (so
+the have no inlet or outlet);
+#X text 220 382 <--- change me;
+#X text 121 359 <--- change me;
+#X text 68 333 Also \, multiple objects can have the same send/receive
+symbol;
+#X obj 233 247 hsl 128 15 0 127 0 0 empty num1 empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 239 176 r num1;
+#X text 72 247 symbol of "num1";
+#X text 65 146 symbol of "num1";
+#X connect 3 0 2 0;
+#X connect 4 0 1 0;
+#X connect 28 0 10 0;
+#X restore 180 92 pd send&receive2_symbols;
+#N canvas 0 23 454 406 send&receive1_objects 0;
+#X floatatom 111 83 5 0 0 0 - - -;
+#X obj 111 104 send myNumber;
+#X obj 199 169 receive myNumber;
+#X floatatom 199 191 5 0 0 0 - - -;
+#X floatatom 207 82 5 0 0 0 - - -;
+#X obj 207 103 s myOtherNumber;
+#X floatatom 302 191 5 0 0 0 - - -;
+#X obj 302 169 r myOtherNumber;
+#N canvas 477 23 290 191 send&receive_to_other_patches 0;
+#X floatatom 28 53 5 0 0 0 - - -;
+#X floatatom 131 53 5 0 0 0 - - -;
+#X floatatom 29 100 5 0 0 0 - - -;
+#X floatatom 131 99 5 0 0 0 - - -;
+#X obj 28 31 r myNumber;
+#X obj 29 121 s myNumber;
+#X obj 131 31 receive myOtherNumber;
+#X obj 131 120 send myOtherNumber;
+#X connect 2 0 5 0;
+#X connect 3 0 7 0;
+#X connect 4 0 0 0;
+#X connect 6 0 1 0;
+#X restore 46 246 pd send&receive_to_other_patches;
+#X text 245 245 <--- click me;
+#X text 101 62 change the numbers below;
+#X text 41 21 For non time sensitive data (i.e. anything like controlling
+a variable that does not need to be 100% in sync) we can also "send"
+from one place in our patch;
+#X text 42 142 And then "receive" that data somewhere else (even in
+another patch/subpatch);
+#X text 37 289 Each "send" object is given a name \, and any "receive"
+object with that name will be automatically connected \, and output
+any input to the send;
+#X text 36 337 's' is a convenient shorthand for 'send';
+#X text 37 354 'r' is a convenient shorthand for 'receive';
+#X connect 0 0 1 0;
+#X connect 2 0 3 0;
+#X connect 4 0 5 0;
+#X connect 7 0 6 0;
+#X restore 181 71 pd send&receive1_objects;
+#X text 53 133 Use send & receive (objects and/or symbols) to tidy
+up the sequencer you made using arrays;
+#X text 44 110 ------------------------------------------------------------
+;
+#N canvas 245 23 740 445 sequencer_w/s&r 0;
+#X obj 46 363 noteout 1;
+#X obj 46 335 makenote 100 250;
+#N canvas 479 246 446 320 conductor_sjf 0;
+#X msg 59 98 0;
+#X text 185 18 reset;
+#X floatatom 63 37 5 50 2000 0 - - -;
+#X text 54 19 delta time;
+#X floatatom 133 39 5 0 0 0 - - -;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 6 131 pd simpleCounter;
+#X obj 135 -72 loadbang;
+#X msg 135 -37 8;
+#X obj 6 67 metro 250;
+#X msg 101 -37 250;
+#X obj 6 37 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X text 3 18 on/off;
+#X text 130 18 #beats;
+#X obj 6 153 outlet;
+#X obj 188 38 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X connect 0 0 5 1;
+#X connect 2 0 8 1;
+#X connect 4 0 5 2;
+#X connect 5 0 13 0;
+#X connect 6 0 7 0;
+#X connect 6 0 9 0;
+#X connect 7 0 4 0;
+#X connect 8 0 5 0;
+#X connect 9 0 2 0;
+#X connect 10 0 8 0;
+#X connect 14 0 0 0;
+#X coords 0 -1 1 1 230 60 1 0 0;
+#X restore 46 18 pd conductor_sjf;
+#X text 288 213 <---- right click me and select "Open";
+#N canvas 0 23 913 648 8stepGUI_w/Arrays 0;
+#X obj 246 339 inlet;
+#X obj 214 468 outlet;
+#X obj 326 25 hradio 25 1 0 8 empty currentBeat empty 0 -8 0 10 -1
+-258113 -1 4;
+#X obj 498 340 inlet;
+#X obj 246 366 t f f f;
+#X obj 215 442 pack;
+#X obj 301 380 s currentBeat;
+#X obj 319 417 tabread \$0-velocity;
+#X obj 214 416 tabread \$0-pitch;
+#X obj 611 363 tabwrite \$0-velocity;
+#X obj 498 363 tabwrite \$0-pitch;
+#X obj 611 338 inlet;
+#N canvas 0 23 450 278 (subpatch) 0;
+#X array \$0-pitch 8 float 3;
+#A 0 53 92 85 78 30 31 60.7782 39;
+#X coords 0 127 8 0 200 140 1 0 0;
+#X restore 326 65 graph;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-velocity 8 float 3;
+#A 0 1 109 46 80 106 15 117 28;
+#X coords 0 127 8 0 200 20 1 0 0;
+#X restore 326 220 graph;
+#X text 94 23 This object now has a receive symbol;
+#X text 10 40 so it receives the current beat without any cables;
+#X connect 0 0 4 0;
+#X connect 3 0 10 0;
+#X connect 4 0 8 0;
+#X connect 4 1 7 0;
+#X connect 4 2 6 0;
+#X connect 5 0 1 0;
+#X connect 7 0 5 1;
+#X connect 8 0 5 0;
+#X connect 11 0 9 0;
+#X coords 0 0 1 1 230 240 1 315 10;
+#X restore 46 88 pd 8stepGUI_w/Arrays;
+#X text 300 228 Note how I have literally copied and pasted my previous
+code and expanded it with send & receive objects and symbols;
+#X text 301 273 I also changed the name of the arrays so they didn't
+conflict with the previous example;
+#N canvas 321 59 668 322 randomiser 0;
+#X obj 11 40 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 11 194 random 128;
+#X obj 11 240 pack, f 20;
+#X obj 11 262 outlet;
+#X text 3 24 Random Pattern;
+#X obj 11 122 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 11 141 pd simpleCounter;
+#X obj 11 101 t f f 0, f 16;
+#X msg 11 67 8;
+#X obj 11 170 t b f, f 20;
+#X text 64 271 tabread expects to get a list of (value \, index);
+#X text 76 195 value;
+#X text 136 170 index;
+#X text 208 15 This just creates 8 random numbers (0-->127);
+#X text 208 34 I use until and my simple counter to determine the index
+each random value will be assigned to;
+#X connect 0 0 8 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 5 0 6 0;
+#X connect 6 0 9 0;
+#X connect 7 0 5 0;
+#X connect 7 1 6 1;
+#X connect 7 2 6 2;
+#X connect 8 0 7 0;
+#X connect 9 0 1 0;
+#X connect 9 1 2 1;
+#X coords 0 -1 1 1 100 60 1 0 0;
+#X restore 283 19 pd randomiser;
+#N canvas 321 59 450 300 randomiser 0;
+#X obj 11 40 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 11 194 random 128;
+#X obj 11 240 pack, f 20;
+#X obj 11 262 outlet;
+#X text 3 24 Random Pattern;
+#X obj 11 122 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 11 141 pd simpleCounter;
+#X obj 11 101 t f f 0, f 16;
+#X msg 11 67 8;
+#X obj 11 170 t b f, f 20;
+#X connect 0 0 8 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 5 0 6 0;
+#X connect 6 0 9 0;
+#X connect 7 0 5 0;
+#X connect 7 1 6 1;
+#X connect 7 2 6 2;
+#X connect 8 0 7 0;
+#X connect 9 0 1 0;
+#X connect 9 1 2 1;
+#X coords 0 -1 1 1 100 60 1 0 0;
+#X restore 283 85 pd randomiser;
+#X connect 1 0 0 0;
+#X connect 1 1 0 1;
+#X connect 2 0 4 0;
+#X connect 4 0 1 0;
+#X connect 7 0 4 1;
+#X connect 8 0 4 2;
+#X restore 152 182 pd sequencer_w/s&r;
+#X restore 222 193 pd send_&_receive;
+#X text 111 191 click me ------->;
+#X text 116 160 2 - some more advanced ways of getting data from one
+placein your patch to another techniques;
+#X text 55 208 ------------------------------------------------------------
+;
+#X text 112 268 click me ------->;
+#N canvas 532 38 456 537 abstractions 0;
+#N canvas 640 23 1280 751 seq_w/abstractions 0;
+#X obj 14 171 conductor_sjf;
+#X obj 204 646 makenote 100 250;
+#X obj 204 668 noteout;
+#X obj 626 254 loadbang;
+#X msg 626 277 3;
+#X text 60 45 I have also expanded the sequencer so it is now 16 steps
+instead of 8;
+#X text 61 4 For this version of my sequencer I have created abstractions
+from my conductor_sjf patch (i.e. the metronome and counter) and the
+sequencer w/send&receive from earlier;
+#X text 253 192 <---- right click and select open to see the original
+patch;
+#X text 589 362 <---- right click and select;
+#X text 626 374 open to see the original;
+#X text 626 387 patch;
+#X text 537 2 Both of these abstractions can be found in the "AUD6204_PD"
+folder;
+#X text 536 31 NOTE: Abstractions can load other abstractions;
+#X obj 14 259 stpSeq16_sjf;
+#X obj 309 259 stpSeq16_sjf;
+#X connect 0 0 13 0;
+#X connect 0 0 14 0;
+#X connect 1 0 2 0;
+#X connect 1 1 2 1;
+#X connect 3 0 4 0;
+#X connect 4 0 14 3;
+#X connect 13 0 1 0;
+#X connect 14 0 1 0;
+#X restore 141 319 pd seq_w/abstractions;
+#X text 20 11 We have already looked at how creating subpatches can
+be helpful for keeping our code tidy \, and allowing us to reuse ideas.
+;
+#X text 20 52 We can go a step further and \, when we have a piece
+of code that is particularly useful we can simply save it as a new
+patch and then load that code into another patch as if it is a normal
+object. We call these patches abstractions;
+#X text 22 106 The only things we need to be aware of is that when
+trying to load an abstraction it needs to be in the same folder as
+the patch that we are trying to load it into \, and anytime we change
+the code in our abstraction it changes for every patch that references
+that abstraction;
+#X obj 184 224 i_am_an_abstraction 12 1 3;
+#X obj 184 204 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 95 203 click me ---->;
+#X text 347 221 <---- click me;
+#X obj 184 246 print abstractionOutput;
+#X text 46 275 ------------------------------------------------------------
+;
+#X text 30 244 Check the PD Window ---->;
+#X text 71 296 Use abstractions to create a step sequencer;
+#N canvas 352 23 774 608 drumMachine_w/abstractions 0;
+#X obj 38 406 makenote 100 250;
+#X obj 38 437 noteout 10;
+#X text 119 434 <---- the General MIDI channel for drums is '10';
+#X text 316 180 <-------;
+#X obj 37 70 conductor_sjf 125 16;
+#X text 369 179 This patch may look new \, but it is essentially the
+same as the velocity section of the stpseq16 patch (with 4 voices instead
+of one \, and no control over pitch);
+#X obj 37 149 drumMachine_sjf;
+#X text 371 221 As I wanted to control drums I decided that every step
+would be either on/off (i.e. striking the drum or not) so MIDI velocity
+<=0 is off \, anything >0 is on with that value as the velocity;
+#X connect 0 0 1 0;
+#X connect 0 1 1 1;
+#X connect 4 0 6 0;
+#X connect 6 0 0 0;
+#X restore 112 466 pd drumMachine_w/abstractions;
+#X text 52 334 ------------------------------------------------------------
+;
+#X text 77 355 Use everything you have learned so far to build a drum
+machine;
+#X text 79 380 NOTE: GeneralMIDI channel number 10 is for drum sounds
+so use --->;
+#X obj 134 395 noteout 10;
+#X text 80 412 Maybe use toggles instead of vsliders for the interface...
+;
+#X connect 4 0 8 0;
+#X connect 5 0 4 0;
+#X restore 223 270 pd abstractions;
+#X text 116 232 3 - creating abstractions \, i.e. using our code as
+if it were normal PD objects;

@@ -1,0 +1,593 @@
+#N canvas -1149 604 527 384 10;
+#X text 336 342 sjf \, SAE London \, 2020;
+#X text 111 70 Firstly \, go to Media >> Audio Settings and ensure
+your drivers are set correctly;
+#X text 113 96 Turn on DSP from the PD Window;
+#X text 103 114 ------------------------------------------------------------
+;
+#N canvas -1280 581 921 673 delay_based_filters_101 0;
+#X obj 381 389 noise~;
+#X text 41 6 As we have covered many times already \, combining signals
+with delayed copies of themselves results in phase cancellations;
+#X text 41 118 https://ccrma.stanford.edu/~jos/filters/Definition_Simplest_Low_Pass.html
+;
+#X text 43 51 Our first filter simply sums a signal with a copy of
+itself delayed by one sample;
+#N canvas 0 23 450 300 delWrite 0;
+#X obj 37 37 inlet~;
+#X obj 84 85 delwrite~ \$0-simpleLPF 10;
+#X obj 39 134 outlet~;
+#X connect 0 0 1 0;
+#X connect 0 0 2 0;
+#X restore 280 430 pd delWrite;
+#N canvas 0 23 450 300 delRead 0;
+#X obj 39 78 inlet~;
+#X obj 158 156 vd~ \$0-simpleLPF;
+#X obj 158 54 loadbang;
+#X obj 158 115 / 44.1;
+#X floatatom 158 136 10 0 0 0 ms - -;
+#X obj 31 189 +~, f 22;
+#X obj 31 209 outlet~;
+#X floatatom 158 96 5 0 0 0 samples - -;
+#X msg 158 75 2;
+#X connect 0 0 5 0;
+#X connect 1 0 5 1;
+#X connect 2 0 8 0;
+#X connect 3 0 4 0;
+#X connect 4 0 1 0;
+#X connect 5 0 6 0;
+#X connect 7 0 3 0;
+#X connect 8 0 7 0;
+#X restore 280 451 pd delRead;
+#X obj 483 406 tgl 15 0 empty empty lpf_on/off 17 7 0 10 -262144 -1
+-1 1 1;
+#X msg 483 447 1;
+#X obj 483 462 -;
+#X obj 473 504 *~;
+#X obj 483 426 t b f;
+#X obj 331 495 *~ 1;
+#X floatatom 483 483 5 0 0 0 - - -;
+#X obj 484 351 loadbang;
+#X msg 484 372 1;
+#X obj 366 554 *~ 0.1;
+#X obj 366 575 vol_sjf~;
+#X obj 366 615 dac~;
+#X text 42 77 (actually I used 2 samples...);
+#X text 41 158 Conceptually \, I think of this from the highest frequency
+(nyquist freq) first;
+#X text 65 182 at the nyquist frequency (SR/2) we need two samples
+to represent the frequency without alisaing (one sample to represent
+sompression \, one for rarefaction);
+#X text 65 217 if we delay this frequency by one sample we are \, essentially
+\, putting it 180degrees out of phase \, and therefore when we sum
+tthe two copies together we get silence;
+#X text 469 159 Conceptually \, the lowest frequencies work in the
+opposite way;
+#X text 493 183 so relative to the number of samples required to represent
+the frequency \, one sample delay is miniscule;
+#X text 493 218 therefore when we sum low frequencies with the delayed
+copies the reinforce each other;
+#X text 33 280 if you compare the output of the LFP with thedry signal
+below you should notice this attenuation of high frequecies and amplification
+of low frequencies;
+#X text 445 587 <--- turn me up;
+#X connect 0 0 9 0;
+#X connect 0 0 4 0;
+#X connect 4 0 5 0;
+#X connect 5 0 11 0;
+#X connect 6 0 10 0;
+#X connect 6 0 11 1;
+#X connect 7 0 8 0;
+#X connect 8 0 9 1;
+#X connect 8 0 12 0;
+#X connect 9 0 15 0;
+#X connect 10 0 7 0;
+#X connect 10 1 8 1;
+#X connect 11 0 15 0;
+#X connect 13 0 14 0;
+#X connect 14 0 6 0;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 16 0 17 1;
+#X restore 128 161 pd delay_based_filters_101;
+#X text 110 10 We have already looked at a number of ways delay lines
+are used to process audio and achieve audio effects;
+#X text 111 37 This lesson will explore using delay lines to create
+filters \, with the ultimate goal of creating artifical reverb;
+#X text 115 132 We'll start by creating a simple low pass filter using
+a delay line;
+#X text 105 175 ------------------------------------------------------------
+;
+#X text 117 193 next we will look at some other filter types;
+#N canvas -1280 581 1280 751 delay_based_filters 0;
+#X obj 120 345 fbcf_sjf~ 0.773 1687 1;
+#X obj 264 345 fbcf_sjf~ 0.802 1601 1;
+#X obj 407 345 fbcf_sjf~ 0.753 2053 1;
+#X obj 548 345 fbcf_sjf~ 0.733 2251 1;
+#X obj 953 112 ffcf_sjf~;
+#X obj 1052 223 fbffcf_sjf~ 0.7 0.7 347 1;
+#X obj 353 106 *~ 1;
+#X obj 1048 157 noise~;
+#X obj 1052 244 *~ 0.1;
+#X obj 1052 265 vol_sjf~;
+#X obj 1051 310 dac~;
+#X obj 300 545 +~;
+#X obj 569 545 +~;
+#X text 326 544 s1 = x1 + x3;
+#X text 599 544 s2 = x2 + x4;
+#X obj 638 56 noise~;
+#X obj 825 516 vradio 15 1 1 4 empty empty empty 0 -8 0 10 -262144
+-1 -1 0;
+#X obj 299 615 +~;
+#X text 324 616 out1 = s1 + s2;
+#X obj 337 667 == 0;
+#X obj 299 687 *~;
+#X obj 825 581 s \$0-revOut;
+#X obj 337 647 r \$0-revOut;
+#X obj 206 737 vol_sjf~;
+#X obj 205 782 dac~;
+#X obj 451 693 *~;
+#X obj 489 653 r \$0-revOut;
+#X text 494 620 out2 = -out1;
+#X obj 450 645 *~ -1;
+#X obj 489 673 == 1;
+#X obj 595 697 *~;
+#X obj 633 657 r \$0-revOut;
+#X obj 594 649 *~ -1;
+#X obj 750 696 *~;
+#X obj 788 656 r \$0-revOut;
+#X text 793 623 out4 = s1 - s2;
+#X obj 752 614 -~, f 4;
+#X text 638 624 out3 = -out4;
+#X obj 633 677 == 2;
+#X obj 788 676 == 3;
+#X obj 777 45 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 692 110 line~;
+#X obj 638 77 *~;
+#X obj 446 735 *~ 0.7;
+#X msg 692 89 1 \, 0 50;
+#X obj 853 19 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 356 33 fbffcf_sjf~ 0.7 0.7 1051 1;
+#X obj 356 53 fbffcf_sjf~ 0.7 0.7 337 1;
+#X obj 356 75 fbffcf_sjf~ 0.7 0.7 113 1;
+#X obj 505 137 t f f f f;
+#X obj 576 27 vsl 15 128 0 1 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 8700 1;
+#X obj 156 20 vsl 15 128 0 1 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 8400 1;
+#X obj 853 39 metro 1000;
+#X floatatom 156 156 5 0 0 0 - - -;
+#X floatatom 576 163 5 0 0 0 - - -;
+#X connect 0 0 11 0;
+#X connect 1 0 12 0;
+#X connect 2 0 11 1;
+#X connect 3 0 12 1;
+#X connect 5 0 8 0;
+#X connect 6 0 3 0;
+#X connect 6 0 0 0;
+#X connect 6 0 1 0;
+#X connect 6 0 2 0;
+#X connect 7 0 5 0;
+#X connect 8 0 9 0;
+#X connect 9 0 10 0;
+#X connect 9 0 10 1;
+#X connect 11 0 17 0;
+#X connect 11 0 36 0;
+#X connect 12 0 17 1;
+#X connect 12 0 36 1;
+#X connect 15 0 42 0;
+#X connect 16 0 21 0;
+#X connect 17 0 20 0;
+#X connect 17 0 28 0;
+#X connect 19 0 20 1;
+#X connect 20 0 43 0;
+#X connect 22 0 19 0;
+#X connect 23 0 24 0;
+#X connect 23 0 24 1;
+#X connect 25 0 43 0;
+#X connect 26 0 29 0;
+#X connect 28 0 25 0;
+#X connect 29 0 25 1;
+#X connect 30 0 43 0;
+#X connect 31 0 38 0;
+#X connect 32 0 30 0;
+#X connect 33 0 43 0;
+#X connect 34 0 39 0;
+#X connect 36 0 33 0;
+#X connect 36 0 32 0;
+#X connect 38 0 30 1;
+#X connect 39 0 33 1;
+#X connect 40 0 44 0;
+#X connect 41 0 42 1;
+#X connect 42 0 23 0;
+#X connect 42 0 46 0;
+#X connect 43 0 23 0;
+#X connect 44 0 41 0;
+#X connect 45 0 52 0;
+#X connect 46 0 47 0;
+#X connect 47 0 48 0;
+#X connect 48 0 6 0;
+#X connect 49 0 0 2;
+#X connect 49 1 1 2;
+#X connect 49 2 2 2;
+#X connect 49 3 3 2;
+#X connect 50 0 49 0;
+#X connect 50 0 54 0;
+#X connect 51 0 53 0;
+#X connect 51 0 46 1;
+#X connect 51 0 46 2;
+#X connect 51 0 47 1;
+#X connect 51 0 47 2;
+#X connect 51 0 48 1;
+#X connect 51 0 48 2;
+#X connect 52 0 40 0;
+#X restore 128 261 pd delay_based_filters;
+#N canvas -1280 581 1280 755 delay_based_filters_2 0;
+#X obj 203 562 vol_sjf~;
+#X obj 202 607 dac~;
+#X text 26 19 We have already seen a more powerful and flexible low
+pass filter than the one we just created \, so on its own that example
+is not of much use;
+#X text 25 58 However \, the concept of using delay lines to achieve
+filtering will enable us to create other filter types;
+#X text 24 89 ------------------------------------------------------------
+;
+#X text 36 107 first we'll look at creating comb filtering effects
+;
+#X text 30 170 ------------------------------------------------------------
+;
+#X text 42 188 we can also combine both feedback and feedforward algorithms
+to create allpass filters;
+#N canvas 1221 54 852 594 comb_filter_1_feedforward 1;
+#X text 53 13 As I'm sure you remember...;
+#X obj 209 344 noise~;
+#X text 54 30 "Comb filtering is the effect of alternating reinforcements/cancellations
+at different frequencies when multiple time-displaced versions of a
+complex sound reach a common point in space";
+#X obj 136 481 *~ 0.1;
+#X obj 136 502 vol_sjf~;
+#X obj 136 545 dac~;
+#X obj 338 332 / 44.1;
+#X floatatom 338 353 10 0 0 0 ms - -;
+#X floatatom 338 313 5 0 0 0 samples - -;
+#X text 319 286 delay time;
+#X obj 480 249 vsl 10 60 0 1 0 1 empty empty gain_/_feedforward_coefficient
+0 -9 0 10 -262144 -1 -1 5900 1;
+#X obj 128 298 tgl 15 0 empty empty ffcomb_on/off 17 7 0 10 -262144
+-1 -1 1 1;
+#X msg 128 339 1;
+#X obj 128 354 -;
+#X obj 145 408 *~;
+#X obj 128 318 t b f;
+#X obj 177 409 *~;
+#X obj 128 255 loadbang;
+#X msg 128 276 1;
+#X text 51 79 i.e. when we sum a signal with delayed copies of itself
+we get a pattern of reinforcement and then cancellation throughout
+the frequency spectrum (think of an actual comb you would use in your
+hair);
+#X text 51 132 Our first comb filter is a feedforward algorithm. i.e.
+the signal is delayed and added to the input \, exactly the same as
+our LPF;
+#X text 51 167 However \, unlike our LPF we now have variable delay
+time and control of the level of the delayed signal (gain/feedforward
+coefficient);
+#X msg 167 273 200;
+#X text 474 13 https://ccrma.stanford.edu/~jos/pasp/Feedforward_Comb_Filters.html
+;
+#N canvas 0 23 450 300 delwriteFFCF 0;
+#X obj 37 37 inlet~;
+#X obj 39 240 outlet~;
+#X obj 156 119 delwrite~ \$0-comb_1 100;
+#X connect 0 0 1 0;
+#X connect 0 0 2 0;
+#X restore 209 365 pd delwriteFFCF;
+#N canvas 0 23 511 300 delReadFFCF 0;
+#X obj 37 37 inlet~;
+#X obj 37 188 +~;
+#X obj 37 209 outlet~;
+#X obj 156 119 vd~ \$0-comb_1 1;
+#X obj 156 81 inlet;
+#X text 151 60 delayTime;
+#X obj 294 106 inlet;
+#X text 289 85 gain / feedforward coefficient;
+#X obj 156 140 vol_sjf~, f 23;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 3 0 8 0;
+#X connect 4 0 3 0;
+#X connect 6 0 8 1;
+#X connect 8 0 1 1;
+#X restore 209 386 pd delReadFFCF;
+#X f 46;
+#X connect 1 0 24 0;
+#X connect 1 0 14 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 4 0 5 1;
+#X connect 6 0 7 0;
+#X connect 7 0 25 1;
+#X connect 8 0 6 0;
+#X connect 10 0 25 2;
+#X connect 11 0 15 0;
+#X connect 12 0 13 0;
+#X connect 13 0 14 1;
+#X connect 14 0 3 0;
+#X connect 15 0 12 0;
+#X connect 15 1 13 1;
+#X connect 15 1 16 1;
+#X connect 16 0 3 0;
+#X connect 17 0 18 0;
+#X connect 17 0 22 0;
+#X connect 18 0 11 0;
+#X connect 22 0 8 0;
+#X connect 24 0 25 0;
+#X connect 25 0 16 0;
+#X restore 126 126 pd comb_filter_1_feedforward;
+#N canvas -1280 581 832 459 comb_filter_2_feedback 1;
+#X obj 175 198 noise~;
+#X obj 102 335 *~ 0.1;
+#X obj 102 356 vol_sjf~;
+#X obj 102 399 dac~;
+#X obj 309 151 / 44.1;
+#X floatatom 309 172 10 0 0 0 ms - -;
+#X floatatom 309 132 5 0 0 0 samples - -;
+#X text 290 105 delay time;
+#X obj 446 103 vsl 10 60 0 1 0 1 empty empty gain_/_feedback_coefficient
+0 -9 0 10 -262144 -1 -1 4800 1;
+#X obj 94 152 tgl 15 0 empty empty ffcomb_on/off 17 7 0 10 -262144
+-1 -1 1 1;
+#X msg 94 193 1;
+#X obj 94 208 -;
+#X obj 111 262 *~;
+#X obj 94 172 t b f;
+#X obj 143 263 *~;
+#X obj 94 109 loadbang;
+#X msg 94 130 1;
+#X msg 133 127 200;
+#X text 433 12 https://ccrma.stanford.edu/~jos/pasp/Feedback_Comb_Filters.html
+;
+#X obj 372 299 send~ \$0-comb_feedback_loop;
+#X obj 242 210 receive~ \$0-comb_feedback_loop;
+#N canvas 0 378 511 300 delReadFBCF 0;
+#X obj 37 37 inlet~;
+#X obj 37 209 outlet~;
+#X obj 156 81 inlet;
+#X text 151 60 delayTime;
+#X obj 291 81 inlet;
+#X text 247 61 gain / feedforward coefficient;
+#X obj 156 140 vol_sjf~, f 23;
+#X obj 156 119 vd~ \$0-comb_2;
+#X obj 156 180 *~ -1;
+#X text 197 181 phase/polarity invert;
+#X obj 156 201 outlet~;
+#X text 147 220 feedback loop;
+#X connect 0 0 1 0;
+#X connect 2 0 7 0;
+#X connect 4 0 6 1;
+#X connect 6 0 8 0;
+#X connect 7 0 6 0;
+#X connect 8 0 10 0;
+#X restore 175 259 pd delReadFBCF;
+#X f 46;
+#N canvas 0 23 450 300 delwriteFBCF 0;
+#X obj 52 63 inlet~;
+#X obj 39 240 outlet~;
+#X obj 82 112 delwrite~ \$0-comb_2 100;
+#X connect 0 0 1 0;
+#X connect 0 0 2 0;
+#X restore 175 238 pd delwriteFBCF;
+#X text 48 12 The second type of comb filtering is feedback \, in which
+the output of the delay line is phase inverted \, summed with the input
+\, and then fed back into the delay line;
+#X connect 0 0 22 0;
+#X connect 0 0 12 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 5 0;
+#X connect 5 0 21 1;
+#X connect 6 0 4 0;
+#X connect 8 0 21 2;
+#X connect 9 0 13 0;
+#X connect 10 0 11 0;
+#X connect 11 0 12 1;
+#X connect 12 0 1 0;
+#X connect 13 0 10 0;
+#X connect 13 1 11 1;
+#X connect 13 1 14 1;
+#X connect 14 0 1 0;
+#X connect 15 0 16 0;
+#X connect 15 0 17 0;
+#X connect 16 0 9 0;
+#X connect 17 0 6 0;
+#X connect 20 0 22 0;
+#X connect 21 0 14 0;
+#X connect 21 1 19 0;
+#X connect 22 0 21 0;
+#X restore 127 152 pd comb_filter_2_feedback;
+#N canvas -1280 581 1258 733 comb_filter_3_FBFF 0;
+#X obj 175 198 noise~;
+#X obj 97 378 *~ 0.1;
+#X obj 97 399 vol_sjf~;
+#X obj 97 442 dac~;
+#X obj 313 158 / 44.1;
+#X floatatom 313 179 10 0 0 0 ms - -;
+#X floatatom 313 139 5 0 0 0 samples - -;
+#X text 294 112 delay time;
+#X obj 453 182 vsl 10 60 0 1 0 1 empty empty gain_/_feedforward_coefficient
+0 -9 0 10 -262144 -1 -1 5900 1;
+#X obj 94 152 tgl 15 0 empty empty ffcomb_on/off 17 7 0 10 -262144
+-1 -1 1 1;
+#X msg 94 193 1;
+#X obj 94 208 -;
+#X obj 78 351 *~;
+#X obj 94 172 t b f;
+#X obj 110 352 *~;
+#X obj 94 109 loadbang;
+#X msg 94 130 1;
+#X msg 133 127 200;
+#X text 433 12 https://ccrma.stanford.edu/~jos/pasp/Allpass_Two_Combs.html
+;
+#X text 46 4 an allpass filter is a filter that has a gain of 1 (i.e.
+not attenuation/amplification) across all frequencies;
+#X text 46 27 but the phase response is shifted by delaying different
+frequencies differently;
+#X text 45 53 This example combines a feedback and feedforward comb
+filter algorithm to create an allpass filter;
+#X obj 210 218 receive~ \$0-fbffcomb_feedback_loop;
+#X obj 403 316 send~ \$0-fbffcomb_feedback_loop;
+#X obj 645 182 vsl 10 60 0 1 0 1 empty empty gain_/_feedback_coefficient
+0 -9 0 10 -262144 -1 -1 5900 1;
+#N canvas 920 305 450 300 delwriteFBFF 1;
+#X obj 37 37 inlet~;
+#X obj 39 240 outlet~;
+#X obj 156 119 delwrite~ \$0-fbffcomb 100;
+#X connect 0 0 1 0;
+#X connect 0 0 2 0;
+#X restore 175 238 pd delwriteFBFF;
+#N canvas 0 23 858 300 delReadFBFF 0;
+#X obj 37 37 inlet~;
+#X obj 37 209 outlet~;
+#X obj 156 81 inlet;
+#X text 151 60 delayTime;
+#X obj 461 125 inlet;
+#X obj 305 154 vol_sjf~, f 23;
+#X obj 156 119 vd~ \$0-fbffcomb;
+#X obj 305 194 *~ -1;
+#X obj 305 215 outlet~;
+#X text 339 195 phase/polarity invert;
+#X text 293 234 feedback loop;
+#X text 456 104 gain / feedback coefficient;
+#X obj 156 163 vol_sjf~;
+#X obj 333 89 inlet;
+#X text 276 70 gain / feedforward coefficient;
+#X connect 0 0 1 0;
+#X connect 2 0 6 0;
+#X connect 4 0 5 1;
+#X connect 5 0 7 0;
+#X connect 6 0 5 0;
+#X connect 6 0 12 0;
+#X connect 7 0 8 0;
+#X connect 12 0 1 0;
+#X connect 13 0 12 1;
+#X restore 175 260 pd delReadFBFF;
+#X f 46;
+#X obj 555 66 vsl 10 60 0 1 0 1 empty empty gain_/_feedforward_coefficient
+0 -9 0 10 -262144 -1 -1 5900 1;
+#X obj 435 462 *~ 0.1;
+#X obj 435 483 vol_sjf~;
+#X obj 435 526 dac~;
+#N canvas 0 23 972 760 test 0;
+#X obj 37 209 inlet~;
+#X obj 36 439 +~, f 13;
+#X obj 66 471 delwrite~ \$0-FBCF 100;
+#X obj 36 590 outlet~;
+#X obj 142 389 *~, f 5;
+#X obj 368 301 sig~ \$1;
+#X obj 111 419 *~ -1;
+#X text 415 299 a;
+#X text 320 288 y(n-M);
+#X text 146 420 -a*y(n-M);
+#X text 29 187 input: x(n);
+#X text 423 435 b;
+#X obj 248 288 vd~ \$0-FBCF;
+#X text 373 522 arg1: feedback coefficiant;
+#X obj 368 278 inlet;
+#X text 376 640 sjf \, SAE London 2020;
+#X text 200 14 https://ccrma.stanford.edu/~jos/pasp/Allpass_Two_Combs.html
+;
+#X text 209 39 v(n) = x(n) - a*v(n-M) --> feedback;
+#X text 209 53 y(n) = b*x(n) + v(n-M) --> feedforward;
+#X text 361 260 feedback coefficient;
+#X text 373 536 arg2: feedforward coefficiant;
+#X text 373 549 arg3: delay time;
+#X text 374 563 arg4: delay time unit (0==ms \; 1==samples);
+#X text 138 437 feedback loop;
+#X obj 36 537 +~;
+#X obj 248 478 *~, f 25;
+#X obj 393 392 inlet;
+#X text 386 374 feedforward coefficient;
+#X text 440 413 b;
+#X text 60 534 feedforward loop;
+#X obj 233 120 loadbang;
+#X obj 311 125 inlet;
+#X obj 233 141 t b b, f 6;
+#X obj 233 206 route 0 1;
+#X obj 266 230 / 44.1;
+#X obj 233 185 pack, f 11;
+#X text 307 102 delay time;
+#X text 258 257 M;
+#X obj 233 256 f;
+#X obj 265 164 f \$3;
+#X obj 233 164 f \$4;
+#X obj 393 415 sig~ \$2;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 1 0 24 0;
+#X connect 4 0 6 0;
+#X connect 5 0 4 1;
+#X connect 6 0 1 1;
+#X connect 12 0 25 0;
+#X connect 12 0 4 0;
+#X connect 14 0 5 0;
+#X connect 24 0 3 0;
+#X connect 25 0 24 1;
+#X connect 26 0 41 0;
+#X connect 30 0 32 0;
+#X connect 31 0 35 1;
+#X connect 32 0 40 0;
+#X connect 32 1 39 0;
+#X connect 33 0 38 0;
+#X connect 33 1 34 0;
+#X connect 34 0 38 0;
+#X connect 35 0 33 0;
+#X connect 38 0 12 0;
+#X connect 39 0 35 1;
+#X connect 40 0 35 0;
+#X connect 41 0 25 1;
+#X restore 435 440 pd test;
+#X f 15;
+#X obj 363 391 noise~;
+#X connect 0 0 25 0;
+#X connect 0 0 12 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 4 0 5 0;
+#X connect 5 0 26 1;
+#X connect 5 0 31 1;
+#X connect 6 0 4 0;
+#X connect 8 0 26 2;
+#X connect 8 0 31 3;
+#X connect 9 0 13 0;
+#X connect 10 0 11 0;
+#X connect 11 0 12 1;
+#X connect 12 0 1 0;
+#X connect 13 0 10 0;
+#X connect 13 1 11 1;
+#X connect 13 1 14 1;
+#X connect 14 0 1 0;
+#X connect 15 0 16 0;
+#X connect 15 0 17 0;
+#X connect 16 0 9 0;
+#X connect 17 0 6 0;
+#X connect 22 0 25 0;
+#X connect 24 0 26 3;
+#X connect 24 0 31 2;
+#X connect 25 0 26 0;
+#X connect 26 0 14 0;
+#X connect 26 1 23 0;
+#X connect 27 0 8 0;
+#X connect 27 0 24 0;
+#X connect 28 0 29 0;
+#X connect 29 0 30 0;
+#X connect 29 0 30 1;
+#X connect 31 0 28 0;
+#X connect 32 0 31 0;
+#X restore 128 218 pd comb_filter_3_FBFF;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
+#X restore 129 216 pd delay_based_filters_2;

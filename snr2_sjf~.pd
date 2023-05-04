@@ -1,0 +1,170 @@
+#N canvas 0 23 1181 746 10;
+#X obj 316 592 lop~ 5000, f 25;
+#N canvas -1280 581 1075 671 snareTones 0;
+#X obj 383 55 inlet;
+#X obj 375 191 vline~;
+#X obj 371 422 *~, f 12;
+#X text 12 134 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 117 422 3 - multiply by signal for amplitude ramp;
+#X text 455 189 and it controls the frequency of the oscillator;
+#X obj 620 304 * 1.41517;
+#X obj 569 365 +~;
+#X obj 569 385 osc~;
+#X obj 472 391 osc~;
+#X obj 462 361 +~;
+#X obj 490 300 *~;
+#X obj 375 135 f, f 15;
+#X text 661 224 this is the lowest frequency of the oscillator on the
+left;
+#X text 683 302 To start I decided to just multiply the base frequency
+by something very random to get the lowest frequency of the right oscillator
+\, this way we always get an inharmonic relationship;
+#X text 138 299 4 - use ramp to sweep frequency (from sweep --> 0 as
+ramp goes from 1 --> 0);
+#X text 597 360 5 - add result of sweep*ramp (step 4) to lowest frequency
+for each oscillator;
+#X text 379 25 trigger In;
+#X text 481 33 tone length in;
+#X obj 490 55 inlet;
+#X obj 522 229 inlet;
+#X obj 623 225 inlet;
+#X text 517 207 sweep;
+#X text 604 208 base freq;
+#X obj 371 443 outlet~;
+#X msg 375 160 1 \, 0 \$1;
+#X text 425 446 changed my mind and went back to one outlet~;
+#X obj 729 490 osc~;
+#X obj 729 442 *~, f 14;
+#X obj 729 463 +~;
+#X obj 729 561 osc~;
+#X obj 729 513 *~, f 14;
+#X obj 729 534 +~;
+#X obj 728 583 *~ 0.4707;
+#X connect 0 0 12 0;
+#X connect 1 0 2 0;
+#X connect 1 0 11 0;
+#X connect 2 0 24 0;
+#X connect 6 0 7 1;
+#X connect 7 0 8 0;
+#X connect 8 0 28 0;
+#X connect 8 0 2 1;
+#X connect 9 0 2 1;
+#X connect 10 0 9 0;
+#X connect 11 0 10 0;
+#X connect 11 0 7 0;
+#X connect 12 0 25 0;
+#X connect 19 0 12 1;
+#X connect 20 0 11 1;
+#X connect 21 0 6 0;
+#X connect 21 0 10 1;
+#X connect 21 0 28 1;
+#X connect 21 0 29 1;
+#X connect 21 0 31 1;
+#X connect 21 0 32 1;
+#X connect 25 0 1 0;
+#X connect 27 0 31 0;
+#X connect 28 0 29 0;
+#X connect 29 0 27 0;
+#X connect 30 0 33 0;
+#X connect 31 0 32 0;
+#X connect 32 0 30 0;
+#X connect 33 0 2 1;
+#X restore 176 330 pd snareTones;
+#X f 38;
+#X obj 176 420 vol_sjf~ tone1;
+#X obj 464 399 vol_sjf~ snares;
+#X obj 316 656 vol_sjf~ out;
+#X text 486 589 and a low pass filter at the end of the chain;
+#N canvas 0 23 871 657 click&snares 0;
+#X obj 135 60 inlet;
+#X text 136 39 trigger;
+#X obj 135 294 *~, f 4;
+#X obj 215 243 noise~;
+#X text 259 242 our noise source is just white noise;
+#X text 169 292 amplitude ramp;
+#X obj 134 155 vline~;
+#X obj 135 237 *~ 0.5;
+#X text 269 118 I use a separate envelope for the white noise that
+will mimick the stick hitting the skin \, and the metal snares;
+#X msg 134 122 1 \, 0.1 20 1 \, 0 \$1 \$1;
+#X obj 134 85 f, f 15;
+#X obj 218 59 inlet;
+#X text 219 38 length;
+#X obj 410 286 inlet;
+#X text 407 268 hpf cutoff;
+#X obj 135 338 outlet~;
+#X text 270 141 `;
+#X obj 135 317 hip~ 5000, f 46;
+#X connect 0 0 10 0;
+#X connect 2 0 17 0;
+#X connect 3 0 2 1;
+#X connect 6 0 7 0;
+#X connect 7 0 2 0;
+#X connect 9 0 6 0;
+#X connect 10 0 9 0;
+#X connect 11 0 10 1;
+#X connect 13 0 17 1;
+#X connect 17 0 15 0;
+#X restore 464 306 pd click&snares;
+#X obj 24 76 hsl 50 10 50 300 1 1 \$0-sweep_snd \$0-sweep_rec sweep
+-2 -8 0 10 -262144 -1 -1 3300 1;
+#X obj 24 52 hsl 50 10 50 200 0 1 \$0-tLength_snd \$0-tLength_rec tLength
+-2 -8 0 10 -262144 -1 -1 1900 1;
+#X obj 79 52 hsl 50 10 100 300 0 1 \$0-basef_snd \$0-basef_rec basef
+-2 -8 0 10 -262144 -1 -1 1900 1;
+#X obj 141 33 hsl 50 10 0 1 0 1 \$0-snrVol_snd \$0-snrVol_rec snr_vol
+-2 -8 0 10 -262144 -1 -1 4900 1;
+#X obj 78 76 hsl 50 10 0 1 0 1 \$0-tVol_snd \$0-tVol_rec tVol -2 -8
+0 10 -262144 -1 -1 400 1;
+#X obj 201 75 hsl 50 10 0 1 0 1 \$0-vol_snd \$0-vol_rec vol -2 -8 0
+10 -262144 -1 -1 4900 1;
+#X obj 412 659 r \$0-vol_snd;
+#X obj 140 56 hsl 50 10 50 200 0 1 \$0-snrLength_snd \$0-snrLength_rec
+snrLength -2 -8 0 10 -262144 -1 -1 2900 1;
+#X obj 525 261 r \$0-snrLength_snd;
+#X obj 139 80 hsl 50 10 1000 20000 1 1 \$0-hpf_snd \$0-hpf_rec hpf
+-2 -8 0 10 -262144 -1 -1 1900 1;
+#X obj 564 284 r \$0-hpf_snd;
+#X obj 329 297 r \$0-basef_snd;
+#X obj 286 273 r \$0-sweep_snd;
+#X obj 202 51 hsl 50 10 1000 20000 1 1 \$0-lpf_snd \$0-lpf_rec lpf
+-2 -8 0 10 -262144 -1 -1 4900 1;
+#X obj 577 350 r \$0-snrVol_snd;
+#X obj 460 562 r \$0-lpf_snd;
+#X obj 316 696 outlet~;
+#X obj 177 186 inlet;
+#X text 165 167 MIDI Velocity in;
+#X obj 177 209 t b b f, f 97;
+#X obj 758 242 / 127;
+#X msg 758 263 \$1 5;
+#X obj 758 284 line~;
+#X obj 316 623 *~, f 76;
+#X text 797 239 convert MIDI Velocity (0 --> 127) to volume changes
+(0 -->1);
+#X obj 237 252 r \$0-tLength_snd;
+#X obj 194 364 r \$0-tVol_snd;
+#X connect 0 0 30 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 0 0;
+#X connect 4 0 23 0;
+#X connect 6 0 3 0;
+#X connect 13 0 4 1;
+#X connect 15 0 6 1;
+#X connect 17 0 6 2;
+#X connect 18 0 1 3;
+#X connect 19 0 1 2;
+#X connect 21 0 3 1;
+#X connect 22 0 0 1;
+#X connect 24 0 26 0;
+#X connect 26 0 1 0;
+#X connect 26 1 6 0;
+#X connect 26 2 27 0;
+#X connect 27 0 28 0;
+#X connect 28 0 29 0;
+#X connect 29 0 30 1;
+#X connect 30 0 4 0;
+#X connect 32 0 1 1;
+#X connect 33 0 2 1;
+#X coords 0 -1 1 1 235 70 1 20 20;

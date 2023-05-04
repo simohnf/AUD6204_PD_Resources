@@ -1,0 +1,1345 @@
+#N canvas 454 152 651 590 10;
+#N canvas 522 23 492 747 simple_counter 0;
+#N canvas 75 68 932 490 simple_counter_solution 0;
+#X msg 398 106 1;
+#X obj 398 182 +;
+#X floatatom 398 249 5 0 0 0 - - -;
+#X text 30 177 2 - the 1 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 30 240 3 - the number is displayed and then fed to the 'cold'
+inlet of the '+' object (i.e. it is stored until the next number is
+received in the hot input;
+#X text 414 78 <----- click me;
+#X text 36 332 And that's it \, a simple counter;
+#X msg 635 122 0;
+#X text 24 11 One possible solution is as follows;
+#X text 580 88 we can start to get fancy and make a way of resetting
+the count to 0;
+#X obj 398 82 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X text 29 106 1 - we want our count to go up by 1 each time \, so
+each time you click bang it triggers the message to output '1';
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 1 1;
+#X connect 7 0 1 1;
+#X connect 10 0 0 0;
+#X restore 108 615 pd simple_counter_solution;
+#X msg 139 323 1;
+#X obj 180 324 +;
+#X floatatom 216 324 5 0 0 0 - - -;
+#X text 42 161 Activate Edit Mode and see if you can connect these
+objects to make a simple counter;
+#X text 104 591 click below for a solution;
+#X text 41 3 A simple counter has many uses in audio programming (e.g.
+counting the beats of a song). It is also a good way to begin 'thinking
+like a computer';
+#X text 39 56 First we will create a counter that just counts up (i.e.
+1 \, 2 \, 3 \, 4 \, 5 \, ...) one number every time a button is pressed
+;
+#X obj 118 323 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 40 98 When coding we need to be very clear on the steps required
+and the order those steps happen in;
+#X text 42 215 TIPS:;
+#X text 42 231 Get a piece of paper and a pen and try to write out
+each step as a flow chart before connecting the objects;
+#X text 44 263 Don't forget to use the "print" object to test your
+code as you build it!!!;
+#X restore 241 224 pd simple_counter;
+#X text 129 221 click me ------->;
+#X text 129 254 click me ------->;
+#X text 129 287 click me ------->;
+#X text 125 365 click me ------->;
+#X text 69 322 ------------------------------------------------------------
+;
+#X text 70 402 ------------------------------------------------------------
+;
+#X text 126 447 click me ------->;
+#X text 131 516 click me ------->;
+#X text 127 204 1 - Create a simple counter;
+#X text 130 346 2 - create a simple step sequencer;
+#X text 131 426 3 - basic midi;
+#X text 136 495 4 - tidying up our code;
+#X text 57 5 NOTE: If SimpleSynth was not open before you opened PD
+you will need to close PD \, open SimpleSynth \, and reopen PD;
+#X text 57 34 NOTE: In the Media menu (along the top^^^) go to MIDI
+Settings and make sure SimpleSynth is selected;
+#X text 73 166 ------------------------------------------------------------
+;
+#N canvas 0 127 643 751 simple_counter_2 0;
+#X msg 236 211 0;
+#X text 39 56 So \, we may as well start as we mean to continue;
+#N canvas 0 214 739 664 simple_counter_2_solution 0;
+#X obj 399 174 +;
+#X floatatom 399 241 5 0 0 0 - - -;
+#X text 426 45 <----- click me;
+#X msg 523 142 0;
+#X msg 399 98 0;
+#X obj 399 295 + 1;
+#X text 30 98 1 - we still want our count to go up by 1 each time \,
+but we want to output 0 the first time;
+#X text 31 169 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 32 243 3 - the count is displayed;
+#X text 33 297 4 - and then 1 is added to it \, before feeding the
+count back to the cold inlet of the first '+' object;
+#X text 461 123 we can still reset in the same way as before;
+#X text 25 3 One solution is as follows;
+#X obj 399 49 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X text 421 56 (Not 100% necessary but..);
+#X obj 163 526 +;
+#X text 190 465 <----- click me;
+#X msg 286 520 0;
+#X msg 163 497 0;
+#X obj 232 557 + 1;
+#X obj 163 469 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 185 476 (Not 100% necessary but..);
+#X floatatom 163 618 5 0 0 0 - - -;
+#X text 42 368 ------------------------------------------------------------
+;
+#X obj 163 548 t f f;
+#X text 20 401 We could use a trigger object to tidy things up more
+and have the display of the counter come at the end of the process
+('f' is short for float \, or decimal number);
+#X connect 0 0 1 0;
+#X connect 1 0 5 0;
+#X connect 3 0 0 1;
+#X connect 4 0 0 0;
+#X connect 5 0 0 1;
+#X connect 12 0 4 0;
+#X connect 14 0 23 0;
+#X connect 16 0 14 1;
+#X connect 17 0 14 0;
+#X connect 18 0 14 1;
+#X connect 19 0 17 0;
+#X connect 23 0 21 0;
+#X connect 23 1 18 0;
+#X restore 51 651 pd simple_counter_2_solution;
+#X msg 106 201 0;
+#X obj 121 258 +;
+#X floatatom 173 289 5 0 0 0 - - -;
+#X obj 139 331 + 1;
+#X text 52 626 click below for a solution;
+#X obj 72 233 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X text 41 141 Activate Edit Mode and see if you can connect these
+objects to make a simple counter that begins its count at 0 and has
+a reset option;
+#X text 41 3 Our last counter started at 1 \, but when working with
+computers you will find you more often need to start with 0;
+#X restore 241 257 pd simple_counter_2;
+#N canvas 313 127 444 751 simple_counter_3 0;
+#X msg 236 211 0;
+#X msg 106 201 0;
+#X obj 121 258 +;
+#X floatatom 173 289 5 0 0 0 - - -;
+#X obj 139 331 + 1;
+#X text 59 634 click below for a solution;
+#X obj 72 233 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X text 41 3 Now we want to build on our last counter by having the
+triggers happen automatically once every 500ms (i.e. twice per second)
+;
+#X text 39 56 We also want our count to only cycle through 8 different
+numbers (as if we have 8 beats in a bar);
+#X text 37 99 Activate Edit Mode and see if you can connect these objects
+to make a simple counter that begins its count at 0 has a reset option
+;
+#X obj 242 388 % 8;
+#X obj 56 379 metro 500;
+#X obj 160 372 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#N canvas 0 134 989 744 simple_counter_3_solution 0;
+#X obj 420 175 +;
+#X msg 467 147 0;
+#X msg 420 146 0;
+#X obj 472 209 + 1;
+#X obj 420 118 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X floatatom 420 338 5 0 0 0 - - -;
+#X obj 420 272 % 8;
+#X obj 420 47 metro 500;
+#X obj 420 26 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 607 344 print v1;
+#X obj 417 522 +;
+#X msg 473 495 0;
+#X msg 417 493 0;
+#X obj 486 602 + 1;
+#X obj 417 465 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X floatatom 417 679 5 0 0 0 - - -;
+#X obj 417 417 metro 500;
+#X obj 417 396 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 417 582 % 8;
+#X obj 599 638 print v2;
+#X text 40 29 1 - we use the toggle to turn on/off the metronome \,
+the metronome outputs a bang every 500ms (because of the argument)
+;
+#X text 40 116 2 - we still want our count to go up by 1 each time
+\, but we want to output 0 the first time;
+#X text 41 175 3 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 40 219 4 - the count is output from the right output of the
+trigger first \, it has 1 added to it and then the new count is stored
+for the next trigger;
+#X text 46 369 ------------------------------------------------------------
+;
+#X text 43 388 1 - we use the toggle to turn on/off the metronome \,
+the metronome outputs a bang every 500ms (because of the argument)
+;
+#X text 43 475 2 - we still want our count to go up by 1 each time
+\, but we want to output 0 the first time;
+#X text 44 534 3 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 46 577 4 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X text 46 680 6 - The count is then displayed;
+#X text 46 630 5 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it and then the new count is
+stored for the next trigger;
+#X text 41 341 6 - The count is then displayed;
+#X text 39 280 5 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X text 502 494 reset;
+#X text 496 149 reset;
+#X text 593 370 Turn on both metronomes at the same time;
+#X text 595 392 Look at the PD window and note the difference between
+the count for v1 (above) and v2 (below);
+#X text 595 423 It will be important to think about exactly what you
+want patches to achieve as even in a simple scenario like this there
+are different ways of arranging our steps (i.e. connecting our objects)
+\, each of which will have different pros and cons...;
+#X text 627 16 NOTE:;
+#X text 627 80 This makes sense because;
+#X text 652 95 0/8 = 0 with a remainder of 0;
+#X text 652 110 1/8 = 0 with a remainder of 1;
+#X text 652 125 2/8 = 0 with a remainder of 2;
+#X text 652 137 .;
+#X text 652 148 .;
+#X text 652 158 .;
+#X text 652 186 8/8 = 1 with a remainder of 0;
+#X text 652 200 9/8 = 1 with a remainder of 1;
+#X text 652 173 7/8 = 1 with a remainder of 7;
+#X text 652 214 etc.;
+#X text 627 31 Pay attention to how the 'modulo' object gives us a
+number that cycles through 8 (because of the argument) numbers \, but
+always begins with 0;
+#X obj 420 219 t f f;
+#X obj 417 621 t f f;
+#X connect 0 0 51 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 3 0 9 0;
+#X connect 4 0 2 0;
+#X connect 6 0 5 0;
+#X connect 7 0 4 0;
+#X connect 8 0 7 0;
+#X connect 10 0 18 0;
+#X connect 11 0 10 1;
+#X connect 12 0 10 0;
+#X connect 13 0 10 1;
+#X connect 13 0 19 0;
+#X connect 14 0 12 0;
+#X connect 16 0 14 0;
+#X connect 17 0 16 0;
+#X connect 18 0 52 0;
+#X connect 51 0 6 0;
+#X connect 51 1 3 0;
+#X connect 52 0 15 0;
+#X connect 52 1 13 0;
+#X restore 58 660 pd simple_counter_3_solution;
+#X obj 253 274 t f f;
+#X restore 241 290 pd simple_counter_3;
+#N canvas 0 457 448 421 simple_step_sequencer 0;
+#X text 33 335 click below for a solution;
+#X text 41 47 Your sequencer should:;
+#X text 42 67 - cycle through 8 beats \, one beat every 250ms;
+#X text 42 84 - trigger a different "button" on each beat (i.e. 8 different
+"buttons");
+#X text 53 114 (we'll look at actually triggering sounds in the future)
+;
+#N canvas 0 295 1069 583 simple_sequencer_solution 0;
+#X obj 382 199 +;
+#X msg 661 142 0;
+#X msg 382 170 0;
+#X obj 451 279 + 1;
+#X obj 382 142 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X floatatom 382 356 5 0 0 0 - - -;
+#X obj 382 73 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 382 259 % 8;
+#X text 8 152 2 - we still want our count to go up by 1 each time \,
+but we want to output 0 the first time;
+#X text 9 211 3 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 11 254 4 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X text 11 307 5 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it and then the new count is
+stored for the next trigger;
+#X text 656 127 reset;
+#X text 11 357 6 - The count is then displayed (not 100% necessary)
+;
+#X obj 382 449 sel 0 1 2 3 4 5 6 7;
+#X obj 382 507 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 398 507 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 413 507 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 429 507 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 444 507 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 460 507 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 475 507 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 491 507 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 654 28 ADVANCED;
+#X floatatom 662 65 5 50 2000 0 - - -;
+#X obj 382 94 metro 250;
+#X text 653 47 delta time;
+#X floatatom 662 206 5 1 8 0 - - -;
+#X text 653 191 #beats in count;
+#X text 701 65 Right click on this object and select "Properties";
+#X text 701 80 Note how I have added "limits" to the possible range
+of numbers;
+#X text 710 209 Right click on this object and select "Properties"
+;
+#X text 710 224 Note how I have added "limits" to the possible range
+of numbers;
+#X text 8 65 1 - we use the toggle to turn on/off the metronome \,
+the metronome outputs a bang every 250ms (because of the argument)
+;
+#X obj 382 298 t f f;
+#X text 11 442 7 - the 'select'(or sel) object parses the count \,
+outputting a different bang on each number;
+#X connect 0 0 7 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 14 0;
+#X connect 6 0 25 0;
+#X connect 7 0 34 0;
+#X connect 14 0 15 0;
+#X connect 14 1 16 0;
+#X connect 14 2 17 0;
+#X connect 14 3 18 0;
+#X connect 14 4 19 0;
+#X connect 14 5 20 0;
+#X connect 14 6 21 0;
+#X connect 14 7 22 0;
+#X connect 24 0 25 1;
+#X connect 25 0 4 0;
+#X connect 27 0 7 1;
+#X connect 34 0 5 0;
+#X connect 34 1 3 0;
+#X restore 32 361 pd simple_sequencer_solution;
+#X text 38 142 Advanced:;
+#X text 39 158 - make a way of resetting the count back to 0;
+#X text 38 179 - make a way of changing the time between each beat
+(this is often referred to as the delta time);
+#X text 40 213 - make a way of changing the number of beats (i.e. maybe
+you want to change it to 6 beats instead of 8 while performing);
+#X text 41 3 Using what we have already learned and the list of basic
+objects \, create a simple sequencer;
+#X restore 237 368 pd simple_step_sequencer;
+#N canvas 0 649 470 229 step_sequencer_w/midi_output 0;
+#X text 65 -23 click me ------->;
+#X text 66 8 click me ------->;
+#X text 81 104 Using makenote & noteout \, create a sequencer that
+cycles through 8 different pitches and outputs them to the MIDI synth
+;
+#X text 67 67 ------------------------------------------------------------
+;
+#N canvas 106 23 1003 751 makenote&noteout_combination 0;
+#X obj 591 211 makenote;
+#X msg 591 58 60;
+#X msg 613 127 100;
+#X text 617 56 MIDI pitch;
+#X text 879 127 MIDI channel;
+#X msg 852 127 1;
+#X msg 734 127 500;
+#X obj 591 311 noteout;
+#X text 761 127 note duration;
+#X text 480 56 click me ------->;
+#X text 640 127 MIDI velocity;
+#X text 17 18 When triggering sounds we often want them to occur for
+a specific length of time.;
+#X text 13 57 'makenote' provides this functionality;
+#X text 13 86 'noteout' sends the midi information from makenote to
+our MIDI synthesiser;
+#X msg 549 531 60;
+#X text 575 529 MIDI pitch;
+#X text 438 529 click me ------->;
+#X obj 549 560 makenote 100 500;
+#X text 182 556 we can also give makenote arguments for velocity &
+duration;
+#X text 241 626 and we can give noteout arguments for midi channel
+;
+#X obj 549 623 noteout 1;
+#X text 224 207 midinote first outputs a note-on message with a given
+pitch and velocity (e.g. pitch = 60 \, velocity = 100);
+#X text 224 240 after the given duration it then outputs a note-off
+message (e.g. pitch = 60 \, and velocity = 0);
+#X obj 591 80 t f b b b;
+#X connect 0 0 7 0;
+#X connect 0 1 7 1;
+#X connect 1 0 23 0;
+#X connect 2 0 0 1;
+#X connect 5 0 7 2;
+#X connect 6 0 0 2;
+#X connect 14 0 17 0;
+#X connect 17 0 20 0;
+#X connect 17 1 20 1;
+#X connect 23 0 0 0;
+#X connect 23 1 2 0;
+#X connect 23 2 6 0;
+#X connect 23 3 5 0;
+#X restore 181 -22 pd makenote&noteout_combination;
+#N canvas 117 100 1074 416 changing_MIDI_Program 0;
+#X obj 594 213 makenote;
+#X msg 594 60 60;
+#X msg 616 129 100;
+#X text 620 58 MIDI pitch;
+#X text 882 129 MIDI channel;
+#X msg 855 129 1;
+#X msg 737 129 500;
+#X obj 594 313 noteout;
+#X text 254 212 create a midinote with a given pitch and velocity;
+#X text 764 129 note duration;
+#X text 254 231 output a note off message (pitch and velocity 0) after
+a given duration;
+#X text 483 58 click me ------->;
+#X text 643 129 MIDI velocity;
+#X text 20 20 While the sounds are cheesy \, we can get a lot of variety
+by using the various different sounds available through GeneralMidi
+;
+#X floatatom 29 127 5 0 127 0 - - -;
+#X text 21 75 'pgmout' lets us change the midi sound used on a midi
+channel (in this case we are using channel 1);
+#X obj 28 156 pgmout 1;
+#X text 68 122 change me then click the message with the MIDI Pitch
+;
+#X obj 594 81 t f b b b;
+#X connect 0 0 7 0;
+#X connect 0 1 7 1;
+#X connect 1 0 18 0;
+#X connect 2 0 0 1;
+#X connect 5 0 7 2;
+#X connect 6 0 0 2;
+#X connect 14 0 16 0;
+#X connect 18 0 0 0;
+#X connect 18 1 2 0;
+#X connect 18 2 6 0;
+#X connect 18 3 5 0;
+#X restore 185 10 pd changing_MIDI_Program;
+#N canvas 575 91 426 156 more_MIDI_NOTES 0;
+#X text 59 36 so MIDI pitches are 0-->127;
+#X text 59 50 so MIDI velocities are also 0-->127;
+#X text 60 64 etc. etc.;
+#X text 59 19 remember MIDI values go from 0-->127;
+#X restore 184 46 pd more_MIDI_NOTES;
+#N canvas 0 23 939 658 sequencer_w/MIDI_output_solution 0;
+#X msg 409 125 0;
+#X obj 356 119 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 356 37 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 404 110 reset;
+#X obj 356 337 sel 0 1 2 3 4 5 6 7;
+#X floatatom 422 95 5 50 2000 0 - - -;
+#X text 413 77 delta time;
+#X floatatom 497 98 5 1 8 0 - - -;
+#X text 257 35 1 - turn on/off;
+#X obj 556 13 loadbang;
+#X msg 556 57 8;
+#X msg 356 381 60;
+#X msg 385 381 62;
+#X msg 414 381 64;
+#X msg 443 381 65;
+#X msg 472 381 67;
+#X msg 502 381 69;
+#X msg 531 381 71;
+#X msg 559 381 72;
+#X text 398 425 but makes things a bit neater...;
+#X obj 356 95 metro 150;
+#X obj 356 418 t f;
+#X text 397 413 this trigger object changes nothing \,;
+#X text 379 418 <--;
+#X obj 356 606 noteout 1;
+#X msg 492 57 150;
+#X obj 356 170 +;
+#X msg 356 139 0;
+#X obj 425 213 + 1;
+#X floatatom 356 241 5 0 0 0 - - -;
+#X obj 356 193 % 8;
+#X text 76 149 This is all just the same code we had;
+#X text 77 164 from the last simple counter example;
+#X text 298 155 ----;
+#X text 322 89 |;
+#X text 327 79 ----;
+#X text 322 100 |;
+#X text 322 111 |;
+#X text 322 122 |;
+#X text 322 133 |;
+#X text 322 144 |;
+#X text 322 155 |;
+#X text 322 166 |;
+#X text 322 178 |;
+#X text 322 189 |;
+#X text 322 200 |;
+#X text 322 211 |;
+#X text 322 222 |;
+#X text 322 233 |;
+#X text 322 244 |;
+#X text 322 255 |;
+#X text 330 258 ----;
+#X text 135 380 '60' is equivalent to MIDI note C4;
+#X text 585 381 '72' is equivalent to MIDI note C5;
+#X obj 356 534 makenote 100 150;
+#X text 615 13 loadbang does what it says:;
+#X text 617 27 outputs a bang when the patch is loaded;
+#X text 618 41 this is very useful for setting initial parameters;
+#X text 493 80 #beats;
+#X text 38 87 1 - We output a count going from 0 --> 8;
+#X text 39 303 2 - We cycle through 8 pitches;
+#X text 63 321 I'm using the C major scale starting on C4;
+#X text 49 530 3 - create note-on and note-off messages;
+#X text 48 606 4 - output MIDI note-on/note-off to MIDI synth;
+#X obj 356 216 t f f;
+#X connect 0 0 26 1;
+#X connect 1 0 27 0;
+#X connect 2 0 20 0;
+#X connect 4 0 11 0;
+#X connect 4 1 12 0;
+#X connect 4 2 13 0;
+#X connect 4 3 14 0;
+#X connect 4 4 15 0;
+#X connect 4 5 16 0;
+#X connect 4 6 17 0;
+#X connect 4 7 18 0;
+#X connect 5 0 20 1;
+#X connect 7 0 30 1;
+#X connect 9 0 10 0;
+#X connect 9 0 25 0;
+#X connect 10 0 7 0;
+#X connect 11 0 21 0;
+#X connect 12 0 21 0;
+#X connect 13 0 21 0;
+#X connect 14 0 21 0;
+#X connect 15 0 21 0;
+#X connect 16 0 21 0;
+#X connect 17 0 21 0;
+#X connect 18 0 21 0;
+#X connect 20 0 1 0;
+#X connect 21 0 54 0;
+#X connect 25 0 5 0;
+#X connect 26 0 30 0;
+#X connect 27 0 26 0;
+#X connect 28 0 26 1;
+#X connect 29 0 4 0;
+#X connect 30 0 64 0;
+#X connect 54 0 24 0;
+#X connect 54 1 24 1;
+#X connect 64 0 29 0;
+#X connect 64 1 28 0;
+#X restore 83 163 pd sequencer_w/MIDI_output_solution;
+#X restore 238 448 pd step_sequencer_w/midi_output;
+#X text 75 471 ------------------------------------------------------------
+;
+#N canvas 495 23 819 751 step_sequencer_w/midi_output_TIDY 0;
+#X text 70 702 click below for a solution;
+#X text 93 400 ADVANCED;
+#X text 94 416 - expand this sequencer by having a sequence of velocities
+;
+#X text 120 433 Either:;
+#X text 161 449 a) a different velocity for each note in the sequence
+;
+#X text 120 523 Either:;
+#X text 94 497 - expand this sequencer by having a sequence of note
+durations;
+#X text 161 539 a) a different different for each note in the sequence
+;
+#X text 128 609 Either:;
+#X text 102 592 - expand this sequencer by having a sequence of MIDI
+sounds;
+#X text 169 625 a) a different MIDI sound for each note in the sequence
+;
+#X text 170 644 b) a sequence (e.g. 3/5/7 different values) of MIDI
+sounds that is cycled through at the same tempo as the pitches;
+#X text 162 558 b) a sequence (e.g. 3/5/7 different values) of durations
+that is cycled through at the same tempo as the pitches;
+#X text 162 468 b) a sequence (e.g. 3/5/7 different values) of velocities
+that is cycled through at the same tempo as the pitches;
+#X text 211 261 ------------------------------------------------------------
+;
+#X text 93 113 This is one of the best ways to keep your code tidy
+\, and makes it very easy to reuse code multiple times in the same
+patch;
+#N canvas 704 23 450 300 [insertname] 0;
+#X obj 119 47 inlet;
+#X obj 200 228 outlet;
+#X obj 187 48 inlet;
+#X obj 259 229 outlet;
+#X floatatom 119 69 5 0 0 0 - - -;
+#X floatatom 187 70 5 0 0 0 - - -;
+#X floatatom 200 136 5 0 0 0 - - -;
+#X floatatom 259 180 5 0 0 0 - - -;
+#X text 26 6 inlets and outlets allow us to communicate with the subpatch
+from the main patch;
+#X text 15 133 4 - change this value ------->;
+#X text 74 179 5 - change this value ------->;
+#X connect 0 0 4 0;
+#X connect 2 0 5 0;
+#X connect 6 0 1 0;
+#X connect 7 0 3 0;
+#X restore 495 203 pd [insertname];
+#X floatatom 492 178 5 0 0 0 - - -;
+#X floatatom 572 179 5 0 0 0 - - -;
+#X floatatom 576 230 5 0 0 0 - - -;
+#X floatatom 500 228 5 0 0 0 - - -;
+#X text 92 70 Then rewrite (or copy & paste if you're lazy...) your
+code in the new subpatcher;
+#X text 85 198 click me ------->;
+#N canvas 71 325 326 74 [nameme] 0;
+#X text 42 16 this is (almost) a blank subpatcher....;
+#X restore 192 200 pd [nameme];
+#X text 86 219 click me ------->;
+#N canvas 58 355 450 112 (subpatch) 0;
+#X text 42 16 this is (almost) a blank subpatcher with no name....
+;
+#X text 43 46 you should probably name your code clearly;
+#X restore 193 221 pd;
+#X text 606 178 <------- change this value;
+#X text 364 201 3 - click me ------->;
+#X text 309 175 1 - change this value ------->;
+#X text 260 162 comment;
+#X text 658 165 2 -;
+#X text 94 7 We can begin to tidy up our code with subpatchers;
+#X text 94 277 Using makenote & noteout \, create a sequencer that
+cycles through 8 different pitches and outputs them to the MIDI synth.
+;
+#X text 94 319 But this time use subpatchers to tidy up your code into
+managable chunks;
+#X text 207 375 ------------------------------------------------------------
+;
+#N canvas 0 23 698 357 sequencer_w/MIDI_output_and_subpatchers_solution
+0;
+#X msg 339 119 0;
+#X obj 174 167 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 174 27 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 334 104 reset;
+#X floatatom 225 118 5 50 2000 0 - - -;
+#X text 213 102 delta time;
+#X floatatom 291 117 5 1 8 0 - - -;
+#X text 75 25 1 - turn on/off;
+#N canvas 56 23 750 350 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 174 206 pd simpleCounter;
+#X obj 328 14 loadbang;
+#X msg 328 49 8;
+#X obj 174 143 metro 150;
+#X obj 174 306 noteout 1;
+#X msg 300 48 150;
+#X obj 174 278 makenote 100 150;
+#N canvas 382 323 674 234 C4major 0;
+#X obj 213 71 sel 0 1 2 3 4 5 6 7;
+#X msg 213 116 60;
+#X msg 242 116 62;
+#X msg 271 116 64;
+#X msg 300 116 65;
+#X msg 329 116 67;
+#X msg 359 116 69;
+#X msg 388 116 71;
+#X msg 416 116 72;
+#X text 258 24 We cycle through 8 pitches;
+#X text 260 42 (a C major scale here...);
+#X text 258 8 1;
+#X obj 213 9 inlet;
+#X text 5 116 '60' is equivalent to MIDI note C4;
+#X text 455 117 '72' is equivalent to MIDI note C5;
+#X obj 213 177 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 2 0;
+#X connect 0 2 3 0;
+#X connect 0 3 4 0;
+#X connect 0 4 5 0;
+#X connect 0 5 6 0;
+#X connect 0 6 7 0;
+#X connect 0 7 8 0;
+#X connect 1 0 15 0;
+#X connect 2 0 15 0;
+#X connect 3 0 15 0;
+#X connect 4 0 15 0;
+#X connect 5 0 15 0;
+#X connect 6 0 15 0;
+#X connect 7 0 15 0;
+#X connect 8 0 15 0;
+#X connect 12 0 0 0;
+#X restore 174 233 pd C4major;
+#X text 281 102 #beats;
+#X text 387 8 loadbang does what it says:;
+#X text 389 22 outputs a bang when the patch is loaded;
+#X text 390 36 this is very useful for setting initial parameters;
+#X text 282 206 The code for our simple counter encapsulated as a subpatch
+;
+#X text 243 233 The code for our C major scale encapsulated as a subpatch
+;
+#X connect 0 0 8 1;
+#X connect 1 0 8 0;
+#X connect 2 0 11 0;
+#X connect 4 0 11 1;
+#X connect 6 0 8 2;
+#X connect 8 0 15 0;
+#X connect 9 0 10 0;
+#X connect 9 0 13 0;
+#X connect 10 0 6 0;
+#X connect 11 0 1 0;
+#X connect 13 0 4 0;
+#X connect 14 0 12 0;
+#X connect 14 1 12 1;
+#X connect 15 0 14 0;
+#X restore 94 351 pd sequencer_w/MIDI_output_and_subpatchers_solution
+;
+#N canvas 468 57 1276 650 step_sequencer_w/MIDI_output_solution_ADVANCEDv1
+0;
+#X msg 159 300 0;
+#X obj 106 192 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 106 110 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 154 285 reset;
+#X floatatom 186 109 5 50 2000 0 - - -;
+#X text 177 91 delta time;
+#X floatatom 197 300 5 1 8 0 - - -;
+#X text 7 108 1 - turn on/off;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 106 333 pd simpleCounter;
+#X msg 403 293 0;
+#X text 398 278 reset;
+#X floatatom 441 293 5 1 8 0 - - -;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 350 326 pd simpleCounter;
+#X msg 707 292 0;
+#X text 702 277 reset;
+#X floatatom 745 292 5 1 8 0 - - -;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 654 325 pd simpleCounter;
+#X obj 412 152 loadbang;
+#X msg 412 187 8;
+#X msg 443 187 5;
+#X msg 473 187 3;
+#X obj 106 508 makenote;
+#X msg 1024 297 0;
+#X text 1019 282 reset;
+#X floatatom 1062 297 5 1 8 0 - - -;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 971 330 pd simpleCounter;
+#X obj 106 212 t b b b b;
+#X obj 970 565 % 127;
+#X obj 970 543 * 6;
+#X obj 970 593 pgmout 1;
+#X text 666 367 We cycle through 3 different durations;
+#X text 979 447 there is no significance to multiplying by 6;
+#X text 979 460 but it means we can quickly move through;
+#X floatatom 985 516 5 0 0 0 - - -;
+#X text 978 473 the full range of sounds - try changing the;
+#X text 980 486 multiplier to get new sequences of sounds;
+#X text 982 386 1;
+#X text 665 353 2;
+#X text 678 6 ADVANCED VERSION;
+#X obj 106 540 noteout 1;
+#X text 675 91 While the C major scale is still apparent \, the complexity
+is greatly increased and new patterns seem to emerge;
+#X msg 507 188 7;
+#X text 982 415 We cycle through 7 different sounds;
+#X text 677 21 This version cycles through 8 pitches \, 5 velocities
+\, 3 durations \, and 7 sounds;
+#X text 678 49 This means the overall sequence is 1320 beats long (8*5*3*7)
+\, i.e. 840 combinations of pitch velocity duration sound occur before
+the cycle begins again;
+#X text 678 120 In truth though \, there is very little adiditional
+knowledge required for this patch in comparison to the last - it's
+just that more than one thing is changing now and by having sequences
+of different length we get complexity...;
+#X text 680 174 Check out some minimalist composers (e.g. Steve Reich)
+for some other approaches to ideas like this;
+#X msg 382 187 200;
+#N canvas 382 323 674 234 C4major 0;
+#X obj 54 76 sel 0 1 2 3 4 5 6 7;
+#X msg 54 121 60;
+#X msg 83 121 62;
+#X msg 112 121 64;
+#X msg 141 121 65;
+#X msg 170 121 67;
+#X msg 200 121 69;
+#X msg 229 121 71;
+#X msg 257 121 72;
+#X text 99 29 We cycle through 8 pitches;
+#X text 101 47 (a C major scale here...);
+#X text 99 13 1;
+#X obj 54 14 inlet;
+#X text -154 121 '60' is equivalent to MIDI note C4;
+#X text 296 122 '72' is equivalent to MIDI note C5;
+#X obj 54 182 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 2 0;
+#X connect 0 2 3 0;
+#X connect 0 3 4 0;
+#X connect 0 4 5 0;
+#X connect 0 5 6 0;
+#X connect 0 6 7 0;
+#X connect 0 7 8 0;
+#X connect 1 0 15 0;
+#X connect 2 0 15 0;
+#X connect 3 0 15 0;
+#X connect 4 0 15 0;
+#X connect 5 0 15 0;
+#X connect 6 0 15 0;
+#X connect 7 0 15 0;
+#X connect 8 0 15 0;
+#X connect 12 0 0 0;
+#X restore 106 404 pd C4major;
+#N canvas 443 427 450 300 5velocities 0;
+#X obj 60 70 sel 0 1 2 3 4;
+#X msg 45 116 127;
+#X msg 103 116 60;
+#X msg 132 116 100;
+#X msg 161 116 40;
+#X msg 74 116 40;
+#X obj 54 15 inlet;
+#X text 202 113 MIDI velocities between 0--> 127;
+#X obj 45 189 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 5 0;
+#X connect 0 2 2 0;
+#X connect 0 3 3 0;
+#X connect 0 4 4 0;
+#X connect 1 0 8 0;
+#X connect 2 0 8 0;
+#X connect 3 0 8 0;
+#X connect 4 0 8 0;
+#X connect 5 0 8 0;
+#X connect 6 0 0 0;
+#X restore 349 387 pd 5velocities;
+#X text 366 364 We cycle through 5 different velocities;
+#X text 367 346 3;
+#N canvas 631 345 450 300 3durations 0;
+#X obj 66 65 sel 0 1 2;
+#X msg 109 111 200;
+#X msg 81 111 100;
+#X msg 51 111 400;
+#X obj 65 23 inlet;
+#X obj 51 184 outlet;
+#X connect 0 0 3 0;
+#X connect 0 1 2 0;
+#X connect 0 2 1 0;
+#X connect 1 0 5 0;
+#X connect 2 0 5 0;
+#X connect 3 0 5 0;
+#X connect 4 0 0 0;
+#X restore 653 393 pd 3durations;
+#X obj 106 168 metro 200;
+#X text 447 308 number of possible velocities;
+#X text 761 319 number of possible durations;
+#X text 1078 324 number of possible sounds;
+#X text 229 298 number of possible pitches;
+#X text 115 351 4;
+#X text 114 368 We cycle through the scale;
+#X connect 0 0 8 1;
+#X connect 1 0 26 0;
+#X connect 2 0 53 0;
+#X connect 4 0 53 1;
+#X connect 6 0 8 2;
+#X connect 8 0 48 0;
+#X connect 9 0 12 1;
+#X connect 11 0 12 2;
+#X connect 12 0 49 0;
+#X connect 13 0 16 1;
+#X connect 15 0 16 2;
+#X connect 16 0 52 0;
+#X connect 17 0 18 0;
+#X connect 17 0 19 0;
+#X connect 17 0 20 0;
+#X connect 17 0 41 0;
+#X connect 17 0 47 0;
+#X connect 18 0 6 0;
+#X connect 19 0 11 0;
+#X connect 20 0 15 0;
+#X connect 21 0 39 0;
+#X connect 21 1 39 1;
+#X connect 22 0 25 1;
+#X connect 24 0 25 2;
+#X connect 25 0 28 0;
+#X connect 26 0 8 0;
+#X connect 26 1 12 0;
+#X connect 26 2 16 0;
+#X connect 26 3 25 0;
+#X connect 27 0 29 0;
+#X connect 28 0 27 0;
+#X connect 33 0 28 1;
+#X connect 41 0 24 0;
+#X connect 47 0 4 0;
+#X connect 48 0 21 0;
+#X connect 49 0 21 1;
+#X connect 52 0 21 2;
+#X connect 53 0 1 0;
+#X restore 69 728 pd step_sequencer_w/MIDI_output_solution_ADVANCEDv1
+;
+#N canvas 2 23 1252 578 step_sequencer_w/MIDI_output_solution_ADVANCEDv2
+0;
+#X msg 105 217 0;
+#X obj 52 196 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 52 114 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 100 194 reset;
+#X floatatom 132 113 5 50 2000 0 - - -;
+#X text 123 95 delta time;
+#X floatatom 239 247 5 1 8 0 - - -;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 52 242 pd simpleCounter;
+#X floatatom 389 249 5 1 8 0 - - -;
+#X floatatom 616 254 5 1 8 0 - - -;
+#X obj 303 148 loadbang;
+#X msg 303 183 8;
+#X msg 334 183 5;
+#X msg 364 183 3;
+#X obj 52 512 makenote;
+#X floatatom 941 253 5 1 8 0 - - -;
+#X obj 926 418 % 127;
+#X obj 926 396 * 6;
+#X obj 926 446 pgmout 1;
+#X text 974 387 there is no significance to multiplying by 6;
+#X text 974 400 but it means we can quickly move through;
+#X floatatom 941 369 5 0 0 0 - - -;
+#X text 973 413 the full range of sounds - try changing the;
+#X text 975 426 multiplier to get new sequences of sounds;
+#X obj 52 544 noteout 1;
+#X text 839 19 While the C major scale is still apparent \, the complexity
+is greatly increased and new patterns seem to emerge;
+#X msg 398 184 7;
+#X text 473 24 This version cycles through 8 pitches \, 5 velocities
+\, 3 durations \, and 7 sounds;
+#X text 842 48 In truth though \, there is very little adiditional
+knowledge required for this patch in comparison to the last - it's
+just that more than one thing is changing now and by having sequences
+of different length we get complexity...;
+#X text 844 102 Check out some minimalist composers (e.g. Steve Reich)
+for some other approaches to ideas like this;
+#X msg 206 182 200;
+#N canvas 382 323 674 234 C4major 0;
+#X obj 54 76 sel 0 1 2 3 4 5 6 7;
+#X msg 54 121 60;
+#X msg 83 121 62;
+#X msg 112 121 64;
+#X msg 141 121 65;
+#X msg 170 121 67;
+#X msg 200 121 69;
+#X msg 229 121 71;
+#X msg 257 121 72;
+#X text 99 29 We cycle through 8 pitches;
+#X text 101 47 (a C major scale here...);
+#X text 99 13 1;
+#X obj 54 14 inlet;
+#X text -154 121 '60' is equivalent to MIDI note C4;
+#X text 296 122 '72' is equivalent to MIDI note C5;
+#X obj 54 182 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 2 0;
+#X connect 0 2 3 0;
+#X connect 0 3 4 0;
+#X connect 0 4 5 0;
+#X connect 0 5 6 0;
+#X connect 0 6 7 0;
+#X connect 0 7 8 0;
+#X connect 1 0 15 0;
+#X connect 2 0 15 0;
+#X connect 3 0 15 0;
+#X connect 4 0 15 0;
+#X connect 5 0 15 0;
+#X connect 6 0 15 0;
+#X connect 7 0 15 0;
+#X connect 8 0 15 0;
+#X connect 12 0 0 0;
+#X restore 52 392 pd C4major;
+#N canvas 443 427 450 300 5velocities 0;
+#X obj 60 70 sel 0 1 2 3 4;
+#X msg 45 116 127;
+#X msg 103 116 60;
+#X msg 132 116 100;
+#X msg 161 116 40;
+#X msg 74 116 40;
+#X obj 54 15 inlet;
+#X text 202 113 MIDI velocities between 0--> 127;
+#X obj 45 189 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 5 0;
+#X connect 0 2 2 0;
+#X connect 0 3 3 0;
+#X connect 0 4 4 0;
+#X connect 1 0 8 0;
+#X connect 2 0 8 0;
+#X connect 3 0 8 0;
+#X connect 4 0 8 0;
+#X connect 5 0 8 0;
+#X connect 6 0 0 0;
+#X restore 280 390 pd 5velocities;
+#N canvas 631 345 450 300 3durations 0;
+#X obj 66 65 sel 0 1 2;
+#X msg 109 111 200;
+#X msg 81 111 100;
+#X msg 51 111 400;
+#X obj 65 23 inlet;
+#X obj 51 184 outlet;
+#X connect 0 0 3 0;
+#X connect 0 1 2 0;
+#X connect 0 2 1 0;
+#X connect 1 0 5 0;
+#X connect 2 0 5 0;
+#X connect 3 0 5 0;
+#X connect 4 0 0 0;
+#X restore 600 401 pd 3durations;
+#X obj 52 172 metro 200;
+#X obj 52 366 %;
+#X obj 280 363 %;
+#X text 319 363 3 - We cycle through 5 different velocities;
+#X text 81 361 4 - we cycle through the scale;
+#X obj 600 367 %;
+#X text 650 254 number of possible durations;
+#X text 421 249 number of possible velocities;
+#X text 975 253 number of possible sounds;
+#X obj 926 338 %;
+#X text 273 247 number of notes;
+#X text 633 362 2 - We cycle through 3 different durations;
+#X text 952 336 1 - We cycle through 7 different sounds;
+#X text 47 95 ON/OFF;
+#X msg 262 183 840;
+#X floatatom 141 217 5 1 8 0 - - -;
+#X text 185 227 of steps;
+#X text 175 217 total number;
+#X text 474 52 This means the overall sequence is 840 beats long (8*5*3*7)
+\, i.e. 840 combinations of pitch velocity duration sound occur before
+the cycle begins again;
+#X text 476 92 Unlike the first example we only use one counter (cycling
+through the entire 840 beats) and use additional 'modulo' objects to
+create the subcycles for each parameter;
+#X text 474 9 ADVANCED VERSION 2;
+#X obj 52 264 t f f f f;
+#X connect 0 0 7 1;
+#X connect 1 0 7 0;
+#X connect 2 0 34 0;
+#X connect 4 0 34 1;
+#X connect 6 0 35 1;
+#X connect 7 0 55 0;
+#X connect 8 0 36 1;
+#X connect 9 0 39 1;
+#X connect 10 0 11 0;
+#X connect 10 0 12 0;
+#X connect 10 0 13 0;
+#X connect 10 0 26 0;
+#X connect 10 0 30 0;
+#X connect 10 0 48 0;
+#X connect 11 0 6 0;
+#X connect 12 0 8 0;
+#X connect 13 0 9 0;
+#X connect 14 0 24 0;
+#X connect 14 1 24 1;
+#X connect 15 0 43 1;
+#X connect 16 0 18 0;
+#X connect 17 0 16 0;
+#X connect 21 0 17 1;
+#X connect 26 0 15 0;
+#X connect 30 0 4 0;
+#X connect 31 0 14 0;
+#X connect 32 0 14 1;
+#X connect 33 0 14 2;
+#X connect 34 0 1 0;
+#X connect 35 0 31 0;
+#X connect 36 0 32 0;
+#X connect 39 0 33 0;
+#X connect 43 0 17 0;
+#X connect 48 0 49 0;
+#X connect 49 0 7 2;
+#X connect 55 0 35 0;
+#X connect 55 1 36 0;
+#X connect 55 2 39 0;
+#X connect 55 3 43 0;
+#X restore 385 728 pd step_sequencer_w/MIDI_output_solution_ADVANCEDv2
+;
+#X text 93 47 Create a new object (cmd+1) \, name it "pd [yoursubpatchname]"
+;
+#X connect 16 0 20 0;
+#X connect 16 1 19 0;
+#X connect 17 0 16 0;
+#X connect 18 0 16 1;
+#X restore 242 518 pd step_sequencer_w/midi_output_TIDY;
+#X text 430 561 sjf \, SAE London \, 2020;
+#X text 63 87 If you have issues with GeneralMIDI you can replace noteout
+with this simple synthesiser;
+#X text 64 114 But you have to setup your audio correctly and turn
+on DSP...;
+#X text 63 140 Also \, there is only one sound available so MIDI program
+changes won't have any effect;
+#X obj 434 95 simpleSynth_sjf~;

@@ -1,0 +1,164 @@
+#N canvas 0 23 494 499 10;
+#N canvas 267 135 740 306 inlets&outlets 0;
+#X floatatom 140 88 5 0 0 0 - - -;
+#X floatatom 193 88 5 0 0 0 - - -;
+#X obj 157 139 +;
+#X floatatom 157 222 5 0 0 0 - - -;
+#X text 70 94 output --->;
+#X text 51 130 'hot' input --->;
+#X text 181 130 <--- 'cold' input;
+#X text 161 178 <--- patch cable;
+#X text 138 72 #1;
+#X text 191 73 #2;
+#X text 59 11 First change the value in box #2 \, then change #1 \,
+then change #2 again;
+#X text 332 183 Any data/bang received to a ‘cold input’ will result
+in the object storing that data until it receives a value/bang in its
+‘hot input’.;
+#X text 335 138 Any data/bang received to a ‘hot input’ will result
+in the object outputting something (a number \, a symbol \, etc).;
+#X text 335 83 Notice how you only get an output when you change the
+value in number box #1!!!;
+#X connect 0 0 2 0;
+#X connect 1 0 2 1;
+#X connect 2 0 3 0;
+#X restore 208 212 pd inlets&outlets;
+#N canvas 419 26 726 408 the_PD_Window 0;
+#X msg 146 325 Hello \, World!;
+#X text 42 31 1 - Printing to the PD Window;
+#X text 38 322 click me ------->;
+#X text 40 380 and then look at the "PD Window" (cmd+r);
+#X obj 146 115 print;
+#X text 38 88 click me ------->;
+#X msg 146 91 Hello World!;
+#X text 300 91 Notice how this message is printed on one line;
+#X text 35 173 click me ------->;
+#X text 35 268 and then look at the "PD Window" (cmd+r);
+#X text 34 199 then click me ------->;
+#X msg 143 176 Hello;
+#X msg 170 200 World!;
+#X obj 144 242 print 2messages;
+#X text 301 178 Notice how these messages are printed on separate lines
+\, in the order that you press them;
+#X obj 146 347 print brokenMessage;
+#X text 30 151 ------------------------------------------------------------
+;
+#X text 41 290 ------------------------------------------------------------
+;
+#X text 36 57 ------------------------------------------------------------
+;
+#X text 37 135 and then look at the "PD Window" (cmd+r);
+#X text 309 323 Notice how this message is printed on two lines \,
+with a break where the comma is \; Essentially the comma makes it as
+if there are 2 messages;
+#X connect 0 0 15 0;
+#X connect 6 0 4 0;
+#X connect 11 0 13 0;
+#X connect 12 0 13 0;
+#X restore 213 125 pd the_PD_Window;
+#X text 104 96 1 - Printing to the PD Window;
+#X text 103 122 click me ------->;
+#N canvas 482 23 735 751 Order_of_Operations 0;
+#X obj 144 384 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 144 462 print 1;
+#X msg 196 440 World!;
+#X obj 196 463 print 2;
+#X text 35 382 click me ------->;
+#X obj 131 76 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X msg 183 107 World!;
+#X text 22 74 click me ------->;
+#X obj 131 201 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X msg 183 230 World!;
+#X text 21 198 click me ------->;
+#X obj 131 129 print a;
+#X obj 183 130 print b;
+#X obj 131 252 print A;
+#X obj 183 253 print B;
+#X text 28 339 ------------------------------------------------------------
+;
+#X text 20 48 ------------------------------------------------------------
+;
+#X obj 136 534 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 136 554 t b b;
+#X text 27 532 click me ------->;
+#X text 31 619 and then look at the "PD Window";
+#X text 23 280 and then look at the "PD Window";
+#X text 24 148 and then look at the "PD Window";
+#X text 32 484 and then look at the "PD Window";
+#X msg 131 107 Hello;
+#X msg 131 230 Hello;
+#X msg 144 440 Hello;
+#X msg 136 578 World!;
+#X msg 203 577 Hello;
+#X obj 144 404 trigger bang bang;
+#X text 355 495 ('t' and 'b' are handy shorthands);
+#X obj 136 600 print Beta;
+#X obj 203 600 print Alpha;
+#X text 343 574 Note how the right outlet always occurs before the
+left!!!;
+#X obj 400 598 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 400 618 t b b b;
+#X msg 459 642 1st;
+#X msg 430 642 2nd;
+#X msg 400 642 3rd;
+#X obj 432 675 print order;
+#X text 366 170 Notice how the order of these messages is unpredictable
+even though the code looks the same;
+#X text 367 197 PD remembers the order you connected objects in \,
+this means if you know what you're going to do in advance it's very
+fast \, but when you're learning it's difficult to decipher;
+#X text 354 416 Always use a "trigger" object to order your messages
+;
+#X text 18 24 Order of operations;
+#X connect 0 0 29 0;
+#X connect 2 0 3 0;
+#X connect 5 0 24 0;
+#X connect 5 0 6 0;
+#X connect 6 0 12 0;
+#X connect 8 0 9 0;
+#X connect 8 0 25 0;
+#X connect 9 0 14 0;
+#X connect 17 0 18 0;
+#X connect 18 0 27 0;
+#X connect 18 1 28 0;
+#X connect 24 0 11 0;
+#X connect 25 0 13 0;
+#X connect 26 0 1 0;
+#X connect 27 0 31 0;
+#X connect 28 0 32 0;
+#X connect 29 0 2 0;
+#X connect 29 1 26 0;
+#X connect 34 0 35 0;
+#X connect 35 0 38 0;
+#X connect 35 1 37 0;
+#X connect 35 2 36 0;
+#X connect 36 0 39 0;
+#X connect 37 0 39 0;
+#X connect 38 0 39 0;
+#X restore 213 312 pd Order_of_Operations;
+#X text 103 309 click me ------->;
+#X text 97 212 click me ------->;
+#X text 76 26 - if your mouse cursor is a hand it's in edit mode;
+#X text 75 41 - if your mouse cursor is an arrow you're in performance/control
+mode;
+#X text 46 246 ------------------------------------------------------------
+;
+#X text 46 147 ------------------------------------------------------------
+;
+#X text 73 11 Firstly \, turn OFF "Edit Mode" (cmd+e);
+#X text 109 286 3 - Order of operations;
+#X text 111 188 2 - Inlets & Outlets;
+#X text 47 337 ------------------------------------------------------------
+;
+#X text 53 445 Experiment with hot&cold inlets and the order of operations
+;
+#X text 53 365 Create a new patch (cmd+n);
+#X text 53 388 Using the "Put" menu (look at the menu at the top of
+the screen) create some objects and connect them together (you can
+also just copy and paste objects from my code into yours);
+#X text 296 481 sjf \, SAE London \, 2020;

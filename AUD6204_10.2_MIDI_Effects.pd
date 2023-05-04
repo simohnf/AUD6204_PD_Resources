@@ -1,0 +1,283 @@
+#N canvas -1143 581 578 310 10;
+#X text 394 266 sjf \, SAE London \, 2020;
+#N canvas -770 719 662 264 argpeggiator 0;
+#X text 165 16 An arpeggiator takes incomming MIDI notes and and plays
+"arpeggios" based on these notes;
+#X text 165 49 These devices often allow you to input a chord and have
+the notes played one at a time (in a variety of ways);
+#X text 164 78 Or to play a single note and have a chord built on top
+of that by transposing the pitch;
+#X text 166 108 To start we will look at a receiving a single note
+and adding/subtracting 'x' semitones on each repitition;
+#X text 166 201 Try to expand on the arpeggiator by including:;
+#X text 167 220 -Changes in direction of arpeggio (i.e. not always
+up/down);
+#N canvas -709 581 401 160 arpeggiator 0;
+#N canvas -821 581 630 687 arpeggiator_1 0;
+#X obj 64 623 noteout;
+#N canvas -1270 581 1280 751 arpeggiator 0;
+#X obj 442 165 inlet;
+#X obj 444 652 outlet;
+#X obj 544 651 outlet;
+#X obj 495 165 inlet;
+#X obj 84 101 tgl 15 0 empty empty ON/OFF 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 531 601 makenote 100 250, f 17;
+#X obj 444 247 pack 0 0 0;
+#X obj 444 294 route 0 1;
+#X obj 444 602 unpack;
+#X obj 442 185 t b f;
+#X obj 531 383 unpack, f 8;
+#X obj 613 526 pipe 250, f 43;
+#X msg 696 501 clear;
+#X floatatom 266 103 5 0 0 1 DeltaTime - -;
+#X floatatom 166 103 5 0 0 1 Interval - -;
+#X obj 531 522 t f f;
+#X obj 531 325 t l b, f 28;
+#X text 417 145 MIDI Pitch;
+#X text 494 146 MIDI Velocity;
+#X obj 739 478 r \$0-on/off;
+#X obj 365 219 r \$0-on/off;
+#X obj 84 124 s \$0-on/off;
+#X obj 266 123 s \$0-deltaTime;
+#X obj 793 503 r \$0-deltaTime;
+#X obj 166 123 s \$0-interval;
+#X obj 613 432 r \$0-interval;
+#X text 64 218 2 - ON/OFF state (1/0) is prepended to MIDI note;
+#X text 91 292 3 - if effect is off (0) MIDI note is routed directly
+to output (left outlet);
+#X text 719 321 5 - right outlet of trigger outputs bang so every time
+new note is received (or effect is turned on/off) the delay line is
+cleared (this stops arpeggio from one note passing over into the next)
+;
+#X text 596 380 6 - MIDI note is unpacked and velocity is sent straight
+to makenote;
+#X text 852 17 This patch uses "pipe" to create a delay line;
+#X text 853 35 When it receives the MIDI note it copies the pitch and
+adds an interval (x semitones) to it;
+#X text 852 60 This new value is delayed and played at a later point
+;
+#X text 853 75 WHen delayed notes are eventually played the loop returns
+begins again (creating cascades of notes riasing/falling by the same
+interval;
+#X text 638 601 8 - makenote outputs the note (pitch & velocity);
+#X text 169 535 9 - the pitch is output out the left outlet of the
+trigger and routed through the delay line;
+#X text 169 508 7 - the trigger object sends the pitch to makenote
+via the right outlet;
+#X text 708 435 10 - the interval (i.e. x semitones) is added to the
+pitch;
+#X text 881 525 11 - the new pitch is delayed and when it is eventually
+output by the pipe the loop returns to step 7;
+#X text 881 550 The loop (7-->11) continues until a new MIDI note message
+is received or the device is turned off;
+#X text 852 124 You might notice I have used "\$0" in the names of
+my send and receive objects. This is useful when creating ptches you
+intend to use as abstractions as it gives a unique number to each instance
+of a patch - this prevents any unwanted communication between abstractions
+;
+#X text 283 167 1 - MIDI note is received;
+#X obj 169 19 loadbang;
+#X obj 169 40 t b b;
+#X msg 169 61 5;
+#X msg 204 63 125;
+#X text 512 291 4 - if effect is on MIDI note is routed to middle outlet
+;
+#X obj 612 455 +;
+#X connect 0 0 9 0;
+#X connect 3 0 6 2;
+#X connect 4 0 21 0;
+#X connect 5 0 1 0;
+#X connect 5 1 2 0;
+#X connect 6 0 7 0;
+#X connect 7 0 8 0;
+#X connect 7 1 16 0;
+#X connect 8 0 1 0;
+#X connect 8 1 2 0;
+#X connect 9 0 6 0;
+#X connect 9 1 6 1;
+#X connect 10 0 15 0;
+#X connect 10 1 5 1;
+#X connect 11 0 15 0;
+#X connect 12 0 11 0;
+#X connect 13 0 22 0;
+#X connect 14 0 24 0;
+#X connect 15 0 47 0;
+#X connect 15 1 5 0;
+#X connect 16 0 10 0;
+#X connect 16 1 12 0;
+#X connect 19 0 12 0;
+#X connect 20 0 6 0;
+#X connect 23 0 11 1;
+#X connect 25 0 47 1;
+#X connect 42 0 43 0;
+#X connect 43 0 44 0;
+#X connect 43 1 45 0;
+#X connect 44 0 14 0;
+#X connect 45 0 13 0;
+#X connect 47 0 11 0;
+#X coords 0 -1 1 1 300 60 1 60 60;
+#X restore 64 544 pd arpeggiator;
+#X obj 347 102 loadbang;
+#X msg 347 123 120;
+#X obj 347 144 s bpm;
+#X obj 137 18 r bpm;
+#X obj 137 40 t b f;
+#X msg 137 62 60000;
+#X obj 137 84 /;
+#X text 202 47 You should remmber this from AUD4100 \, AUD43/4400 \,
+and AUD5300;
+#X text 202 74 the length of a quarter note = (60 \, 000/bpm)ms;
+#X text 369 552 <---- right click and select open;
+#X obj 64 178 stpseq16_sjf mel;
+#X obj 64 111 conductor_sjf 1000 16;
+#X obj 64 518 makenote 100 500;
+#X connect 1 0 0 0;
+#X connect 1 1 0 1;
+#X connect 2 0 3 0;
+#X connect 3 0 4 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 6 1 8 1;
+#X connect 7 0 8 0;
+#X connect 8 0 13 1;
+#X connect 12 0 14 0;
+#X connect 13 0 12 0;
+#X connect 14 0 1 0;
+#X connect 14 1 1 1;
+#X restore 102 35 pd arpeggiator_1;
+#N canvas 40 155 1003 676 arpeggiator_2 0;
+#X obj 49 486 noteout, f 60;
+#X obj 386 101 loadbang;
+#X msg 347 123 120;
+#X obj 347 144 s bpm;
+#X obj 128 18 r bpm;
+#X obj 128 40 t b f;
+#X msg 128 62 60000;
+#X obj 128 84 /;
+#X obj 128 105 * 4;
+#X obj 49 129 conductor_sjf 2000 4;
+#N canvas 0 23 450 300 some_chords 0;
+#X obj 59 55 sel 0 1 2 3, f 41;
+#X msg 59 90 48 100 \, 57 100 \, 64 100, f 7;
+#X msg 119 90 49 100 \, 58 100 \, 64 100, f 7;
+#X msg 180 90 50 100 \, 60 100 \, 65 100, f 7;
+#X msg 241 90 50 100 \, 59 100 \, 65 100, f 7;
+#X obj 59 25 inlet;
+#X obj 59 146 outlet;
+#X connect 0 0 1 0;
+#X connect 0 1 2 0;
+#X connect 0 2 3 0;
+#X connect 0 3 4 0;
+#X connect 1 0 6 0;
+#X connect 2 0 6 0;
+#X connect 3 0 6 0;
+#X connect 4 0 6 0;
+#X connect 5 0 0 0;
+#X restore 49 321 pd some_chords;
+#X f 11;
+#X obj 175 377 r bpm;
+#X obj 326 317 random 4;
+#X obj 216 317 random 3;
+#X obj 49 409 arpeggiator_sjf;
+#X obj 232 233 repeator_sjf;
+#X obj 49 206 t b f b, f 28;
+#X obj 330 184 r bpm;
+#X obj 271 317 random 4;
+#X obj 469 539 noteout 10;
+#X msg 469 397 44 100, f 3;
+#X obj 469 468 rolls_sjf;
+#X obj 552 434 r bpm;
+#X obj 469 372 t b b b, f 53;
+#X obj 678 414 random 4;
+#X obj 738 414 random 4;
+#X obj 842 414 random 4;
+#X obj 842 434 == 0;
+#X obj 510 414 random 4;
+#X obj 510 434 == 0;
+#X obj 469 302 repeator_sjf;
+#X obj 571 267 r bpm;
+#X obj 678 434 + 1;
+#X obj 386 122 s on;
+#X obj 514 268 r on;
+#X obj 262 200 r on;
+#X obj 157 337 == 0;
+#X text 522 17 This patch demonstrates an alternative arpeggiator approach
+;
+#X text 528 30 - rather than simply transposing the input to create
+arpeggios \, we take a chord and play the notes one at a time;
+#X obj 231 203 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 528 63 I have also included a patch that repeats input at some
+rhythmic division --> this allows me to run my metronome at a rate
+of once per bar and then have subdivisions within that;
+#X text 529 114 I use this same logic within another patch to create
+rhythmic rolls;
+#X obj 13 211 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 157 317 random 3;
+#X obj 49 365 makenote 100 2000, f 9;
+#X connect 1 0 2 0;
+#X connect 1 0 33 0;
+#X connect 2 0 3 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 5 1 7 1;
+#X connect 6 0 7 0;
+#X connect 7 0 8 0;
+#X connect 8 0 9 1;
+#X connect 9 0 42 0;
+#X connect 9 0 16 0;
+#X connect 10 0 44 0;
+#X connect 11 0 14 4;
+#X connect 12 0 14 7;
+#X connect 13 0 14 5;
+#X connect 14 0 0 0;
+#X connect 14 1 0 1;
+#X connect 15 0 13 0;
+#X connect 15 0 12 0;
+#X connect 15 0 18 0;
+#X connect 15 0 30 0;
+#X connect 16 0 14 2;
+#X connect 16 1 10 0;
+#X connect 16 2 15 0;
+#X connect 16 2 43 0;
+#X connect 17 0 15 2;
+#X connect 18 0 14 6;
+#X connect 20 0 21 0;
+#X connect 21 0 19 0;
+#X connect 22 0 21 2;
+#X connect 23 0 20 0;
+#X connect 23 1 28 0;
+#X connect 23 2 24 0;
+#X connect 23 2 25 0;
+#X connect 23 2 26 0;
+#X connect 24 0 32 0;
+#X connect 25 0 21 6;
+#X connect 26 0 27 0;
+#X connect 27 0 21 7;
+#X connect 28 0 29 0;
+#X connect 29 0 21 1;
+#X connect 30 0 23 0;
+#X connect 31 0 30 2;
+#X connect 32 0 21 5;
+#X connect 34 0 30 1;
+#X connect 35 0 15 1;
+#X connect 36 0 14 3;
+#X connect 39 0 15 0;
+#X connect 43 0 36 0;
+#X connect 44 0 14 0;
+#X connect 44 1 14 1;
+#X restore 104 66 pd arpeggiator_2;
+#X restore 170 160 pd arpeggiator;
+#X restore 138 182 pd argpeggiator;
+#X text 240 181 <--- click me;
+#X text 88 60 NOTE: If SimpleSynth was not open before you opened PD
+you will need to close PD \, open SimpleSynth \, and reopen PD;
+#X text 88 89 NOTE: In the Media menu (along the top ^^^) go to MIDI
+Settings and make sure SimpleSynth is selected;
+#X text 87 17 Now that we have looked at some more functional patches
+(sequencers etc) we will look at some more interesting MIDI effects
+;
+#X text 85 140 APOLOGIES: This patch is not particularly well documented
+yet...;

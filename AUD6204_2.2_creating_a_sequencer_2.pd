@@ -1,0 +1,1356 @@
+#N canvas 159 23 587 382 10;
+#X text 57 5 NOTE: If SimpleSynth was not open before you opened PD
+you will need to close PD \, open SimpleSynth \, and reopen PD;
+#X text 53 72 ------------------------------------------------------------
+;
+#X text 109 117 click me ------->;
+#X text 49 168 ------------------------------------------------------------
+;
+#X text 105 213 click me ------->;
+#X text 53 245 ------------------------------------------------------------
+;
+#X text 109 290 click me ------->;
+#X text 114 96 1 - basic interfacing;
+#X text 110 192 2 - interface design: Graph-On-Parent;
+#X text 114 269 3 - random numbers;
+#X text 57 34 NOTE: In the Media menu (along the top ^^^) go to MIDI
+Settings and make sure SimpleSynth is selected;
+#N canvas 290 23 544 274 interface_objects 0;
+#X text 52 7 Create a sequencer that uses interface objects to give
+the user control over the pitch of the notes in a sequence;
+#X text 53 35 HINT: Use the float object to store each MIDI pitch...
+;
+#N canvas 0 23 1090 493 sequencer_w/interface_solution_w/velocity 0
+;
+#X msg 251 121 0;
+#X obj 198 114 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 198 27 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 246 106 reset;
+#X floatatom 249 68 5 50 2000 0 - - -;
+#X text 240 50 delta time;
+#X floatatom 289 121 5 1 8 0 - - -;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 198 154 pd simpleCounter;
+#X obj 330 32 loadbang;
+#X msg 330 67 8;
+#X text 298 136 #beats in sequence;
+#X text 637 300 MIDI velocity;
+#X obj 504 139 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 520 139 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 536 139 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 552 139 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 568 139 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 584 139 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 600 139 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 616 139 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 198 90 metro 250;
+#X obj 504 299 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 520 299 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 536 299 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 552 299 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 568 299 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 584 299 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 600 299 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 616 299 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 198 462 noteout 1;
+#X obj 198 434 makenote 100 250;
+#X text 641 207 MIDI pitch;
+#X msg 296 67 250;
+#N canvas 0 23 540 283 8stepSeq 0;
+#X obj 10 12 inlet;
+#X obj 10 37 sel 0 1 2 3 4 5 6 7;
+#X obj 10 161 outlet;
+#X obj 202 12 inlet;
+#X obj 244 12 inlet;
+#X obj 281 12 inlet;
+#X obj 319 12 inlet;
+#X obj 361 12 inlet;
+#X obj 398 12 inlet;
+#X obj 436 12 inlet;
+#X obj 478 12 inlet;
+#X obj 10 107 f;
+#X obj 46 107 f;
+#X obj 82 107 f;
+#X obj 118 107 f;
+#X obj 155 107 f;
+#X obj 191 107 f;
+#X obj 227 107 f;
+#X obj 262 107 f;
+#X connect 0 0 1 0;
+#X connect 1 0 11 0;
+#X connect 1 1 12 0;
+#X connect 1 2 13 0;
+#X connect 1 3 14 0;
+#X connect 1 4 15 0;
+#X connect 1 5 16 0;
+#X connect 1 6 17 0;
+#X connect 1 7 18 0;
+#X connect 3 0 11 1;
+#X connect 4 0 12 1;
+#X connect 5 0 13 1;
+#X connect 6 0 14 1;
+#X connect 7 0 15 1;
+#X connect 8 0 16 1;
+#X connect 9 0 17 1;
+#X connect 10 0 18 1;
+#X connect 11 0 2 0;
+#X connect 12 0 2 0;
+#X connect 13 0 2 0;
+#X connect 14 0 2 0;
+#X connect 15 0 2 0;
+#X connect 16 0 2 0;
+#X connect 17 0 2 0;
+#X connect 18 0 2 0;
+#X restore 198 354 pd 8stepSeq;
+#N canvas 0 23 596 273 8stepSeq 0;
+#X obj 35 21 inlet;
+#X obj 34 55 sel 0 1 2 3 4 5 6 7;
+#X obj 34 170 outlet;
+#X obj 222 42 inlet;
+#X obj 264 42 inlet;
+#X obj 301 42 inlet;
+#X obj 339 42 inlet;
+#X obj 381 42 inlet;
+#X obj 418 42 inlet;
+#X obj 456 42 inlet;
+#X obj 498 42 inlet;
+#X obj 34 116 f;
+#X obj 70 116 f;
+#X obj 106 116 f;
+#X obj 142 116 f;
+#X obj 179 116 f;
+#X obj 215 116 f;
+#X obj 251 116 f;
+#X obj 287 116 f;
+#X connect 0 0 1 0;
+#X connect 1 0 11 0;
+#X connect 1 1 12 0;
+#X connect 1 2 13 0;
+#X connect 1 3 14 0;
+#X connect 1 4 15 0;
+#X connect 1 5 16 0;
+#X connect 1 6 17 0;
+#X connect 1 7 18 0;
+#X connect 3 0 11 1;
+#X connect 4 0 12 1;
+#X connect 5 0 13 1;
+#X connect 6 0 14 1;
+#X connect 7 0 15 1;
+#X connect 8 0 16 1;
+#X connect 9 0 17 1;
+#X connect 10 0 18 1;
+#X connect 11 0 2 0;
+#X connect 12 0 2 0;
+#X connect 13 0 2 0;
+#X connect 14 0 2 0;
+#X connect 15 0 2 0;
+#X connect 16 0 2 0;
+#X connect 17 0 2 0;
+#X connect 18 0 2 0;
+#X restore 498 349 pd 8stepSeq;
+#X text 573 346 <---- click me;
+#X text 107 353 click me ---->;
+#X text 743 168 1 - we enter our sequence of pitches;
+#X text 739 300 2 - we enter our sequence of velocities;
+#X obj 504 110 hradio 16 1 0 8 empty empty empty 0 -8 0 10 -262144
+-1 -1 7;
+#X text 636 107 <---- this is just for show;
+#X text 192 10 ON/OFF;
+#X text 739 345 3 - each sequence is stored in 'float' objects contained
+within the "8stepSeq" subpatches;
+#X text 19 177 4 - our trust metro+simpleCounter gives us the cycle
+of beats;
+#X text 498 81 5 - the hradio object displays the current step;
+#X text 452 383 6 - the velocity is retrieved first and sent to the
+maketnote;
+#X text 28 387 7 - finally the pitch is retrieved and sent to the makenote
+\, resulting in the synth being triggered;
+#X obj 198 297 t f f f;
+#X connect 0 0 7 1;
+#X connect 1 0 7 0;
+#X connect 2 0 20 0;
+#X connect 4 0 20 1;
+#X connect 6 0 7 2;
+#X connect 7 0 47 0;
+#X connect 8 0 9 0;
+#X connect 8 0 32 0;
+#X connect 9 0 6 0;
+#X connect 12 0 33 1;
+#X connect 13 0 33 2;
+#X connect 14 0 33 3;
+#X connect 15 0 33 4;
+#X connect 16 0 33 5;
+#X connect 17 0 33 6;
+#X connect 18 0 33 7;
+#X connect 19 0 33 8;
+#X connect 20 0 1 0;
+#X connect 21 0 34 1;
+#X connect 22 0 34 2;
+#X connect 23 0 34 3;
+#X connect 24 0 34 4;
+#X connect 25 0 34 5;
+#X connect 26 0 34 6;
+#X connect 27 0 34 7;
+#X connect 28 0 34 8;
+#X connect 30 0 29 0;
+#X connect 30 1 29 1;
+#X connect 32 0 4 0;
+#X connect 33 0 30 0;
+#X connect 34 0 30 1;
+#X connect 47 0 33 0;
+#X connect 47 1 34 0;
+#X connect 47 2 39 0;
+#X restore 50 198 pd sequencer_w/interface_solution_w/velocity;
+#X text 51 147 Expand on the last patch by adding control over the
+velocity of each note;
+#X text 50 174 Use subpatchers to keep things tidy;
+#N canvas 0 23 1035 749 sequencer_w/interface_solution 0;
+#X msg 487 103 0;
+#X obj 434 86 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 434 4 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X text 482 88 reset;
+#X floatatom 485 41 5 50 2000 0 - - -;
+#X text 476 23 delta time;
+#X floatatom 525 103 5 1 8 0 - - -;
+#X obj 556 43 loadbang;
+#X text 534 118 #beats in sequence;
+#X obj 284 81 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 300 81 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 316 81 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 332 81 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 434 62 metro 250;
+#X obj 434 446 noteout 1;
+#X obj 434 418 makenote 100 250;
+#X msg 525 42 250;
+#X obj 434 244 float;
+#X obj 470 244 float;
+#X obj 506 244 float;
+#X obj 542 244 float;
+#X text 468 373 but makes things a bit neater \,;
+#X text 469 387 especially if we want to reuse the code...;
+#X text 315 2 Turn melody ON/OFF;
+#X text 467 362 this trigger object changes nothing \,;
+#X text 62 241 2 - by connecting the sliders to the cold input of the
+float objects we 'store' these values until a trigger (bang) is received
+in the hot inlet;
+#X text 62 80 1 - input a melody using the sliders;
+#X obj 348 81 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 364 81 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 380 81 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 396 81 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 578 244 float;
+#X obj 614 244 float;
+#X obj 650 244 float;
+#X obj 686 244 float;
+#X msg 556 78 8;
+#X obj 434 161 sel 0 1 2 3 4 5 6 7;
+#X text 558 156 3 - the select provides the trigger \, sending a bang
+out a different output for each beat;
+#X obj 434 366 t f;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 434 136 pd simpleCounter;
+#X connect 0 0 39 1;
+#X connect 1 0 39 0;
+#X connect 2 0 13 0;
+#X connect 4 0 13 1;
+#X connect 6 0 39 2;
+#X connect 7 0 35 0;
+#X connect 7 0 16 0;
+#X connect 9 0 17 1;
+#X connect 10 0 18 1;
+#X connect 11 0 19 1;
+#X connect 12 0 20 1;
+#X connect 13 0 1 0;
+#X connect 15 0 14 0;
+#X connect 15 1 14 1;
+#X connect 16 0 4 0;
+#X connect 17 0 38 0;
+#X connect 18 0 38 0;
+#X connect 19 0 38 0;
+#X connect 20 0 38 0;
+#X connect 27 0 31 1;
+#X connect 28 0 32 1;
+#X connect 29 0 33 1;
+#X connect 30 0 34 1;
+#X connect 31 0 38 0;
+#X connect 32 0 38 0;
+#X connect 33 0 38 0;
+#X connect 34 0 38 0;
+#X connect 35 0 6 0;
+#X connect 36 0 17 0;
+#X connect 36 1 18 0;
+#X connect 36 2 19 0;
+#X connect 36 3 20 0;
+#X connect 36 4 31 0;
+#X connect 36 5 32 0;
+#X connect 36 6 33 0;
+#X connect 36 7 34 0;
+#X connect 38 0 15 0;
+#X connect 39 0 36 0;
+#X restore 54 89 pd sequencer_w/interface_solution;
+#X restore 221 118 pd interface_objects;
+#N canvas 4 23 1111 706 interface_design_Graph_On_Parent 0;
+#N canvas 0 23 677 516 sequencer_w/interface_solution3 0;
+#X obj 8 430 noteout 1;
+#X obj 8 402 makenote 100 250;
+#N canvas 0 23 513 405 8stepGUI 0;
+#X text 145 182 MIDI velocity;
+#X obj 12 32 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 28 32 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 44 32 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 60 32 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 76 32 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 92 32 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 108 32 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 124 32 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 12 181 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 28 181 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 44 181 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 60 181 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 76 181 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 92 181 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 108 181 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 124 181 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X text 149 100 MIDI pitch;
+#N canvas 0 23 540 283 8stepSeq 0;
+#X obj 10 12 inlet;
+#X obj 10 37 sel 0 1 2 3 4 5 6 7;
+#X obj 10 161 outlet;
+#X obj 202 12 inlet;
+#X obj 244 12 inlet;
+#X obj 281 12 inlet;
+#X obj 319 12 inlet;
+#X obj 361 12 inlet;
+#X obj 398 12 inlet;
+#X obj 436 12 inlet;
+#X obj 478 12 inlet;
+#X obj 10 107 f;
+#X obj 46 107 f;
+#X obj 82 107 f;
+#X obj 118 107 f;
+#X obj 155 107 f;
+#X obj 191 107 f;
+#X obj 227 107 f;
+#X obj 262 107 f;
+#X connect 0 0 1 0;
+#X connect 1 0 11 0;
+#X connect 1 1 12 0;
+#X connect 1 2 13 0;
+#X connect 1 3 14 0;
+#X connect 1 4 15 0;
+#X connect 1 5 16 0;
+#X connect 1 6 17 0;
+#X connect 1 7 18 0;
+#X connect 3 0 11 1;
+#X connect 4 0 12 1;
+#X connect 5 0 13 1;
+#X connect 6 0 14 1;
+#X connect 7 0 15 1;
+#X connect 8 0 16 1;
+#X connect 9 0 17 1;
+#X connect 10 0 18 1;
+#X connect 11 0 2 0;
+#X connect 12 0 2 0;
+#X connect 13 0 2 0;
+#X connect 14 0 2 0;
+#X connect 15 0 2 0;
+#X connect 16 0 2 0;
+#X connect 17 0 2 0;
+#X connect 18 0 2 0;
+#X restore -195 196 pd 8stepSeq;
+#N canvas 0 23 596 273 8stepSeq 0;
+#X obj 35 21 inlet;
+#X obj 34 55 sel 0 1 2 3 4 5 6 7;
+#X obj 34 170 outlet;
+#X obj 222 42 inlet;
+#X obj 264 42 inlet;
+#X obj 301 42 inlet;
+#X obj 339 42 inlet;
+#X obj 381 42 inlet;
+#X obj 418 42 inlet;
+#X obj 456 42 inlet;
+#X obj 498 42 inlet;
+#X obj 34 116 f;
+#X obj 70 116 f;
+#X obj 106 116 f;
+#X obj 142 116 f;
+#X obj 179 116 f;
+#X obj 215 116 f;
+#X obj 251 116 f;
+#X obj 287 116 f;
+#X connect 0 0 1 0;
+#X connect 1 0 11 0;
+#X connect 1 1 12 0;
+#X connect 1 2 13 0;
+#X connect 1 3 14 0;
+#X connect 1 4 15 0;
+#X connect 1 5 16 0;
+#X connect 1 6 17 0;
+#X connect 1 7 18 0;
+#X connect 3 0 11 1;
+#X connect 4 0 12 1;
+#X connect 5 0 13 1;
+#X connect 6 0 14 1;
+#X connect 7 0 15 1;
+#X connect 8 0 16 1;
+#X connect 9 0 17 1;
+#X connect 10 0 18 1;
+#X connect 11 0 2 0;
+#X connect 12 0 2 0;
+#X connect 13 0 2 0;
+#X connect 14 0 2 0;
+#X connect 15 0 2 0;
+#X connect 16 0 2 0;
+#X connect 17 0 2 0;
+#X connect 18 0 2 0;
+#X restore 5 221 pd 8stepSeq;
+#X obj -195 105 inlet;
+#X obj -195 301 pack;
+#X obj -195 326 outlet;
+#X obj 12 12 hradio 16 1 0 8 empty empty empty 0 -8 0 10 -1 -258113
+-1 6;
+#X text -136 296 <---- I'm just using a pack object so that I only
+need one outlet \, for this scenario I could just as easily have used
+2 outlets and sent the pitch out left and the velocity out right...
+;
+#X obj -195 132 t f f f;
+#X connect 1 0 18 1;
+#X connect 2 0 18 2;
+#X connect 3 0 18 3;
+#X connect 4 0 18 4;
+#X connect 5 0 18 5;
+#X connect 6 0 18 6;
+#X connect 7 0 18 7;
+#X connect 8 0 18 8;
+#X connect 9 0 19 1;
+#X connect 10 0 19 2;
+#X connect 11 0 19 3;
+#X connect 12 0 19 4;
+#X connect 13 0 19 5;
+#X connect 14 0 19 6;
+#X connect 15 0 19 7;
+#X connect 16 0 19 8;
+#X connect 18 0 21 0;
+#X connect 19 0 21 1;
+#X connect 20 0 25 0;
+#X connect 21 0 22 0;
+#X connect 25 0 18 0;
+#X connect 25 1 19 0;
+#X connect 25 2 23 0;
+#X coords 0 0 1 1 230 220 1 0 0;
+#X restore 8 73 pd 8stepGUI;
+#X obj 144 401 print seqOut;
+#X text 243 21 <----;
+#X text 241 155 <----;
+#X text 283 9 Right click and select open;
+#X text 283 23 Compare the code within to our previous examples;
+#X text 283 36 Note how much tidier (and clearer) the code appears
+this way;
+#X text 274 149 Right click and select open;
+#X text 274 163 Compare the code within to our previous examples;
+#X text 275 179 Note how much tidier (and clearer) the code appears
+this way;
+#N canvas 479 246 446 320 conductor 0;
+#X msg 59 98 0;
+#X text 185 18 reset;
+#X floatatom 63 37 5 50 2000 0 - - -;
+#X text 54 19 delta time;
+#X floatatom 133 39 5 0 0 0 - - -;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 6 131 pd simpleCounter;
+#X obj 135 -72 loadbang;
+#X msg 135 -37 8;
+#X obj 6 67 metro 250;
+#X msg 101 -37 250;
+#X obj 6 37 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X text 3 18 on/off;
+#X text 130 18 #beats;
+#X obj 6 153 outlet;
+#X obj 188 38 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X connect 0 0 5 1;
+#X connect 2 0 8 1;
+#X connect 4 0 5 2;
+#X connect 5 0 13 0;
+#X connect 6 0 7 0;
+#X connect 6 0 9 0;
+#X connect 7 0 4 0;
+#X connect 8 0 5 0;
+#X connect 9 0 2 0;
+#X connect 10 0 8 0;
+#X connect 14 0 0 0;
+#X coords 0 -1 1 1 230 60 1 0 0;
+#X restore 8 3 pd conductor;
+#X connect 1 0 0 0;
+#X connect 1 1 0 1;
+#X connect 2 0 1 0;
+#X connect 2 0 3 0;
+#X connect 12 0 2 0;
+#X restore 232 677 pd sequencer_w/interface_solution3;
+#X floatatom 397 474 5 0 0 0 - - -;
+#X floatatom 518 471 5 0 0 0 - - -;
+#X obj 640 473 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X floatatom 397 365 5 0 0 0 - - -;
+#X floatatom 518 372 5 0 0 0 - - -;
+#X obj 640 370 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X floatatom 414 211 5 0 0 0 - - -;
+#X floatatom 451 211 5 0 0 0 - - -;
+#X obj 489 212 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X floatatom 414 292 5 0 0 0 - - -;
+#X floatatom 451 292 5 0 0 0 - - -;
+#X obj 489 294 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 412 99 hsl 128 15 0 127 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X floatatom 548 99 5 0 0 0 - - -;
+#X obj 594 101 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X floatatom 409 48 5 0 0 0 - - -;
+#X floatatom 548 50 5 0 0 0 - - -;
+#X obj 594 51 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 409 148 5 0 0 0 - - -;
+#X floatatom 548 147 5 0 0 0 - - -;
+#X obj 594 149 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 10 -2 In addition to subpatchers and interface objects \, we
+can also improve our interfaces and tidy up our code by activating
+'Graph-On-Parent' on our subpatches.;
+#X text 398 66 ------------------------------------;
+#X text 398 125 ------------------------------------;
+#X text 391 75 |;
+#X text 391 86 |;
+#X text 391 97 |;
+#X text 391 108 |;
+#X text 391 119 |;
+#X text 613 75 |;
+#X text 613 86 |;
+#X text 613 97 |;
+#X text 613 109 |;
+#X text 613 120 |;
+#X text 12 98 1 - A simple piece of code invoving three interace objects
+;
+#X text 365 95 ----;
+#X text 395 230 |;
+#X text 395 241 |;
+#X text 395 252 |;
+#X text 395 263 |;
+#X text 515 230 |;
+#X text 515 241 |;
+#X text 515 264 |;
+#X text 402 221 -------------------;
+#X text 565 275 comment;
+#X text 398 270 --------------------;
+#X text 347 252 --------;
+#X text 12 250 2 - Exactly the same code \, but with the three interface
+objects encapsulated in a subpatcher;
+#X text 511 248 <------ click me;
+#X text 10 412 3 - Again this is exactly the same code \, but now the
+subpatcher from the last patch has been set to 'Graph-On-Parent';
+#X text 337 411 ---------;
+#X text 10 457 Note how only the interface objects are visible (here
+inlets & outlets are hidden from view \, but as we will see all non
+interface objects are hidden);
+#X text 707 205 2b - To turn our subpatch into an interface object
+we need to right click on the subpatcher and go to "Properties";
+#X text 707 239 In "properties" activate 'Graph-On-Parent';
+#X text 706 262 Once 'Graph-On-Parent' is activated you will need to
+change the Margins and Size (both are also in the "Properties" window)
+to ensure that the correct portion of your subpatch is displayed on
+the parent patch;
+#X text 656 416 <---------;
+#X text 722 401 Right click on me and go to "Properties";
+#X text 722 419 Note how the Size and Margin values have been changeed
+from the default settings;
+#X text 722 451 This lets me center the display on my interface \,
+potentially lots masses of code;
+#N canvas 197 134 324 104 simple_GUI 0;
+#X obj 35 34 hsl 128 15 0 127 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 32 54 outlet;
+#X floatatom 171 34 5 0 0 0 - - -;
+#X obj 171 55 outlet;
+#X obj 236 32 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 236 52 outlet;
+#X obj 32 10 inlet;
+#X obj 170 13 inlet;
+#X obj 236 11 inlet;
+#X connect 0 0 1 0;
+#X connect 2 0 3 0;
+#X connect 4 0 5 0;
+#X connect 6 0 0 0;
+#X connect 7 0 2 0;
+#X connect 8 0 4 0;
+#X restore 414 250 pd simple_GUI;
+#N canvas 197 134 450 300 simple_GUI_as_graph 0;
+#X obj 5 26 hsl 128 15 0 127 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 2 46 outlet;
+#X floatatom 141 26 5 0 0 0 - - -;
+#X obj 141 47 outlet;
+#X obj 206 24 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 206 44 outlet;
+#X obj 2 2 inlet;
+#X obj 140 5 inlet;
+#X obj 206 3 inlet;
+#X connect 0 0 1 0;
+#X connect 2 0 3 0;
+#X connect 4 0 5 0;
+#X connect 6 0 0 0;
+#X connect 7 0 2 0;
+#X connect 8 0 4 0;
+#X coords 0 -1 1 1 250 70 1 0 0;
+#X restore 397 393 pd simple_GUI_as_graph;
+#X text 721 481 You can also open the subpatch to see the code within
+by right clicking on the object and selecting open;
+#X text 333 330 ------------------------------------------------------------
+;
+#X text 335 175 ------------------------------------------------------------
+;
+#X text 33 539 ------------------------------------------------------------
+;
+#X text 393 539 ------------------------------------------------------------
+;
+#X text 752 539 -------------------------------------------------------
+;
+#N canvas 496 47 332 79 clickMe 0;
+#X text 160 16 I'm level 1;
+#N canvas 488 90 437 74 clickMeToo 0;
+#N canvas 601 61 303 74 clickMeAgain 0;
+#X text 104 32 I'm bored now...;
+#X restore 63 27 pd clickMeAgain;
+#X text 226 26 I'm level 2;
+#X restore 53 17 pd clickMeToo;
+#X restore 523 579 pd clickMe;
+#X text 13 565 Building on our last sequencer \, create a sequencer
+(with user control over the pitch and velocity of each step in the
+sequence);
+#X text 11 609 Use subpatchers to keep code tidy \, and use graph-on-parent
+to create an interface;
+#X text 492 559 HINT: We can also embed subpatchers within other subpatchers
+;
+#X connect 4 0 61 0;
+#X connect 5 0 61 1;
+#X connect 6 0 61 2;
+#X connect 7 0 60 0;
+#X connect 8 0 60 1;
+#X connect 9 0 60 2;
+#X connect 13 0 19 0;
+#X connect 14 0 20 0;
+#X connect 15 0 21 0;
+#X connect 16 0 13 0;
+#X connect 17 0 14 0;
+#X connect 18 0 15 0;
+#X connect 60 0 10 0;
+#X connect 60 1 11 0;
+#X connect 60 2 12 0;
+#X connect 61 0 1 0;
+#X connect 61 1 2 0;
+#X connect 61 2 3 0;
+#X restore 217 214 pd interface_design_Graph_On_Parent;
+#N canvas 4 23 883 755 random_numbers 0;
+#X text 64 116 We will often want to generate random numbers when coding
+;
+#X text 65 134 e.g. to add variations to a melody \, or even to create
+entire melodies;
+#X obj 561 179 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 560 430 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 12300 1;
+#X obj 590 298 random 128;
+#X obj 576 430 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 12500 1;
+#X obj 592 430 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 10600 1;
+#X obj 608 430 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 1300 1;
+#X text 471 176 click me----->;
+#X text 120 567 ------------------------------------------------------------
+;
+#X text 480 567 ------------------------------------------------------------
+;
+#X text 17 600 Expand on our previous sequencer by including a feature
+where the user can randomly gerate patterns;
+#X obj 362 23 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 362 43 random 100;
+#X obj 362 65 print random;
+#X text 271 20 click me----->;
+#X text 26 38 random outputs numbers from;
+#X text 27 52 within the given range (0 --> argument-1 );
+#X text 148 99 ------------------------------------------------------------
+;
+#X text 508 99 ------------------------------------------------------------
+;
+#X text 468 120 In these examples we will look at creating a random
+melody;
+#N canvas 0 23 740 512 sequencer_w/interfacesolution4 0;
+#X obj 9 430 noteout 1;
+#X obj 9 402 makenote 100 250;
+#N canvas 0 23 719 495 8stepGUI 0;
+#X text 137 186 MIDI velocity;
+#X obj 4 36 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 8000 1;
+#X obj 20 36 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 7800 1;
+#X obj 36 36 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 8000 1;
+#X obj 52 36 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 300 1;
+#X obj 68 36 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 7800 1;
+#X obj 84 36 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 4000 1;
+#X obj 100 36 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 3500 1;
+#X obj 116 36 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 7800 1;
+#X obj 4 185 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 2329 1;
+#X obj 20 185 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 206 1;
+#X obj 36 185 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 2009 1;
+#X obj 52 185 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 23 1;
+#X obj 68 185 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 2694 1;
+#X obj 84 185 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 1187 1;
+#X obj 100 185 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 1827 1;
+#X obj 116 185 vsl 15 30 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 548 1;
+#X text 141 104 MIDI pitch;
+#N canvas 0 23 540 283 8stepSeq 0;
+#X obj 10 12 inlet;
+#X obj 10 37 sel 0 1 2 3 4 5 6 7;
+#X obj 10 161 outlet;
+#X obj 202 12 inlet;
+#X obj 244 12 inlet;
+#X obj 281 12 inlet;
+#X obj 319 12 inlet;
+#X obj 361 12 inlet;
+#X obj 398 12 inlet;
+#X obj 436 12 inlet;
+#X obj 478 12 inlet;
+#X obj 10 107 f;
+#X obj 46 107 f;
+#X obj 82 107 f;
+#X obj 118 107 f;
+#X obj 155 107 f;
+#X obj 191 107 f;
+#X obj 227 107 f;
+#X obj 262 107 f;
+#X connect 0 0 1 0;
+#X connect 1 0 11 0;
+#X connect 1 1 12 0;
+#X connect 1 2 13 0;
+#X connect 1 3 14 0;
+#X connect 1 4 15 0;
+#X connect 1 5 16 0;
+#X connect 1 6 17 0;
+#X connect 1 7 18 0;
+#X connect 3 0 11 1;
+#X connect 4 0 12 1;
+#X connect 5 0 13 1;
+#X connect 6 0 14 1;
+#X connect 7 0 15 1;
+#X connect 8 0 16 1;
+#X connect 9 0 17 1;
+#X connect 10 0 18 1;
+#X connect 11 0 2 0;
+#X connect 12 0 2 0;
+#X connect 13 0 2 0;
+#X connect 14 0 2 0;
+#X connect 15 0 2 0;
+#X connect 16 0 2 0;
+#X connect 17 0 2 0;
+#X connect 18 0 2 0;
+#X restore -203 200 pd 8stepSeq;
+#N canvas 0 23 596 273 8stepSeq 0;
+#X obj 35 21 inlet;
+#X obj 34 55 sel 0 1 2 3 4 5 6 7;
+#X obj 34 170 outlet;
+#X obj 222 42 inlet;
+#X obj 264 42 inlet;
+#X obj 301 42 inlet;
+#X obj 339 42 inlet;
+#X obj 381 42 inlet;
+#X obj 418 42 inlet;
+#X obj 456 42 inlet;
+#X obj 498 42 inlet;
+#X obj 34 116 f;
+#X obj 70 116 f;
+#X obj 106 116 f;
+#X obj 142 116 f;
+#X obj 179 116 f;
+#X obj 215 116 f;
+#X obj 251 116 f;
+#X obj 287 116 f;
+#X connect 0 0 1 0;
+#X connect 1 0 11 0;
+#X connect 1 1 12 0;
+#X connect 1 2 13 0;
+#X connect 1 3 14 0;
+#X connect 1 4 15 0;
+#X connect 1 5 16 0;
+#X connect 1 6 17 0;
+#X connect 1 7 18 0;
+#X connect 3 0 11 1;
+#X connect 4 0 12 1;
+#X connect 5 0 13 1;
+#X connect 6 0 14 1;
+#X connect 7 0 15 1;
+#X connect 8 0 16 1;
+#X connect 9 0 17 1;
+#X connect 10 0 18 1;
+#X connect 11 0 2 0;
+#X connect 12 0 2 0;
+#X connect 13 0 2 0;
+#X connect 14 0 2 0;
+#X connect 15 0 2 0;
+#X connect 16 0 2 0;
+#X connect 17 0 2 0;
+#X connect 18 0 2 0;
+#X restore -3 225 pd 8stepSeq;
+#X obj -203 109 inlet;
+#X obj -203 305 pack;
+#X obj -203 330 outlet;
+#X obj 4 14 hradio 16 1 0 8 empty empty empty 0 -8 0 10 -1 -258113
+-1 0;
+#X text -144 300 <---- I'm just using a pack object so that I only
+need one outlet \, for this scenario I could just as easily have used
+2 outlets and sent the pitch out left and the velocity out right...
+;
+#X obj 33 -105 inlet;
+#X obj 310 21 inlet;
+#X text -354 -95 I choose to receive the pitch and velocity values
+as lists;
+#X text -352 -81 in the form of [ slider number \, value ];
+#X text -351 -65 This allows me to send the list directly to the gate
+(which interperets the first value in the list as the gate number to
+open \, and everything else as the message to output out that outlet)
+;
+#X obj -203 136 t f f f;
+#X obj 33 -78 route 0 1 2 3 4 5 6 7;
+#X obj 310 47 route 0 1 2 3 4 5 6 7;
+#X connect 1 0 18 1;
+#X connect 2 0 18 2;
+#X connect 3 0 18 3;
+#X connect 4 0 18 4;
+#X connect 5 0 18 5;
+#X connect 6 0 18 6;
+#X connect 7 0 18 7;
+#X connect 8 0 18 8;
+#X connect 9 0 19 1;
+#X connect 10 0 19 2;
+#X connect 11 0 19 3;
+#X connect 12 0 19 4;
+#X connect 13 0 19 5;
+#X connect 14 0 19 6;
+#X connect 15 0 19 7;
+#X connect 16 0 19 8;
+#X connect 18 0 21 0;
+#X connect 19 0 21 1;
+#X connect 20 0 30 0;
+#X connect 21 0 22 0;
+#X connect 25 0 31 0;
+#X connect 26 0 32 0;
+#X connect 30 0 18 0;
+#X connect 30 1 19 0;
+#X connect 30 2 23 0;
+#X connect 31 0 1 0;
+#X connect 31 1 2 0;
+#X connect 31 2 3 0;
+#X connect 31 3 4 0;
+#X connect 31 4 5 0;
+#X connect 31 5 6 0;
+#X connect 31 6 7 0;
+#X connect 31 7 8 0;
+#X connect 32 0 9 0;
+#X connect 32 1 10 0;
+#X connect 32 2 11 0;
+#X connect 32 3 12 0;
+#X connect 32 4 13 0;
+#X connect 32 5 14 0;
+#X connect 32 6 15 0;
+#X connect 32 7 16 0;
+#X coords 0 0 1 1 230 220 1 0 0;
+#X restore 9 73 pd 8stepGUI;
+#X obj 145 401 print seqOut;
+#N canvas 479 246 446 320 conductor 0;
+#X msg 59 98 0;
+#X text 185 18 reset;
+#X floatatom 63 37 5 50 2000 0 - - -;
+#X text 54 19 delta time;
+#X floatatom 133 39 5 0 0 0 - - -;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 6 131 pd simpleCounter;
+#X obj 135 -72 loadbang;
+#X msg 135 -37 8;
+#X obj 6 67 metro 250;
+#X msg 101 -37 250;
+#X obj 6 37 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X text 3 18 on/off;
+#X text 130 18 #beats;
+#X obj 6 153 outlet;
+#X obj 188 38 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X connect 0 0 5 1;
+#X connect 2 0 8 1;
+#X connect 4 0 5 2;
+#X connect 5 0 13 0;
+#X connect 6 0 7 0;
+#X connect 6 0 9 0;
+#X connect 7 0 4 0;
+#X connect 8 0 5 0;
+#X connect 9 0 2 0;
+#X connect 10 0 8 0;
+#X connect 14 0 0 0;
+#X coords 0 -1 1 1 230 60 1 0 0;
+#X restore 9 3 pd conductor;
+#N canvas 321 59 450 300 randomiser 0;
+#X obj 11 40 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 31 197 random 128;
+#X obj 11 240 pack;
+#X obj 11 262 outlet;
+#X text 3 24 Random Pattern;
+#X obj 11 170 t f b;
+#X obj 11 122 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 11 141 pd simpleCounter;
+#X msg 11 67 8;
+#X obj 11 101 t f b f, f 16;
+#X connect 0 0 8 0;
+#X connect 1 0 2 1;
+#X connect 2 0 3 0;
+#X connect 5 0 2 0;
+#X connect 5 1 1 0;
+#X connect 6 0 7 0;
+#X connect 7 0 5 0;
+#X connect 8 0 9 0;
+#X connect 9 0 6 0;
+#X connect 9 1 7 1;
+#X connect 9 2 7 2;
+#X coords 0 -1 1 1 100 60 1 0 0;
+#X restore 245 3 pd randomiser;
+#X text 242 199 <---- right click me and select "Open";
+#X text 359 17 <---- right click me and select "Open";
+#X text 358 32 Note how I have literally copied and pasted my previous
+code;
+#N canvas 321 59 450 300 randomiser 0;
+#X obj 11 40 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 31 197 random 128;
+#X obj 11 240 pack;
+#X obj 11 262 outlet;
+#X text 3 24 Random Pattern;
+#X obj 11 170 t f b;
+#X obj 11 122 until;
+#N canvas 56 23 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 11 141 pd simpleCounter;
+#X msg 11 67 8;
+#X obj 11 101 t f b f, f 16;
+#X connect 0 0 8 0;
+#X connect 1 0 2 1;
+#X connect 2 0 3 0;
+#X connect 5 0 2 0;
+#X connect 5 1 1 0;
+#X connect 6 0 7 0;
+#X connect 7 0 5 0;
+#X connect 8 0 9 0;
+#X connect 9 0 6 0;
+#X connect 9 1 7 1;
+#X connect 9 2 7 2;
+#X coords 0 -1 1 1 100 60 1 0 0;
+#X restore 245 74 pd randomiser;
+#X text 241 214 Note how I have literally copied and pasted my previous
+code and then just expanded it with inlets and route objects;
+#X connect 1 0 0 0;
+#X connect 1 1 0 1;
+#X connect 2 0 1 0;
+#X connect 2 0 3 0;
+#X connect 4 0 2 0;
+#X connect 5 0 2 1;
+#X connect 9 0 2 2;
+#X restore 118 640 pd sequencer_w/interfacesolution4;
+#X text 180 197 1 - the until is triggered and I use it to make our
+simple counter ourput a count (in this case 0 \, 1 \, 2 \, 3);
+#X msg 561 199 4;
+#X obj 561 241 until;
+#N canvas 1027 230 816 536 simpleCounter 0;
+#X obj 385 98 +;
+#X msg 509 45 0;
+#X msg 385 59 0;
+#X obj 454 178 + 1;
+#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 385 263 5 0 0 0 - - -;
+#X obj 385 158 % 8;
+#X text 536 43 reset;
+#X floatatom 597 43 5 0 0 0 - - -;
+#X text 630 42 #beats in count;
+#X obj 385 8 inlet;
+#X obj 385 317 outlet;
+#X text 13 58 1 - we want our count to go up by 1 each time \, but
+we want to output 0 the first time;
+#X text 14 98 2 - the 0 is added to the previous count (which starts
+at 0 because there is no argument after '+');
+#X text 14 153 3 - the count is passed through a modulo object (which
+divides the output by 8 (due to the argument) and then outputs the
+remainder.;
+#X obj 509 8 inlet;
+#X obj 597 8 inlet;
+#X text 13 206 4 - the remainder is output from the right output of
+the trigger first \, it has 1 added to it (right outlet) and then the
+new count is stored for the next trigger;
+#X text 14 256 5 - The count is then displayed (not 100% necessary)
+;
+#X obj 385 214 t f f;
+#X connect 0 0 6 0;
+#X connect 1 0 0 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 1;
+#X connect 4 0 2 0;
+#X connect 5 0 11 0;
+#X connect 6 0 19 0;
+#X connect 8 0 6 1;
+#X connect 10 0 4 0;
+#X connect 15 0 1 0;
+#X connect 16 0 8 0;
+#X connect 19 0 5 0;
+#X connect 19 1 3 0;
+#X restore 561 260 pd simpleCounter;
+#X obj 562 279 t f b;
+#X obj 562 325 pack;
+#X obj 562 351 route 0 1 2 3;
+#X text 180 395 6 - the loop begins at step 1 again until the until
+has completed its full count;
+#X text 183 351 5 - the route object routes the message (from step
+4) to the output (determined during step 2);
+#X text 183 286 3 - the trigger then outputs a bang out the right outlet
+\, this triggers the random object to output a number from 0 to 127
+\, the left outlet outputs the current count and will be used to determine
+which output of the route object the random number goes to;
+#X text 183 237 2 - the trigger first resets the counter by outputtin
+'0' out th right outlet. The middle outlet then outputs an integer
+\, this determines the maximum count of the simpleCounter;
+#X obj 561 220 t f b f, f 16;
+#X connect 2 0 23 0;
+#X connect 4 0 27 1;
+#X connect 12 0 13 0;
+#X connect 13 0 14 0;
+#X connect 23 0 33 0;
+#X connect 24 0 25 0;
+#X connect 25 0 26 0;
+#X connect 26 0 27 0;
+#X connect 26 1 4 0;
+#X connect 27 0 28 0;
+#X connect 28 0 3 0;
+#X connect 28 1 5 0;
+#X connect 28 2 6 0;
+#X connect 28 3 7 0;
+#X connect 33 0 24 0;
+#X connect 33 1 25 1;
+#X connect 33 2 25 2;
+#X restore 221 291 pd random_numbers;
+#X text 440 355 sjf \, SAE London \, 2020;

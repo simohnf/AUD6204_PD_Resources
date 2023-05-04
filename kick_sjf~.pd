@@ -1,0 +1,163 @@
+#N canvas 578 96 1332 761 10;
+#X obj 392 362 *~, f 19;
+#X obj 392 383 vol_sjf~ out;
+#X text 140 368 3 - multiply by signal for amplitude ramp;
+#X text 129 348 Amplitude ramp;
+#X obj 105 132 hsl 50 10 10 20000 1 1 \$0-clickf_snd \$0-clickf_rec
+click_freq -2 -8 0 10 -262144 -1 -1 3600 1;
+#X obj 424 239 cnv 15 300 100 empty empty empty 20 12 0 14 -233017
+-66577 0;
+#X obj 443 270 vol_sjf~ tone;
+#X obj 538 292 vol_sjf~ click;
+#X text 448 246 MIXER;
+#X obj 225 132 hsl 50 10 10 250 0 1 \$0-length_snd \$0-length_rec length
+-2 -8 0 10 -262144 -1 -1 1800 1;
+#X obj 389 47 inlet;
+#X text 386 19 MIDI velocity in as trigger;
+#N canvas 0 23 838 300 ramp 0;
+#X obj 390 77 inlet;
+#X obj 389 178 vline~;
+#X msg 389 147 1 1 \, 0 \$1 1;
+#X text 469 148 This ramp will act as both the control for the overall
+amlitude envelope (left path);
+#X obj 389 122 f 50, f 15;
+#X text 26 121 1 - the bang triggers the float object to output its
+value \, this acts as the length of the ramp;
+#X text 12 149 2 - the message to vline~ says: go to 1 in 1 millisecond
+\, then go to 0 over the length (step1) milliseconds;
+#X text 469 176 and it controls the frequency of the oscillator;
+#X obj 469 74 inlet;
+#X text 471 48 length;
+#X text 388 47 bang;
+#X obj 389 199 outlet~;
+#X connect 0 0 4 0;
+#X connect 1 0 11 0;
+#X connect 2 0 1 0;
+#X connect 4 0 2 0;
+#X connect 8 0 4 1;
+#X restore 389 133 pd ramp;
+#X obj 433 105 r \$0-length_snd;
+#N canvas 0 23 594 340 sweepOsc 0;
+#X obj 80 47 inlet~;
+#X obj 51 99 cnv 15 450 200 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 80 190 osc~ 100;
+#X obj 80 155 *~ 100;
+#X text 127 151 4 - use ramp to sweep frequency (from maxfreq --> 0
+as ramp goes from 1 --> 0);
+#X text 136 190 The Oscillator;
+#X text 97 227 (<---The article also has a lpf in here \, but I'm not
+sure it's necessary);
+#X text 155 109 Low frequency components with downward frequency sweep
+;
+#X obj 182 72 inlet;
+#X text 76 27 signal;
+#X text 184 47 tone freq;
+#X obj 79 265 outlet~;
+#X connect 0 0 3 0;
+#X connect 2 0 11 0;
+#X connect 3 0 2 0;
+#X connect 8 0 3 1;
+#X restore 443 217 pd sweepOsc;
+#X floatatom 610 145 5 50 150 0 maxfreq - -;
+#X obj 166 132 hsl 50 10 50 300 0 1 \$0-tonef_snd \$0-tonef_rec tone_freq
+-2 -8 0 10 -262144 -1 -1 800 1;
+#X obj 507 195 r \$0-tonef_snd;
+#X obj 495 243 r \$0-toneVol_snd;
+#X obj 619 264 r \$0-clickVol_snd;
+#X floatatom 542 214 5 0 0 0 - - -;
+#X floatatom 449 137 5 0 0 0 - - -;
+#N canvas 0 23 815 446 click 0;
+#X obj 122 199 cnv 15 430 200 empty empty empty 20 12 0 14 -233017
+-66577 0;
+#X obj 146 171 vline~;
+#X obj 147 299 *~, f 4;
+#X obj 239 231 noise~;
+#X text 213 69 for the click I used the same ramp for amplitude and
+the cutoff of the lfp;
+#X text 213 93 I decided not to give control over the length of the
+click;
+#X text 283 230 our noise source is just white noise;
+#X obj 147 320 lop~ 1000, f 19;
+#X text 202 133 I found 0.1 was a good maximum l3evel for the click
+\, but you can change this;
+#X text 202 108 the message tells vline~ to jump to 0.1 \, and then
+go down to 0 over 5 milliseconds;
+#X text 181 297 amplitude ramp;
+#X text 153 350 I simplified things by making the lpf cuttoff fixed
+(rather than sweeping);
+#X msg 147 71 0.1 \, 0 5;
+#X obj 147 49 inlet;
+#X text 147 27 bang;
+#X obj 147 400 outlet~;
+#X obj 361 292 inlet;
+#X text 360 276 cutoff frequency;
+#X connect 1 0 2 0;
+#X connect 2 0 7 0;
+#X connect 3 0 2 1;
+#X connect 7 0 15 0;
+#X connect 12 0 1 0;
+#X connect 13 0 12 0;
+#X connect 16 0 7 1;
+#X restore 644 213 pd click;
+#X floatatom 773 244 10 0 0 0 - - -;
+#X text 837 246 Hz;
+#X obj 719 191 r \$0-clickf_snd;
+#X obj 105 156 hsl 50 10 0 1 0 1 \$0-clickVol_snd \$0-clickVol_rec
+click_vol -2 -8 0 10 -262144 -1 -1 4900 1;
+#X obj 166 156 hsl 50 10 0 1 0 1 \$0-toneVol_snd \$0-toneVol_rec tone_vol
+-2 -8 0 10 -262144 -1 -1 2700 1;
+#X obj 390 80 t b b f, f 87;
+#X obj 918 167 / 127;
+#X obj 392 428 *~, f 89;
+#X obj 392 449 outlet~;
+#X obj 225 156 hsl 50 10 0 1 0 1 \$0-vol_snd \$0-vol_rec vol -2 -8
+0 10 -262144 -1 -1 4900 1;
+#X obj 515 363 r \$0-vol_snd;
+#X text 959 165 <--- /127 toconvert MIDI vel 0-->127 to vol control
+0 --> 1;
+#X text 904 9 This is based on Fig. 11 of this article: https://www.soundonsound.com/techniques/practical-bass-drum-synthesis
+;
+#X text 955 513 sjf \, SAE London \, \, 2020;
+#X obj 1042 391 loadbang;
+#X obj 1041 423 t b b;
+#X obj 1026 449 int \$0;
+#X obj 1026 470 outlet;
+#X obj 999 408 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 1159 397 tgl 15 1 empty \$0-dsp_rec dsp 17 7 0 10 -262144 -1
+-1 1 1;
+#X obj 1159 417 switch~;
+#X msg 1068 449 1;
+#X obj 1068 470 s \$0-dsp_rec;
+#X connect 0 0 1 0;
+#X connect 1 0 30 0;
+#X connect 6 0 0 1;
+#X connect 7 0 0 1;
+#X connect 10 0 28 0;
+#X connect 12 0 14 0;
+#X connect 12 0 0 0;
+#X connect 13 0 12 1;
+#X connect 13 0 21 0;
+#X connect 14 0 6 0;
+#X connect 17 0 14 1;
+#X connect 17 0 20 0;
+#X connect 18 0 6 1;
+#X connect 19 0 7 1;
+#X connect 22 0 7 0;
+#X connect 25 0 23 0;
+#X connect 25 0 22 1;
+#X connect 28 0 12 0;
+#X connect 28 1 22 0;
+#X connect 28 2 29 0;
+#X connect 29 0 30 1;
+#X connect 30 0 31 0;
+#X connect 33 0 1 1;
+#X connect 37 0 38 0;
+#X connect 38 0 39 0;
+#X connect 38 1 44 0;
+#X connect 39 0 40 0;
+#X connect 41 0 38 0;
+#X connect 42 0 43 0;
+#X connect 44 0 45 0;
+#X coords 0 -1 1 1 180 70 1 100 100;

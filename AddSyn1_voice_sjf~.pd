@@ -1,0 +1,52 @@
+#N canvas 0 23 643 374 10;
+#X obj 59 30 inlet;
+#X obj 59 222 *;
+#X floatatom 111 148 5 0 0 0 - - -;
+#X obj 106 197 tabread \$1-fratios;
+#X obj 220 197 tabread \$1-amplitudes;
+#X obj 59 51 t f b;
+#X obj 111 127 i \$2;
+#X text 209 41 \$1 - (the first argument needed when initiating this
+abstraction) is the unique identifier of the parent patch (i.e. \$0
+should be the first argument);
+#X text 212 81 \$2 - (the second argument needed when initiating this
+abstraction) is the instance of that patch in the parent patch (i.e.
+the first instance should have a second argument of 0 (".... \$0 0")
+\, the second should be "\$0 1" etc.;
+#X text 222 15 This abstraction expects two arguments;
+#X obj 444 143 loadbang;
+#X obj 433 170 i \$1;
+#X obj 480 171 i \$2;
+#X floatatom 433 191 5 0 0 0 - - -;
+#X floatatom 480 192 5 0 0 0 - - -;
+#X obj 59 313 osc~ 330;
+#X obj 59 334 *~, f 26;
+#X obj 59 355 outlet~;
+#X obj 59 243 pack;
+#X obj 59 289 line~;
+#X msg 220 218 \$1 5;
+#X obj 220 239 line~;
+#X text 94 282 line~ lets me set a time period over which weslide to
+the frequency;
+#X obj 110 225 r \$1-slide_snd;
+#X connect 0 0 5 0;
+#X connect 1 0 18 0;
+#X connect 2 0 3 0;
+#X connect 2 0 4 0;
+#X connect 3 0 1 1;
+#X connect 4 0 20 0;
+#X connect 5 0 1 0;
+#X connect 5 1 6 0;
+#X connect 6 0 2 0;
+#X connect 10 0 11 0;
+#X connect 10 0 12 0;
+#X connect 10 0 6 0;
+#X connect 11 0 13 0;
+#X connect 12 0 14 0;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 18 0 19 0;
+#X connect 19 0 15 0;
+#X connect 20 0 21 0;
+#X connect 21 0 16 1;
+#X connect 23 0 18 1;
