@@ -1,0 +1,16 @@
+#N canvas 324 349 450 300 12;
+#X obj 87 64 inlet~;
+#X obj 146 82 sig~ \$1;
+#X obj 87 194 outlet~;
+#X obj 331 71 inlet~;
+#X obj 147 131 +~, f 27;
+#X text 80 23 signal;
+#X text 333 31 spread;
+#X obj 147 107 tabread~ \$2-allpDelays;
+#X obj 87 167 freeverb_allpass_sjf~ 0 0.5;
+#X connect 0 0 8 0;
+#X connect 1 0 7 0;
+#X connect 3 0 4 1;
+#X connect 4 0 8 1;
+#X connect 7 0 4 0;
+#X connect 8 0 2 0;

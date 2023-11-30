@@ -1,34 +1,26 @@
 #N canvas 297 106 737 327 12;
 #X obj 25 88 until;
-#N canvas 56 23 816 536 simpleCounter 0;
-#X obj 385 98 +;
-#X msg 509 45 0;
-#X msg 385 59 0;
-#X obj 454 178 + 1;
-#X obj 385 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
-#X floatatom 385 263 5 0 0 0 - - -;
-#X obj 385 158 % 8;
-#X text 536 43 reset;
-#X floatatom 597 43 5 0 0 0 - - -;
-#X text 630 42 #beats in count;
-#X obj 385 8 inlet;
-#X obj 385 317 outlet;
-#X text 13 58 1 - we want our count to go up by 1 each time \, but
-we want to output 0 the first time;
-#X text 14 98 2 - the 0 is added to the previous count (which starts
-at 0 because there is no argument after '+');
-#X text 14 153 3 - the count is passed through a modulo object (which
-divides the output by 8 (due to the argument) and then outputs the
-remainder.;
-#X obj 509 8 inlet;
-#X obj 597 8 inlet;
-#X text 13 206 4 - the remainder is output from the right output of
-the trigger first \, it has 1 added to it (right outlet) and then the
-new count is stored for the next trigger;
-#X text 14 256 5 - The count is then displayed (not 100% necessary)
-;
-#X obj 385 214 t f f;
+#N canvas 56 25 816 536 simpleCounter 0;
+#X obj 443 98 +;
+#X msg 567 45 0;
+#X msg 443 59 0;
+#X obj 512 178 + 1;
+#X obj 443 41 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
+#X floatatom 443 263 5 0 0 0 - - - 0;
+#X obj 443 158 % 8;
+#X text 594 43 reset;
+#X floatatom 655 43 5 0 0 0 - - - 0;
+#X text 688 42 #beats in count;
+#X obj 443 8 inlet;
+#X obj 443 317 outlet;
+#X text 11 58 1 - we want our count to go up by 1 each time \, but we want to output 0 the first time;
+#X text 12 98 2 - the 0 is added to the previous count (which starts at 0 because there is no argument after '+');
+#X text 12 153 3 - the count is passed through a modulo object (which divides the output by 8 (due to the argument) and then outputs the remainder.;
+#X obj 567 8 inlet;
+#X obj 655 8 inlet;
+#X text 11 206 4 - the remainder is output from the right output of the trigger first \, it has 1 added to it (right outlet) and then the new count is stored for the next trigger;
+#X text 12 256 5 - The count is then displayed (not 100% necessary);
+#X obj 443 214 t f f;
 #X connect 0 0 6 0;
 #X connect 1 0 0 1;
 #X connect 2 0 0 0;
@@ -55,15 +47,10 @@ new count is stored for the next trigger;
 #X obj 84 197 sel;
 #X obj 148 190 outlet;
 #X text 253 11 This patch output x bangs as fast as possible;
-#X text 256 76 Or set via the right inlet and stored until a bang is
-received in the left inlet;
-#X text 255 109 Or set via the left inlet and that number of bangs
-will immediately be output;
-#X text 254 145 This is roughly based on a standard MaxMSP object that
-is quite useful;
-#X text 253 30 The number of bangs to output can be set as an argument
-(the \$1 arghument to the "int" references the first argument to the
-abstraction;
+#X text 256 76 Or set via the right inlet and stored until a bang is received in the left inlet;
+#X text 255 109 Or set via the left inlet and that number of bangs will immediately be output;
+#X text 254 145 This is roughly based on a standard MaxMSP object that is quite useful;
+#X text 253 30 The number of bangs to output can be set as an argument (the \$1 arghument to the "int" references the first argument to the abstraction;
 #X obj 129 152 - 1;
 #X text 144 210 Outlet 3: count;
 #X connect 0 0 1 0;
