@@ -26,7 +26,7 @@
 #X obj 511 189 inlet~;
 #X text 512 166 damping;
 #X text 481 23 block size to allow feedback loop;
-#X obj 106 369 fexpr~ $x1[0] + $x2[0] * ( $y1[-1] - $x1[0] ), f 46;
+#X obj 103 369 fexpr~ $x1[0] + $x2[0] * ( $y1[-1] - $x1[0] ), f 46;
 #X text 248 394 onepole low pass filter;
 #X obj 584 58 block~ 4;
 #X connect 0 0 14 0;
