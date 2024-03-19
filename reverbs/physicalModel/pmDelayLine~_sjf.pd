@@ -15,13 +15,13 @@
 #X msg 486 250 0.25;
 #X obj 378 320 sig~;
 #X floatatom 462 299 5 0 0 0 - - - 0;
-#X obj 552 290 inlet~;
-#X obj 692 290 * 0.001;
-#X obj 549 332 expr~ pow(10 \, (-3*$f2/($v1)));
-#X text 563 244 size scale;
+#X obj 558 310 inlet~;
+#X obj 663 289 * 0.001;
+#X obj 558 352 expr~ pow(10 \, (-3*$f2/($v1)));
+#X text 549 290 size scale;
 #X obj 267 384 *~, f 42;
 #X obj 147 208 fexpr~ $x1[0] + $x2[0] * ( $y1[-1] - $x1[0] ), f 25;
-#X text 408 137 onepole low pass filter;
+#X text 156 188 onepole low pass filter;
 #X obj 336 70 inlet~;
 #X text 333 41 damping;
 #X obj 44 472 delwrite~ \$0-pmDel 1000;

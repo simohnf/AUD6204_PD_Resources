@@ -1,4 +1,4 @@
-#N canvas 15 -1463 1065 847 12;
+#N canvas 375 25 1065 847 12;
 #N canvas 0 25 624 566 reorderDimensions 0;
 #X obj 222 70 pack 0 0;
 #X obj 306 73 pack 0 1;
@@ -152,13 +152,14 @@
 #X obj 87 91 max 0;
 #X obj 86 166 * 9.5;
 #X obj 86 190 + 0.5;
-#X obj 366 187 * 0.6;
+#X obj 366 147 * 0.6;
 #X obj 87 20 r \$0-decay;
 #X obj 86 263 s~ \$0-decaySig;
 #X obj 366 117 sqrt;
 #X floatatom 87 139 5 0 0 0 - - - 0;
 #X obj 87 115 expr pow($f1 \, 2);
-#X obj 366 211 + 0.39;
+#X obj 366 171 + 0.39;
+#X floatatom 379 209 5 0 0 0 - - - 0;
 #X connect 0 0 8 0;
 #X connect 1 0 2 0;
 #X connect 2 0 16 0;
@@ -178,6 +179,7 @@
 #X connect 18 0 12 0;
 #X connect 19 0 18 0;
 #X connect 20 0 4 0;
+#X connect 20 0 21 0;
 #X restore 472 35 pd parameters;
 #X obj 749 16 r \$0-dsp;
 #X obj 749 49 switch~;
@@ -356,7 +358,7 @@
 #X obj 376 508 line~;
 #X obj 264 549 *~;
 #X obj 14 269 hradio 19 1 0 5 \$0-ertypesnd \$0-ertyperec er\ type 0 -10 0 12 #fcfcfc #000000 #000000 0;
-#N canvas 736 180 704 381 early 1;
+#N canvas 376 520 704 381 early 0;
 #X obj 113 80 inlet~;
 #N canvas 240 25 783 300 diffusion_ap 0;
 #X obj 89 21 inlet~;
@@ -380,7 +382,7 @@
 #X connect 9 0 4 3;
 #X connect 9 0 5 3;
 #X restore 9 222 pd diffusion_ap;
-#N canvas 149 25 826 363 diffusion_mt 1;
+#N canvas 149 25 826 363 diffusion_mt 0;
 #X obj 140 39 inlet~;
 #X obj 42 313 outlet~;
 #X obj 140 81 delwrite~ \$0-multiTapEarly 1000;
@@ -586,7 +588,7 @@
 #X obj 243 80 == 0;
 #X obj 282 80 == 1;
 #X obj 322 80 == 2;
-#N canvas 609 71 807 732 diffusion_gl 0;
+#N canvas 263 479 807 732 diffusion_gl 0;
 #X obj 41 5 inlet~;
 #X obj 41 29 *~ 0.353553;
 #X obj 347 45 inlet~;
@@ -786,7 +788,7 @@
 #X obj 260 34 r \$0-ertypesnd;
 #X obj 91 277 outlet~;
 #X obj 371 80 == 3;
-#N canvas 121 -993 959 481 nestedAP 0;
+#N canvas 121 25 959 481 nestedAP 0;
 #X obj 37 137 inlet~;
 #X obj 14 375 outlet~;
 #X obj 421 146 inlet;
